@@ -12,11 +12,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        title: 'Startup Name Generator',
-        home: RandomWords(), // homepage should point to the RandomWords widget
-        debugShowCheckedModeBanner:
-            false); // disable the top right banner for debug
+    return MaterialApp(
+      title: 'Startup Name Generator',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white, foregroundColor: Colors.black),
+      ),
+      home: RandomWords(), // homepage should point to the RandomWords widget
+      debugShowCheckedModeBanner: false,
+    ); // disable the top right banner for debug
   }
 }
 
@@ -32,6 +36,8 @@ class _RandomWordsState extends State<RandomWords> {
   // suggestions variable is private variable accessble only in this library
   // list of words
   final _suggestions = <WordPair>[];
+  // set to save the user's favourite words
+  final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18);
 
   @override
@@ -41,8 +47,30 @@ class _RandomWordsState extends State<RandomWords> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Startup Name Generator'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.list),
+              onPressed: _pushSaved,
+              tooltip: 'Saved Suggestions',
+            )
+          ],
         ),
         body: _buildSuggestions());
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
+      final tiles = _saved.map((pair) {
+        return ListTile(title: Text(pair.asPascalCase, style: _biggerFont));
+      });
+      final divided = tiles.isNotEmpty
+          ? ListTile.divideTiles(context: context, tiles: tiles).toList()
+          : <Widget>[];
+      return Scaffold(
+          appBar: AppBar(title: const Text('Saved Suggestions')),
+          // backgroundColor: Colors.amberAccent),
+          body: ListView(children: divided));
+    }));
   }
 
   // building list of suggestion names
@@ -64,6 +92,25 @@ class _RandomWordsState extends State<RandomWords> {
 
   // creating the row widget in the list
   Widget _buildRow(WordPair pair) {
-    return ListTile(title: Text(pair.asPascalCase, style: _biggerFont));
+    final _alreadySaved = _saved.contains(pair);
+    return ListTile(
+      title: Text(pair.asPascalCase, style: _biggerFont),
+      // adding a heart icon to indicate user has saved the word
+      trailing: Icon(
+        _alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: _alreadySaved ? Colors.red : null,
+        semanticLabel: _alreadySaved ? 'Remove from saved' : 'Save',
+      ),
+      // add interactivity - when clicked on the icon what should happen
+      onTap: () {
+        setState(() {
+          if (_alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
+    );
   }
 }
