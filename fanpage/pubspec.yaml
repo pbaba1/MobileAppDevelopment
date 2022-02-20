@@ -41,6 +41,9 @@ dependencies:
   cloud_firestore: 
   crypto: ^3.0.1
   convert: ^3.0.1
+  google_sign_in:
+  font_awesome_flutter: 
+  
   
 dev_dependencies:
   flutter_test:

@@ -14,9 +14,17 @@
       },
       "oauth_client": [
         {
+          "client_id": "382366113740-pke03lsg8mf6m06aq1ptmdu8910bvfjt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fanpage",
+            "certificate_hash": "897bf8c1aed3cc6edc47372eb99a4fc52f8fd9c3"
+          }
+        },
+        {
           "client_id": "382366113740-tbguuh4ovc2oe4dhh7rjl1iqhnuobekr.apps.googleusercontent.com",
           "client_type": 3
-        } 
+        }
       ],
       "api_key": [
         {

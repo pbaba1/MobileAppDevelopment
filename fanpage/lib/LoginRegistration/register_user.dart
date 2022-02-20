@@ -64,7 +64,6 @@ class _RegisterUserState extends State<RegisterUser> {
   _storeUserInDB(User? user) async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     CollectionReference users = _firestore.collection('users');
-    print('inside storeuserindb');
 
     try {
       await users.doc(user!.uid).set({
@@ -72,8 +71,8 @@ class _RegisterUserState extends State<RegisterUser> {
         'lname': _lastNameController.text,
         'email': _emailController.text,
         'password': _generateMD5Value(),
-        // 'password': _passwordController.text,
-        'role': 'USER'
+        'role': 'USER',
+        'user_creation_timestamp': DateTime.now()
       });
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('User created!')));
@@ -91,10 +90,10 @@ class _RegisterUserState extends State<RegisterUser> {
       UserCredential userCredential =
           await _firebaseAuthInstance.createUserWithEmailAndPassword(
               email: _emailController.text, password: _generateMD5Value());
-      print('user is: ' + userCredential.user.toString());
       if (userCredential.user != null) {
         _storeUserInDB(userCredential.user);
       }
+      await _firebaseAuthInstance.signOut();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
