@@ -110,113 +110,115 @@ class _RegisterUserState extends State<RegisterUser> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       key: _registerForm,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Fan Page App',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 24,
-                )),
-            // first name
-            Padding(
-              padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
-              child: TextFormField(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Fan Page App',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 24,
+                  )),
+              // first name
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
+                child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter a valid first name';
+                      }
+                      return null;
+                    },
+                    controller: _firstNameController,
+                    decoration: _textDecorationValue(
+                        'First Name', 'First Name', 'fname')),
+              ),
+              // last name
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
+                child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter a valid last name';
+                      }
+                      return null;
+                    },
+                    controller: _lastNameController,
+                    decoration:
+                        _textDecorationValue('Last Name', 'Last Name', 'lname')),
+              ),
+        
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
+                child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter an email address';
+                      } else if (!value.contains('@')) {
+                        return 'Enter a valid email address';
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                    decoration: _textDecorationValue('Email', 'Email', 'email')),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter a valid first name';
+                      return 'Enter a password';
                     }
                     return null;
                   },
-                  controller: _firstNameController,
-                  decoration: _textDecorationValue(
-                      'First Name', 'First Name', 'fname')),
-            ),
-            // last name
-            Padding(
-              padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter a valid last name';
-                    }
-                    return null;
-                  },
-                  controller: _lastNameController,
+                  controller: _passwordController,
                   decoration:
-                      _textDecorationValue('Last Name', 'Last Name', 'lname')),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
-              child: TextFormField(
+                      _textDecorationValue('Password', 'Password', 'password'),
+                  obscureText: _isTextObscure,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter an email address';
-                    } else if (!value.contains('@')) {
-                      return 'Enter a valid email address';
+                      return 'Enter a password to confirm';
+                    } else if (value != _passwordController.text) {
+                      return 'Password does not match';
                     }
                     return null;
                   },
-                  controller: _emailController,
-                  decoration: _textDecorationValue('Email', 'Email', 'email')),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Enter a password';
-                  }
-                  return null;
-                },
-                controller: _passwordController,
-                decoration:
-                    _textDecorationValue('Password', 'Password', 'password'),
-                obscureText: _isTextObscure,
+                  decoration: _textDecorationValue(
+                      'Confirm Password', 'Confirm Password', 'cpassword'),
+                  obscureText: true,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Enter a password to confirm';
-                  } else if (value != _passwordController.text) {
-                    return 'Password does not match';
-                  }
-                  return null;
-                },
-                decoration: _textDecorationValue(
-                    'Confirm Password', 'Confirm Password', 'cpassword'),
-                obscureText: true,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-                height: 35,
-                width: 250,
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20)),
-                child: TextButton(
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  onPressed: () {
-                    _registerForm.currentState!.validate()
-                        ? _registerUser()
-                        : null;
-                  },
-                )),
-            const SizedBox(height: 10),
-            InkWell(
-                child: const Text('Click here to login',
-                    style: TextStyle(color: Colors.lightBlue)),
-                onTap: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Login()))),
-          ],
+              const SizedBox(height: 10),
+              Container(
+                  height: 35,
+                  width: 250,
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: TextButton(
+                    child: const Text(
+                      'Register',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    onPressed: () {
+                      _registerForm.currentState!.validate()
+                          ? _registerUser()
+                          : null;
+                    },
+                  )),
+              const SizedBox(height: 10),
+              InkWell(
+                  child: const Text('Click here to login',
+                      style: TextStyle(color: Colors.lightBlue)),
+                  onTap: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Login()))),
+            ],
+          ),
         ),
       ),
     ));
