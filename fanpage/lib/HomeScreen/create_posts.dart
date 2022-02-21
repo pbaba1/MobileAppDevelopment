@@ -209,17 +209,12 @@ class _CreatePostsState extends State<CreatePosts> {
                             ElevatedButton(
                               child: const Text("Upload Image"),
                               onPressed: () {
-                                /* if (defaultTargetPlatform.toString() ==
-                                    TargetPlatform.windows.toString()) {
-                                  _uploadToStorage();
-                                } else {
-                                } */
                                 _imagePicker(context);
                               },
                             ),
                           ],
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                       ]),
                     ]),
               )),

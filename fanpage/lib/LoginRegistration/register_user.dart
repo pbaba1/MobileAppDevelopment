@@ -53,18 +53,10 @@ class _RegisterUserState extends State<RegisterUser> {
         labelText: labelTextValue,
         hintText: hintTextValue);
   }
-/* 
-  String _generateMD5Value() {
-    var content = new Utf8Encoder().convert(_passwordController.text);
-    var md5 = crypto.md5;
-    var digest = md5.convert(content);
-    return digest.toString();
-  } */
 
   _storeUserInDB(User? user) async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     CollectionReference users = _firestore.collection('users');
-
     try {
       await users.doc(user!.uid).set({
         'fname': _firstNameController.text,
@@ -87,11 +79,34 @@ class _RegisterUserState extends State<RegisterUser> {
   }
 
   _registerUser() async {
+    print('hello world!!!!');
     try {
       UserCredential userCredential =
           await _firebaseAuthInstance.createUserWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
       if (userCredential.user != null) {
+        FirebaseFirestore _firestore = FirebaseFirestore.instance;
+        CollectionReference users = _firestore.collection('users');
+        try {
+          await users.doc(userCredential.user!.uid).set({
+            'fname': _firstNameController.text,
+            'lname': _lastNameController.text,
+            'email': _emailController.text,
+            'password': _passwordController.text,
+            'role': 'USER',
+            'user_creation_timestamp': DateTime.now(),
+            'is_google_user': false
+          });
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('User created!')));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const Login()),
+              (Route route) => false);
+        } catch (e) {
+          print('there was an error storing the user in DB....');
+          print(e);
+        }
+
         _storeUserInDB(userCredential.user);
       }
       await _firebaseAuthInstance.signOut();
@@ -170,6 +185,8 @@ class _RegisterUserState extends State<RegisterUser> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter a password';
+                    } else if (value.length < 6) {
+                      return 'Enter a password greater than 6 characters';
                     }
                     return null;
                   },

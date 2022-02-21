@@ -60,7 +60,6 @@ class _LoginState extends State<Login> {
     return InputDecoration(
         alignLabelWithHint: true,
         labelText: labelTextValue,
-        // errorText: _errorText(fieldName, controller),
         suffixIcon: fieldName == 'email'
             ? const Icon(Icons.email)
             : IconButton(
@@ -75,7 +74,7 @@ class _LoginState extends State<Login> {
   }
 
   // forget password
-  _passwordReset() async {
+  Future _resetPassword() async {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text);
@@ -196,7 +195,9 @@ class _LoginState extends State<Login> {
               InkWell(
                   child: const Text('Forgot Password?',
                       style: TextStyle(color: Colors.lightBlue)),
-                  onTap: () => _passwordReset()),
+                  onTap: () async {
+                    await _resetPassword();
+                  }),
               const SizedBox(height: 15),
               const Text('OR', style: TextStyle(letterSpacing: 1.2)),
               const SizedBox(height: 15),
