@@ -1,7 +1,7 @@
 // import 'dart:html';
 import 'dart:io' as i;
-import 'dart:typed_data';
-import 'dart:html' as html;
+// import 'dart:typed_data';
+// import 'dart:html' as html;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FBA;
@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as FBS;
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+// import 'package:image_picker_web/image_picker_web.dart';
 import 'package:path/path.dart';
 
 class CreatePosts extends StatefulWidget {
@@ -75,7 +75,7 @@ class _CreatePostsState extends State<CreatePosts> {
     }
   }
 
-  _imagePickerWeb({required Function(html.File file) onSelected}) {
+  /*  _imagePickerWeb({required Function(html.File file) onSelected}) {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
     uploadInput.accept = '.png,.jpg,.jpeg';
     uploadInput.click();
@@ -90,7 +90,7 @@ class _CreatePostsState extends State<CreatePosts> {
         onSelected(file);
       });
     });
-  }
+  } */
 
   _imagePicker(context) async {
     print('DEFAULTTARGETPLATFORM');
@@ -107,7 +107,7 @@ class _CreatePostsState extends State<CreatePosts> {
     _uploadToFirebase(context);
   }
 
-  _uploadToStorage() {
+/*   _uploadToStorage() {
     final dateTime = DateTime.now();
     FBS.FirebaseStorage storage = FBS.FirebaseStorage.instance;
     _imagePickerWeb(onSelected: (file) async {
@@ -121,7 +121,7 @@ class _CreatePostsState extends State<CreatePosts> {
 
       downloadUrl = await (await uploadTask).ref.getDownloadURL();
     });
-  }
+  } */
 
   Future _uploadToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile.path);
@@ -209,12 +209,12 @@ class _CreatePostsState extends State<CreatePosts> {
                             ElevatedButton(
                               child: const Text("Upload Image"),
                               onPressed: () {
-                                if (defaultTargetPlatform.toString() ==
+                                /* if (defaultTargetPlatform.toString() ==
                                     TargetPlatform.windows.toString()) {
                                   _uploadToStorage();
                                 } else {
-                                  _imagePicker(context);
-                                }
+                                } */
+                                _imagePicker(context);
                               },
                             ),
                           ],
