@@ -90,7 +90,7 @@ class _RegisterUserState extends State<RegisterUser> {
     try {
       UserCredential userCredential =
           await _firebaseAuthInstance.createUserWithEmailAndPassword(
-              email: _emailController.text, password: _generateMD5Value());
+              email: _emailController.text, password: _passwordController.text);
       if (userCredential.user != null) {
         _storeUserInDB(userCredential.user);
       }
