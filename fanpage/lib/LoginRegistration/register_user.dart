@@ -53,13 +53,13 @@ class _RegisterUserState extends State<RegisterUser> {
         labelText: labelTextValue,
         hintText: hintTextValue);
   }
-
+/* 
   String _generateMD5Value() {
     var content = new Utf8Encoder().convert(_passwordController.text);
     var md5 = crypto.md5;
     var digest = md5.convert(content);
     return digest.toString();
-  }
+  } */
 
   _storeUserInDB(User? user) async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -70,7 +70,7 @@ class _RegisterUserState extends State<RegisterUser> {
         'fname': _firstNameController.text,
         'lname': _lastNameController.text,
         'email': _emailController.text,
-        'password': _generateMD5Value(),
+        'password': _passwordController.text,
         'role': 'USER',
         'user_creation_timestamp': DateTime.now(),
         'is_google_user': false

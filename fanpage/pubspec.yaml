@@ -39,7 +39,6 @@ dependencies:
   convert: ^3.0.1
   google_sign_in: 5.2.4
   font_awesome_flutter: 9.2.0
-  image_picker_web:
   image_picker:
   firebase_storage:
   permission_handler: 
