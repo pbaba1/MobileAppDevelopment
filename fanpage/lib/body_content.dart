@@ -21,7 +21,6 @@ class _BodyContentState extends State<BodyContent> {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String userName = '';
-  bool _isDataFetching = true;
   final Stream<QuerySnapshot> _messageStream = FirebaseFirestore.instance
       .collection('posts')
       .orderBy('posted_at')
@@ -30,15 +29,12 @@ class _BodyContentState extends State<BodyContent> {
 
   @override
   void initState() {
-    // userName = GoogleSignInProviderClass().getUserName()!;
-    // print('&&&&&&&&&&' + userName.toString());
     super.initState();
     // get user details
     _fetchUserDetails();
-    // get posts
-    _getPosts();
   }
 
+  // fetching the user details - username, userid etc
   void _fetchUserDetails() {
     _firebaseAuth.authStateChanges().listen((User? u) {
       user = u;
@@ -58,28 +54,18 @@ class _BodyContentState extends State<BodyContent> {
                     /*  fname = snapshot['fname'];
                     lname = snapshot['lname']; */
                     userName = snapshot['fname'] + ' ' + snapshot['lname'];
-                    print('&&&&&&&&&&' + userName.toString());
                   })
                 });
       }
     });
   }
 
-  void _getPosts() async {
-    CollectionReference<Map<String, dynamic>> _fsGetPosts =
-        FirebaseFirestore.instance.collection('posts');
-    QuerySnapshot querySnapshot = await _fsGetPosts.get();
-
-    _listOfPosts = querySnapshot.docs.map((doc) => doc.data()).toList();
-    _isDataFetching = false;
-    print('###############');
-    print(_listOfPosts);
-  }
-
+// check if the user logged in is admin - for floating button used to create the post
   bool _isAdmin(String userRole) {
     return userRole == 'ADMIN';
   }
 
+  // logout feature
   Widget _logout(context) {
     return AlertDialog(
         actionsPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -128,18 +114,31 @@ class _BodyContentState extends State<BodyContent> {
         ]);
   }
 
-  Widget _displayPostDetails(String? postedBy) {
-    CollectionReference col = _firebaseFirestore.collection('users');
-    Query query = col.where('posted_by', isEqualTo: postedBy);
-    print('*&*&*&*&**&');
-    print(query.get());
-    query.get();
-    // Stream<QuerySnapshot<Map<String, dynamic>>> user = _firebaseFirestore
-    // .collection('users')
-    // .where('posted_by', isEqualTo: postedBy));
+  // check if the current user is in the likes array list of the post
+/*   bool _checkIfUserLikedPost(likesArray) {
+    return likesArray.toString().contains((user?.email).toString());
+  } */
 
-    return Text('hello');
-  }
+  //  update post for like and dislike
+ /*  _updatePost(singlePost) {
+    String? currentUserID = (user!.email).toString();
+    if (_checkIfUserLikedPost(singlePost['likes'].toString())) {
+      setState(() => {
+            singlePost['likes']
+                .removeWhere((item) => item.toString() == currentUserID)
+          });
+    } else {
+      setState(() {
+        singlePost['likes'].add(currentUserID);
+      });
+    }
+
+    /*   print('FINALLLLLL*****************');
+    print(singlePost['likes']);
+    print(currentUserID.runtimeType);
+    print('Contains???????' +
+        singlePost['likes'].contains(currentUserID.toString()).toString()); */
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -183,8 +182,6 @@ class _BodyContentState extends State<BodyContent> {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                  // child: Text("Loading....",
-                  //     style: TextStyle(fontSize: 20.0, color: Colors.red)));
                   child: CircularProgressIndicator(
                 color: Colors.red,
               ));
@@ -213,6 +210,7 @@ class _BodyContentState extends State<BodyContent> {
                             child: Text(
                               data['posted_by_name'].toString(),
                               textAlign: TextAlign.left,
+                              style: const TextStyle(fontSize: 12),
                             ),
                           )),
                       SizedBox(
@@ -225,20 +223,25 @@ class _BodyContentState extends State<BodyContent> {
                                   .format(data['posted_at'].toDate())
                                   .toString(),
                               textAlign: TextAlign.right,
+                              style: const TextStyle(fontSize: 12),
                             ),
                           )),
                     ]),
                     Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                       child: ListTile(
+                        leading: CircleAvatar(
+                            backgroundImage: data['image_url'] == null
+                                ? const AssetImage('assets/dummy_user.jpg') as ImageProvider
+                                : NetworkImage(data['image_url'])),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
                         title: Text(
                           data['message'],
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.blueAccent),
                           textAlign: TextAlign.justify,
                         ),
-                        tileColor: Colors.white,
+                        tileColor: Colors.grey.shade300,
                       ),
                     ),
                   ],

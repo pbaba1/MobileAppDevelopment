@@ -72,7 +72,8 @@ class _RegisterUserState extends State<RegisterUser> {
         'email': _emailController.text,
         'password': _generateMD5Value(),
         'role': 'USER',
-        'user_creation_timestamp': DateTime.now()
+        'user_creation_timestamp': DateTime.now(),
+        'is_google_user': false
       });
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('User created!')));
@@ -144,10 +145,10 @@ class _RegisterUserState extends State<RegisterUser> {
                       return null;
                     },
                     controller: _lastNameController,
-                    decoration:
-                        _textDecorationValue('Last Name', 'Last Name', 'lname')),
+                    decoration: _textDecorationValue(
+                        'Last Name', 'Last Name', 'lname')),
               ),
-        
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
                 child: TextFormField(
@@ -160,7 +161,8 @@ class _RegisterUserState extends State<RegisterUser> {
                       return null;
                     },
                     controller: _emailController,
-                    decoration: _textDecorationValue('Email', 'Email', 'email')),
+                    decoration:
+                        _textDecorationValue('Email', 'Email', 'email')),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
@@ -215,8 +217,8 @@ class _RegisterUserState extends State<RegisterUser> {
               InkWell(
                   child: const Text('Click here to login',
                       style: TextStyle(color: Colors.lightBlue)),
-                  onTap: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Login()))),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Login()))),
             ],
           ),
         ),

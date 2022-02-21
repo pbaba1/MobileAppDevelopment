@@ -13,7 +13,8 @@ void main() async {
           apiKey: 'AIzaSyDRkxVLTphGHtMXBbjC_-fFQb5YFpxa_mU',
           appId: '1:382366113740:android:ed70c98389bdb6a8f20769',
           messagingSenderId: '382366113740',
-          projectId: 'fan-page-33fd1'));
+          projectId: 'fan-page-33fd1',
+          storageBucket: 'fan-page-33fd1.appspot.com'));
   runApp(const MyApp());
 }
 

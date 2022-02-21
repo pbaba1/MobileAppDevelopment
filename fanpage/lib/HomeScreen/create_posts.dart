@@ -1,7 +1,16 @@
+// import 'dart:html';
+import 'dart:io' as i;
+import 'dart:typed_data';
+import 'dart:html' as html;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FBA;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:firebase_storage/firebase_storage.dart' as FBS;
+import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:path/path.dart';
 
 class CreatePosts extends StatefulWidget {
   const CreatePosts({Key? key}) : super(key: key);
@@ -11,20 +20,22 @@ class CreatePosts extends StatefulWidget {
 }
 
 class _CreatePostsState extends State<CreatePosts> {
-  User? currentUser;
+  FBA.User? currentUser;
   final _postForm = GlobalKey<FormState>();
   final _messageController = TextEditingController();
   final CollectionReference<Map<String, dynamic>> _firebaseFirestore =
       FirebaseFirestore.instance.collection('posts');
   final FirebaseFirestore _firebaseFirestoreUsers = FirebaseFirestore.instance;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FBA.FirebaseAuth _firebaseAuth = FBA.FirebaseAuth.instance;
   bool _isPostingError = false;
   String? userName = '';
+  var downloadUrl;
+  i.File _imageFile = new i.File('');
 
   @override
   void initState() {
     super.initState();
-    _firebaseAuth.authStateChanges().listen((User? user) {
+    _firebaseAuth.authStateChanges().listen((FBA.User? user) {
       if (user != null) {
         currentUser = user;
 
@@ -50,6 +61,7 @@ class _CreatePostsState extends State<CreatePosts> {
           'posted_by': currentUser?.uid,
           'posted_by_name': userName,
           'likes': [],
+          'image_url': downloadUrl
         });
         setState(() {
           _isPostingError = false;
@@ -61,6 +73,67 @@ class _CreatePostsState extends State<CreatePosts> {
         print('Error creating a post :/' + e.toString());
       }
     }
+  }
+
+  _imagePickerWeb({required Function(html.File file) onSelected}) {
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.accept = '.png,.jpg,.jpeg';
+    uploadInput.click();
+
+    uploadInput.onChange.listen((event) {
+      html.File file = uploadInput.files!.first;
+      final reader = html.FileReader();
+      reader.readAsDataUrl(file);
+      print('FILe is');
+      print(file.toString());
+      reader.onLoadEnd.listen((event) {
+        onSelected(file);
+      });
+    });
+  }
+
+  _imagePicker(context) async {
+    print('DEFAULTTARGETPLATFORM');
+    print(defaultTargetPlatform);
+    if (defaultTargetPlatform == TargetPlatform.windows) {
+    } else {
+      final picker = ImagePicker();
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      setState(() {
+        _imageFile = i.File(pickedFile!.path);
+      });
+    }
+
+    _uploadToFirebase(context);
+  }
+
+  _uploadToStorage() {
+    final dateTime = DateTime.now();
+    FBS.FirebaseStorage storage = FBS.FirebaseStorage.instance;
+    _imagePickerWeb(onSelected: (file) async {
+      i.File newFile = file as i.File;
+      FBS.Reference ref =
+          storage.ref().child('images/' + DateTime.now().toString());
+      FBS.UploadTask uploadTask = ref.putFile(newFile);
+      uploadTask.then((res) {
+        res.ref.getDownloadURL();
+      });
+
+      downloadUrl = await (await uploadTask).ref.getDownloadURL();
+    });
+  }
+
+  Future _uploadToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    FBS.FirebaseStorage storage = FBS.FirebaseStorage.instance;
+    FBS.Reference ref =
+        storage.ref().child('images/' + DateTime.now().toString());
+    FBS.UploadTask uploadTask = ref.putFile(_imageFile);
+    uploadTask.then((res) {
+      res.ref.getDownloadURL();
+    });
+
+    downloadUrl = await (await uploadTask).ref.getDownloadURL();
   }
 
   @override
@@ -124,11 +197,27 @@ class _CreatePostsState extends State<CreatePosts> {
                                       color: Colors.grey, width: 1))),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
-                          child: const Text("Create Post"),
-                          onPressed: () {
-                            _createPost();
-                          },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              child: const Text("Create Post"),
+                              onPressed: () {
+                                _createPost();
+                              },
+                            ),
+                            ElevatedButton(
+                              child: const Text("Upload Image"),
+                              onPressed: () {
+                                if (defaultTargetPlatform.toString() ==
+                                    TargetPlatform.windows.toString()) {
+                                  _uploadToStorage();
+                                } else {
+                                  _imagePicker(context);
+                                }
+                              },
+                            ),
+                          ],
                         ),
                         SizedBox(height: 10),
                       ]),
