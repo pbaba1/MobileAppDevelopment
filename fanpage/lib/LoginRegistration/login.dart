@@ -126,109 +126,112 @@ class _LoginState extends State<Login> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Center(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Fan Page App',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 24,
-                  )),
-              const SizedBox(
-                height: 10,
-              ),
-              !_isLoginSuccess
-                  ? Text(
-                      errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    )
-                  : Container(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
-                child: TextFormField(
+          child: Container(
+            width: 750,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Fan Page App',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 24,
+                    )),
+                const SizedBox(
+                  height: 10,
+                ),
+                !_isLoginSuccess
+                    ? Text(
+                        errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    : Container(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
+                  child: TextFormField(
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Please enter email';
+                        } else if (!text.contains('@')) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                      controller: _emailController,
+                      decoration: _textDecorationValue(
+                          'Email', 'Email', 'email', _emailController)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                  child: TextFormField(
+                    onChanged: (value) => _isLoginSuccess = true,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Please enter email';
-                      } else if (!text.contains('@')) {
-                        return 'Please enter a valid email';
+                        return 'Please enter password';
+                      } else if (text.length < 6) {
+                        return 'Please enter password of atleast 6 characters.';
                       }
                       return null;
                     },
-                    controller: _emailController,
-                    decoration: _textDecorationValue(
-                        'Email', 'Email', 'email', _emailController)),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-                child: TextFormField(
-                  onChanged: (value) => _isLoginSuccess = true,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      return 'Please enter password';
-                    } else if (text.length < 6) {
-                      return 'Please enter password of atleast 6 characters.';
-                    }
-                    return null;
-                  },
-                  controller: _passwordController,
-                  decoration: _textDecorationValue(
-                      'Password', 'Password', 'password', _passwordController),
-                  obscureText: _isTextObscure,
+                    controller: _passwordController,
+                    decoration: _textDecorationValue('Password', 'Password',
+                        'password', _passwordController),
+                    obscureText: _isTextObscure,
+                  ),
                 ),
-              ),
-              Container(
-                  height: 40,
-                  width: 250,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: TextButton(
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    onPressed: () {
-                      _formKey.currentState!.validate() ? _submit() : null;
-                    },
-                  )),
-              const SizedBox(height: 10),
-              InkWell(
-                  child: const Text('Forgot Password?',
-                      style: TextStyle(color: Colors.lightBlue)),
-                  onTap: () async {
-                    await _resetPassword();
-                  }),
-              const SizedBox(height: 15),
-              const Text('OR', style: TextStyle(letterSpacing: 1.2)),
-              const SizedBox(height: 15),
-              Container(
-                  height: 35,
-                  width: 250,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ElevatedButton.icon(
-                    icon: const FaIcon(FontAwesomeIcons.google),
-                    label: const Text(
-                      'Google Sign In',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    onPressed: () {
-                      final provider = Provider.of<GoogleSignInProviderClass>(
-                          context,
-                          listen: false);
-                      provider.googleLogin(context);
-                    },
-                  )),
-              const SizedBox(height: 10),
-              InkWell(
-                  child: const Text('Not registered? Click here to register',
-                      style: TextStyle(color: Colors.lightBlue)),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterUser()))),
-            ],
+                Container(
+                    height: 40,
+                    width: 250,
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TextButton(
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onPressed: () {
+                        _formKey.currentState!.validate() ? _submit() : null;
+                      },
+                    )),
+                const SizedBox(height: 10),
+                InkWell(
+                    child: const Text('Forgot Password?',
+                        style: TextStyle(color: Colors.lightBlue)),
+                    onTap: () async {
+                      await _resetPassword();
+                    }),
+                const SizedBox(height: 15),
+                const Text('OR', style: TextStyle(letterSpacing: 1.2)),
+                const SizedBox(height: 15),
+                Container(
+                    height: 35,
+                    width: 250,
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ElevatedButton.icon(
+                      icon: const FaIcon(FontAwesomeIcons.google),
+                      label: const Text(
+                        'Google Sign In',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onPressed: () {
+                        final provider = Provider.of<GoogleSignInProviderClass>(
+                            context,
+                            listen: false);
+                        provider.googleLogin(context);
+                      },
+                    )),
+                const SizedBox(height: 10),
+                InkWell(
+                    child: const Text('Not registered? Click here to register',
+                        style: TextStyle(color: Colors.lightBlue)),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterUser()))),
+              ],
+            ),
           ),
         ),
       ),

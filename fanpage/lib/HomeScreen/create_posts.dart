@@ -28,8 +28,9 @@ class _CreatePostsState extends State<CreatePosts> {
   final FirebaseFirestore _firebaseFirestoreUsers = FirebaseFirestore.instance;
   final FBA.FirebaseAuth _firebaseAuth = FBA.FirebaseAuth.instance;
   bool _isPostingError = false;
+  bool _isImageUploadError = false;
   String? userName = '';
-  var downloadUrl;
+  var downloadUrl = '';
   i.File _imageFile = new i.File('');
 
   @override
@@ -64,7 +65,10 @@ class _CreatePostsState extends State<CreatePosts> {
           'image_url': downloadUrl
         });
         setState(() {
-          _isPostingError = false;
+          if (_messageController.text != null ||
+              _messageController.text != '') {
+            _isPostingError = false;
+          }
         });
       } catch (e) {
         setState(() {
@@ -93,12 +97,10 @@ class _CreatePostsState extends State<CreatePosts> {
   } */
 
   _imagePicker(context) async {
-    print('DEFAULTTARGETPLATFORM');
-    print(defaultTargetPlatform);
     if (defaultTargetPlatform == TargetPlatform.windows) {
     } else {
       final picker = ImagePicker();
-      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
       setState(() {
         _imageFile = i.File(pickedFile!.path);
       });
@@ -128,12 +130,21 @@ class _CreatePostsState extends State<CreatePosts> {
     FBS.FirebaseStorage storage = FBS.FirebaseStorage.instance;
     FBS.Reference ref =
         storage.ref().child('images/' + DateTime.now().toString());
-    FBS.UploadTask uploadTask = ref.putFile(_imageFile);
-    uploadTask.then((res) {
-      res.ref.getDownloadURL();
-    });
+    try {
+      FBS.UploadTask uploadTask = ref.putFile(_imageFile);
+      uploadTask.then((res) {
+        res.ref.getDownloadURL();
+      });
 
-    downloadUrl = await (await uploadTask).ref.getDownloadURL();
+      downloadUrl = await (await uploadTask).ref.getDownloadURL();
+      setState(() {
+        _isImageUploadError = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isImageUploadError = true;
+      });
+    }
   }
 
   @override
@@ -172,9 +183,21 @@ class _CreatePostsState extends State<CreatePosts> {
                               'The message could not be posted. Please try again later',
                               style: TextStyle(color: Colors.red, fontSize: 14))
                           : Container(),
-                      (!_isPostingError && _messageController.text.length > 0)
+                      (!_isPostingError &&
+                              _messageController.text.trim().length > 0)
                           ? const Text(
                               'Post created successfully! \nClose this popup to go back to the posts listing screen',
+                              style:
+                                  TextStyle(color: Colors.green, fontSize: 14))
+                          : Container(),
+                      _isImageUploadError
+                          ? const Text(
+                              'The image could not be uploaded. Please try again later',
+                              style: TextStyle(color: Colors.red, fontSize: 14))
+                          : Container(),
+                      (!_isImageUploadError &&
+                              downloadUrl.toString().trim().length > 0)
+                          ? const Text('Image uploaded successfully!',
                               style:
                                   TextStyle(color: Colors.green, fontSize: 14))
                           : Container(),
