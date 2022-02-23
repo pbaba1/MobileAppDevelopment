@@ -39,8 +39,9 @@ class GoogleSignInProviderClass with ChangeNotifier {
             'fname': _user!.displayName!.split(' ')[0],
             'lname': _user!.displayName?.split(' ')[1],
             'email': _user!.email,
-            'uid': '',
+            'uid': _user!.id,
             'role': 'USER',
+            'is_google_user': true,
             'user_creation_timestamp': DateTime.now(),
           });
         }
