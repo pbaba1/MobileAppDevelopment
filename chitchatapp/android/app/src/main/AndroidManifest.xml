@@ -2,7 +2,7 @@
     package="com.pbaba1.chitchatapp">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
+    <uses-permission android:name="android.permission.CAMERA" />
    <application
         android:label="ChitChat App"
         android:name="${applicationName}"

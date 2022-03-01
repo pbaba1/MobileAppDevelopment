@@ -21,7 +21,6 @@ class _RegisterUserState extends State<RegisterUser> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController();
   bool _isTextObscure = true;
   final FBA.FirebaseAuth _firebaseAuthInstance = FBA.FirebaseAuth.instance;
 
@@ -74,9 +73,10 @@ class _RegisterUserState extends State<RegisterUser> {
         'password': _passwordController.text,
         'role': 'USER',
         'user_creation_timestamp': DateTime.now(),
-        'bio': _bioController.text,
         'image_url': downloadUrl
       });
+      print('DOWNLOAD URL: ' + downloadUrl);
+      FBA.FirebaseAuth.instance.signOut();
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('User created!')));
       Navigator.of(context).pushAndRemoveUntil(
@@ -97,27 +97,28 @@ class _RegisterUserState extends State<RegisterUser> {
         FirebaseFirestore _firestore = FirebaseFirestore.instance;
         CollectionReference users = _firestore.collection('users');
         try {
+          print('DOWNLOAD URL: ' + downloadUrl);
           await users.doc(userCredential.user!.uid).set({
             'fname': _firstNameController.text,
             'lname': _lastNameController.text,
             'email': _emailController.text,
             'password': _passwordController.text,
-            'role': 'USER',
             'user_creation_timestamp': DateTime.now(),
-            'bio': _bioController.text,
             'image_url': downloadUrl
           });
+          FBA.FirebaseAuth.instance.signOut();
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('User created!')));
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const Login()),
               (Route route) => false);
+          // _storeUserInDB(userCredential.user);
         } catch (e) {
           print('there was an error storing the user in DB....');
           print(e);
         }
 
-        _storeUserInDB(userCredential.user);
+        // _storeUserInDB(userCredential.user);
       }
       await _firebaseAuthInstance.signOut();
     } on FBA.FirebaseAuthException catch (e) {
@@ -151,7 +152,17 @@ class _RegisterUserState extends State<RegisterUser> {
     }
   }
 
-  _imagePicker(context) async {
+  _imgFromCamera() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    setState(() {
+      _imageFile = i.File(pickedFile!.path);
+    });
+
+    _uploadToFirebase(context);
+  }
+
+  _imgFromGallery() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
@@ -159,6 +170,36 @@ class _RegisterUserState extends State<RegisterUser> {
     });
 
     _uploadToFirebase(context);
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Photo Library'),
+                    onTap: () {
+                      _imgFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                Builder(builder: (context) {
+                  return ListTile(
+                    leading: const Icon(Icons.photo_camera),
+                    title: const Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  );
+                }),
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -188,9 +229,9 @@ class _RegisterUserState extends State<RegisterUser> {
                       )),
                 ],
               ),
-              !_isImageUploadError && _imageFile != null
+              /*  (!_isImageUploadError && _imageFile != null && _imageFile != '')
                   ? Text('Image selected sucessfully!')
-                  : Container(),
+                  : Container(), */
               // FIRST NAME
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
@@ -270,7 +311,6 @@ class _RegisterUserState extends State<RegisterUser> {
                   obscureText: true,
                 ),
               ),
-              const SizedBox(height: 5),
               // UPLOAD IMAGE
               TextButton(
                   child: Row(
@@ -282,12 +322,11 @@ class _RegisterUserState extends State<RegisterUser> {
                         ),
                         IconButton(
                             onPressed: () {
-                              _imagePicker(context);
+                              // _showPicker(context);
                             },
                             icon: const Icon(Icons.camera_alt_rounded))
                       ]),
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login()))),
+                  onPressed: () => _showPicker(context)),
               const SizedBox(height: 10),
               // REGISTER BUTTON
               Container(

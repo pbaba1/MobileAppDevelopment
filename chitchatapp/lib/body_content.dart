@@ -107,9 +107,10 @@ class _BodyContentState extends State<BodyContent> {
           height: 35,
           width: 35,
           child: CircleAvatar(
-            backgroundImage: userImageUrl.toString() == null
+            backgroundImage: (userImageUrl.toString() == 'null' ||
+                    userImageUrl.toString() == '')
                 ? const AssetImage('assets/dummy_user.jpg') as ImageProvider
-                : NetworkImage(userImageUrl!),
+                : NetworkImage(userImageUrl.toString()),
           ),
         ),
         onTap: () {
