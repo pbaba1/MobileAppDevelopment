@@ -79,7 +79,6 @@ class _RegisterUserState extends State<RegisterUser> {
   }
 
   _registerUser() async {
-    print('hello world!!!!');
     try {
       UserCredential userCredential =
           await _firebaseAuthInstance.createUserWithEmailAndPassword(

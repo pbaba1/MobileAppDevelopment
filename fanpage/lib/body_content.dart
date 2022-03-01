@@ -120,7 +120,7 @@ class _BodyContentState extends State<BodyContent> {
   } */
 
   //  update post for like and dislike
- /*  _updatePost(singlePost) {
+  /*  _updatePost(singlePost) {
     String? currentUserID = (user!.email).toString();
     if (_checkIfUserLikedPost(singlePost['likes'].toString())) {
       setState(() => {
@@ -232,7 +232,8 @@ class _BodyContentState extends State<BodyContent> {
                       child: ListTile(
                         leading: CircleAvatar(
                             backgroundImage: data['image_url'] == null
-                                ? const AssetImage('assets/dummy_user.jpg') as ImageProvider
+                                ? const AssetImage('assets/dummy_user.jpg')
+                                    as ImageProvider
                                 : NetworkImage(data['image_url'])),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
