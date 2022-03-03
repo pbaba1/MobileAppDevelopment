@@ -61,32 +61,6 @@ class _RegisterUserState extends State<RegisterUser> {
         border: fieldName == 'bio' ? const OutlineInputBorder() : null);
   }
 
-  _storeUserInDB(FBA.User? user) async {
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    CollectionReference users = _firestore.collection('users');
-    try {
-      await users.doc(user!.uid).set({
-        'fname': _firstNameController.text,
-        'lname': _lastNameController.text,
-        'email': _emailController.text,
-        'password': _passwordController.text,
-        'role': 'USER',
-        'user_creation_timestamp': DateTime.now(),
-        'image_url': downloadUrl
-      });
-      print('DOWNLOAD URL: ' + downloadUrl);
-      FBA.FirebaseAuth.instance.signOut();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('User created!')));
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const Login()),
-          (Route route) => false);
-    } catch (e) {
-      print('there was an error storing the user in DB....');
-      print(e);
-    }
-  }
-
   _registerUser() async {
     try {
       FBA.UserCredential userCredential =
@@ -96,12 +70,12 @@ class _RegisterUserState extends State<RegisterUser> {
         FirebaseFirestore _firestore = FirebaseFirestore.instance;
         CollectionReference users = _firestore.collection('users');
         try {
-          print('DOWNLOAD URL: ' + downloadUrl);
           await users.doc(userCredential.user!.uid).set({
             'fname': _firstNameController.text,
             'lname': _lastNameController.text,
+            'display_name':
+                _firstNameController.text + ' ' + _lastNameController.text,
             'email': _emailController.text,
-            'password': _passwordController.text,
             'user_creation_timestamp': DateTime.now(),
             'image_url': downloadUrl
           });

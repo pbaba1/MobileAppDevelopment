@@ -33,8 +33,7 @@ dependencies:
   provider: 6.0.0
   google_sign_in:
   flutter_native_splash: ^2.0.5
-  image_picker: ^0.8.4+10
- 
+  image_picker: ^0.8.4+10 
 
 flutter_icons:
   image_path: "assets/chat_app_icon.png" 

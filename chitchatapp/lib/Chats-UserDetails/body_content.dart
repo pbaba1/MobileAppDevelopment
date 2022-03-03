@@ -15,50 +15,6 @@ class BodyContent extends StatefulWidget {
   _BodyContentState createState() => _BodyContentState();
 }
 
-_logout(context) {
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  return AlertDialog(
-      actionsPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [Text('Confirmation'), SizedBox(height: 3)],
-      ),
-      content: const Text('Are you sure you want to logout?'),
-      actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(
-              child:
-                  const Text('Cancel', style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.redAccent)),
-            ),
-            TextButton(
-              child: const Text('Ok', style: TextStyle(color: Colors.white)),
-              onPressed: () async {
-                await _firebaseAuth.signOut();
-                final GoogleSignIn _googleSignIn = GoogleSignIn(
-                    clientId:
-                        '172976090138-upc2i80p6q4juq8oq7fru3clahk8ko64.apps.googleusercontent.com');
-                await _googleSignIn.disconnect();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Login()),
-                    (Route route) => false);
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green)),
-            ),
-          ],
-        )
-      ]);
-}
-
 class _BodyContentState extends State<BodyContent> {
   String? userImageUrl = '';
   String? userName = '';
@@ -96,7 +52,7 @@ class _BodyContentState extends State<BodyContent> {
             .then((DocumentSnapshot snapshot) => {
                   setState(() {
                     userImageUrl = snapshot['image_url'];
-                    userName = snapshot['fname'] + ' ' + snapshot['lname'];
+                    userName = snapshot['display_name'];
                   })
                 });
       }

@@ -2,6 +2,7 @@ import 'package:chitchatapp/Login-SignIn/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:chitchatapp/constants.dart' as C;
 
 class UserProfile extends StatefulWidget {
   final String? userImageURL;
@@ -15,11 +16,14 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  @override
+  void initState() {
+    print(widget.userImageURL);
+  }
+
   _logout() async {
     await FirebaseAuth.instance.signOut();
-    final GoogleSignIn _googleSignIn = GoogleSignIn(
-        clientId:
-            '172976090138-upc2i80p6q4juq8oq7fru3clahk8ko64.apps.googleusercontent.com');
+    final GoogleSignIn _googleSignIn = C.googleSignIn;
     await _googleSignIn.disconnect();
     Navigator.pushAndRemoveUntil(
         context,
@@ -38,7 +42,7 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             // user profile photo
             CircleAvatar(
-                backgroundImage: widget.userImageURL.toString() == null
+                backgroundImage: widget.userImageURL == null
                     ? const AssetImage('assets/dummy_user.jpg') as ImageProvider
                     : NetworkImage(widget.userImageURL!),
                 radius: 100),

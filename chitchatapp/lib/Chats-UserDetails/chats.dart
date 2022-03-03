@@ -60,90 +60,33 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          shape: const RoundedRectangleBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(15.0))),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(Icons.add),
+          ),
+          tooltip: 'Chat with a new user',
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const UserDirectory()));
+          }),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                // SEARCH TEXT FIELD
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Search conversations",
-                        hintStyle: TextStyle(color: Colors.grey.shade600),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.grey.shade600,
-                          size: 20,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        contentPadding: EdgeInsets.all(8),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade100)),
-                      ),
-                    ),
-                  ),
-                ),
-                // ADD NEW BUTTON
-                InkWell(
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.indigo[50],
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.add,
-                          color: Colors.indigo,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          "Add New",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UserDirectory()));
-                  },
-                ),
-              ],
-            ),
-            ListView.builder(
-                itemCount: chatUsers.length,
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 16),
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return ConversationList(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                      imageUrl: chatUsers[index].imageURL,
-                      time: chatUsers[index].time,
-                      isMessageRead: (index == 0 || index == 3) ? true : false);
-                })
-          ],
-        ),
+        physics: const BouncingScrollPhysics(),
+        child: ListView.builder(
+            itemCount: chatUsers.length,
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(top: 16),
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return ConversationList(
+                  name: chatUsers[index].name,
+                  messageText: chatUsers[index].messageText,
+                  imageUrl: chatUsers[index].imageURL,
+                  time: chatUsers[index].time,
+                  isMessageRead: (index == 0 || index == 3) ? true : false);
+            }),
       ),
     );
   }

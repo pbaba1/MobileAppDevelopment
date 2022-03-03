@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../Login-SignIn/login.dart';
 
 class UserDirectory extends StatefulWidget {
   const UserDirectory({Key? key}) : super(key: key);
@@ -13,13 +13,48 @@ class UserDirectory extends StatefulWidget {
 class _UserDirectoryState extends State<UserDirectory> {
   Stream<QuerySnapshot> _users =
       FirebaseFirestore.instance.collection('users').snapshots();
-  String searchKey = '';
+  Stream<QuerySnapshot> _users1 =
+      FirebaseFirestore.instance.collection('users').snapshots();
+  String? loggedInUserName = '';
+
+  @override
+  void initState() {
+    setState(() {
+      loggedInUserName = FirebaseAuth.instance.currentUser!.displayName;
+    });
+    loggedInUserName ??= _fetchUserDetails();
+  }
+
+  _fetchUserDetails() {
+    FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+    User? user;
+    _firebaseAuth.authStateChanges().listen((User? u) {
+      user = u;
+      if (user == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+            (Route route) => false);
+      } else {
+        _firebaseFirestore
+            .collection('users')
+            .doc(user?.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {
+                  setState(() {
+                    loggedInUserName = snapshot['display_name'];
+                  })
+                });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ChatApp'),
+        title: const Text('ChatApp'),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -33,16 +68,15 @@ class _UserDirectoryState extends State<UserDirectory> {
                 child: TextField(
                   onChanged: (value) {
                     setState(() {
-                      searchKey = value;
                       _users = FirebaseFirestore.instance
                           .collection('users')
-                          .where('fname', isGreaterThanOrEqualTo: searchKey)
-                          .where('fname', isLessThan: searchKey + '\uf7ff')
+                          .where('display_name', isGreaterThanOrEqualTo: value)
+                          .where('display_name', isLessThan: value + '\uf7ff')
                           .snapshots();
                     });
                   },
                   decoration: InputDecoration(
-                    hintText: "Search conversations",
+                    hintText: "Search user",
                     hintStyle: TextStyle(color: Colors.grey.shade600),
                     prefixIcon: Icon(
                       Icons.search,
@@ -50,8 +84,8 @@ class _UserDirectoryState extends State<UserDirectory> {
                       size: 20,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade100,
-                    contentPadding: EdgeInsets.all(8),
+                    fillColor: Colors.grey.shade200,
+                    contentPadding: const EdgeInsets.all(8),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.grey.shade100)),
@@ -77,13 +111,15 @@ class _UserDirectoryState extends State<UserDirectory> {
                     );
                   }
                   if (snapshot.data!.docs.isEmpty) {
-                    return const Text('No users present',
-                        style: TextStyle(fontSize: 18, color: Colors.indigo));
+                    return const Center(
+                      child: Text('No users present',
+                          style: TextStyle(fontSize: 18, color: Colors.indigo)),
+                    );
                   }
                   return SingleChildScrollView(
                     child: ListView(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       children:
                           snapshot.data!.docs.map((DocumentSnapshot document) {
                         Map<String, dynamic> data =
@@ -94,19 +130,22 @@ class _UserDirectoryState extends State<UserDirectory> {
                             Row(
                               children: [
                                 // Text(data['fname'])
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      color: Colors.red),
-                                  child: Text(
-                                    data['fname'] + ' ' + data['lname'],
-                                    style: const TextStyle(
-                                        color: Colors.blueAccent),
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                ),
+                                data['display_name'] != loggedInUserName
+                                    ? Container(
+                                        padding: const EdgeInsets.all(10),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                1,
+                                        decoration: const BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            color: Colors.grey),
+                                        child: Text(
+                                          data['display_name'],
+                                          style: const TextStyle(
+                                              color: Colors.blueAccent),
+                                          textAlign: TextAlign.justify,
+                                        ))
+                                    : Container()
                               ],
                             ),
                             const SizedBox(height: 15)

@@ -3,16 +3,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:chitchatapp/Login-SignIn/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:chitchatapp/constants.dart' as C;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-          apiKey: 'AIzaSyCYsAV41QbcsWawW0HYxl8brwqM2cmcilI',
-          appId: '1:172976090138:android:d39437e71ef445871175a3',
-          messagingSenderId: '430535446155',
-          projectId: 'chit-chat-app-79874',
-          storageBucket: 'chit-chat-app-79874.appspot.com'));
+      options: FirebaseOptions(
+          apiKey: C.apiKey,
+          appId: C.appId,
+          messagingSenderId: C.messagingSenderId,
+          projectId: C.projectId,
+          storageBucket: C.storageBucket));
   runApp(const MyApp());
 }
 
