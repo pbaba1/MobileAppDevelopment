@@ -20,3 +20,4 @@ samples, guidance on mobile development, and a full API reference.
 # Webapp run command - flutter run -d chrome --web-hostname localhost --web-port 5000
 # Update App Logo - https://www.geeksforgeeks.org/flutter-changing-app-icon/
 # Splash screen - https://pub.dev/packages/flutter_native_splash
+# CORS issue resolution - https://stackoverflow.com/questions/65849071/flutter-firebase-storage-cors-issue

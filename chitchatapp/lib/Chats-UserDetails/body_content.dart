@@ -1,7 +1,10 @@
-import 'package:chitchatapp/login.dart';
-import 'package:chitchatapp/user_profile.dart';
+import 'package:chitchatapp/Chats-UserDetails/chats.dart';
+import 'package:chitchatapp/Login-SignIn/login.dart';
+import 'package:chitchatapp/Chats-UserDetails/search.dart';
+import 'package:chitchatapp/Chats-UserDetails/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -59,6 +62,9 @@ _logout(context) {
 class _BodyContentState extends State<BodyContent> {
   String? userImageUrl = '';
   String? userName = '';
+  int _selectedIndex = 0;
+
+  // List<Widget> _widgetOptions = <Widget>[Chats(), UserProfile()];
 
   @override
   void initState() {
@@ -97,42 +103,36 @@ class _BodyContentState extends State<BodyContent> {
     });
   }
 
+  _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('ChitChat App'), actions: <Widget>[
-      // display user icon
-      InkWell(
-        child: SizedBox(
-          height: 35,
-          width: 35,
-          child: CircleAvatar(
-            backgroundImage: (userImageUrl.toString() == 'null' ||
-                    userImageUrl.toString() == '')
-                ? const AssetImage('assets/dummy_user.jpg') as ImageProvider
-                : NetworkImage(userImageUrl.toString()),
-          ),
+        appBar: AppBar(
+          title: const Text('ChitChat App'),
+          centerTitle: true,
         ),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UserProfile(
-                      userImageURL: userImageUrl, displayName: userName)));
-        },
-      ),
-      SizedBox(
-        width: 10,
-      )
-      /*  IconButton(
-        icon: const Icon(Icons.logout_sharp),
-        tooltip: 'Logout',
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext buildContext) => _logout(context));
-        },
-      ) */
-    ]));
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.chat_bubble_2_fill),
+              label: 'Conversations',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_box),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.indigo,
+          onTap: _onItemTapped,
+        ),
+        body: _selectedIndex == 0
+            ? const Chats()
+            : UserProfile(userImageURL: userImageUrl, displayName: userName));
   }
 }

@@ -1,6 +1,6 @@
-import 'package:chitchatapp/google_sign_in.dart';
+import 'package:chitchatapp/Login-SignIn/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:chitchatapp/login.dart';
+import 'package:chitchatapp/Login-SignIn/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

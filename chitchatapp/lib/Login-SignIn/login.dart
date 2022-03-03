@@ -1,8 +1,8 @@
 import 'dart:convert';
 // import 'package:fanpage/LoginRegistration/google_sign_in.dart';
-import 'package:chitchatapp/body_content.dart';
-import 'package:chitchatapp/google_sign_in.dart';
-import 'package:chitchatapp/register_user.dart';
+import 'package:chitchatapp/Chats-UserDetails/body_content.dart';
+import 'package:chitchatapp/Login-SignIn/google_sign_in.dart';
+import 'package:chitchatapp/Login-SignIn/register_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

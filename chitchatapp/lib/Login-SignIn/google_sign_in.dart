@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../body_content.dart';
+import '../Chats-UserDetails/body_content.dart';
 
 class GoogleSignInProviderClass with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
