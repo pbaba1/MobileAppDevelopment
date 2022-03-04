@@ -1,4 +1,5 @@
 import 'package:chitchatapp/Chats-UserDetails/chats.dart';
+// import 'package:chitchatapp/Chats-UserDetails/get_location.dart';
 import 'package:chitchatapp/Login-SignIn/login.dart';
 import 'package:chitchatapp/Chats-UserDetails/search.dart';
 import 'package:chitchatapp/Chats-UserDetails/user_profile.dart';
@@ -20,7 +21,11 @@ class _BodyContentState extends State<BodyContent> {
   String? userName = '';
   int _selectedIndex = 0;
 
-  // List<Widget> _widgetOptions = <Widget>[Chats(), UserProfile()];
+  List<Widget> _widgetOptions = <Widget>[
+    Chats(),
+    UserProfile(userImageURL: '', displayName: ''),
+    // GetLocation()
+  ];
 
   @override
   void initState() {
@@ -82,12 +87,18 @@ class _BodyContentState extends State<BodyContent> {
               icon: Icon(Icons.account_box),
               label: 'Profile',
             ),
+            /* BottomNavigationBarItem(
+              icon: Icon(Icons.location_on_sharp),
+              label: 'Location',
+            ), */
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.indigo,
           onTap: _onItemTapped,
         ),
-        body: _selectedIndex == 0
+        body: 
+
+        _selectedIndex == 0
             ? const Chats()
             : UserProfile(userImageURL: userImageUrl, displayName: userName));
   }

@@ -21,3 +21,4 @@ samples, guidance on mobile development, and a full API reference.
 # Update App Logo - https://www.geeksforgeeks.org/flutter-changing-app-icon/
 # Splash screen - https://pub.dev/packages/flutter_native_splash
 # CORS issue resolution - https://stackoverflow.com/questions/65849071/flutter-firebase-storage-cors-issue
+# Flutter Project Creation - flutter create --org com.<campusID> <AppName>

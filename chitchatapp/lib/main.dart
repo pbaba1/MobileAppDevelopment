@@ -3,17 +3,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:chitchatapp/Login-SignIn/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chitchatapp/constants.dart' as C;
+import 'package:chitchatapp/constants.dart' as c;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: FirebaseOptions(
-          apiKey: C.apiKey,
-          appId: C.appId,
-          messagingSenderId: C.messagingSenderId,
-          projectId: C.projectId,
-          storageBucket: C.storageBucket));
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyBx168NaAKk7NC5OT6OWOX9UVdjjuDUkI0",
+          authDomain: "chit-chat-app-79874.firebaseapp.com",
+          projectId: "chit-chat-app-79874",
+          storageBucket: "chit-chat-app-79874.appspot.com",
+          messagingSenderId: "172976090138",
+          appId: "1:172976090138:web:d2129f392282c3ad1175a3",
+          measurementId: "G-X1510M64NY"));
   runApp(const MyApp());
 }
 
@@ -33,9 +35,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'ChitChat App',
         theme: ThemeData(
-          // primaryColor: Color(0xff000c66),
           primarySwatch: Colors.indigo,
-          // colorScheme: Colors.indigo[800]
         ),
         home: FutureBuilder(
           initialData: _initializeApp,
