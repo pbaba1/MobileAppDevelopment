@@ -8,14 +8,13 @@ import 'package:chitchatapp/constants.dart' as c;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-          apiKey: "AIzaSyBx168NaAKk7NC5OT6OWOX9UVdjjuDUkI0",
-          authDomain: "chit-chat-app-79874.firebaseapp.com",
-          projectId: "chit-chat-app-79874",
-          storageBucket: "chit-chat-app-79874.appspot.com",
-          messagingSenderId: "172976090138",
-          appId: "1:172976090138:web:d2129f392282c3ad1175a3",
-          measurementId: "G-X1510M64NY"));
+      options: FirebaseOptions(
+    apiKey: c.apiKey,
+    projectId: c.projectId,
+    storageBucket: c.storageBucket,
+    messagingSenderId: c.messagingSenderId,
+    appId: c.appId,
+  ));
   runApp(const MyApp());
 }
 

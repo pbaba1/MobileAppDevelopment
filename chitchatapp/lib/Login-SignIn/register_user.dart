@@ -74,7 +74,8 @@ class _RegisterUserState extends State<RegisterUser> {
             'fname': _firstNameController.text,
             'lname': _lastNameController.text,
             'display_name':
-                _firstNameController.text + ' ' + _lastNameController.text,
+                (_firstNameController.text + ' ' + _lastNameController.text)
+                    .toLowerCase(),
             'email': _emailController.text,
             'user_creation_timestamp': DateTime.now(),
             'image_url': downloadUrl

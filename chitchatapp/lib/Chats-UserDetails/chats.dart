@@ -60,7 +60,7 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      /*  floatingActionButton: FloatingActionButton(
           shape: const RoundedRectangleBorder(
               borderRadius: const BorderRadius.all(Radius.circular(15.0))),
           child: const Padding(
@@ -71,7 +71,7 @@ class _ChatsState extends State<Chats> {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const UserDirectory()));
-          }),
+          }), */
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: ListView.builder(

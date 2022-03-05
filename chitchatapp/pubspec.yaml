@@ -32,10 +32,11 @@ dependencies:
   font_awesome_flutter:
   provider: 6.0.0
   google_sign_in:
-  flutter_native_splash: ^2.0.5
+  flutter_native_splash: any
   image_picker: ^0.8.4+10 
   geocoding: ^2.0.2
   geolocator: ^8.2.0
+  recase: ^4.0.0
 
 flutter_icons:
   image_path: "assets/chat_app_icon.png" 

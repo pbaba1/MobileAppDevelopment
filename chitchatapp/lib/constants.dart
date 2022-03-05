@@ -1,4 +1,3 @@
-import 'package:firebase/firebase.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(
@@ -10,3 +9,5 @@ var appId = '1:172976090138:android:d39437e71ef445871175a3';
 var messagingSenderId = '430535446155';
 var projectId = 'chit-chat-app-79874';
 var storageBucket = 'chit-chat-app-79874.appspot.com';
+
+const String EMAIL_COPIED = 'Email address has been copied';

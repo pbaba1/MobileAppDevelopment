@@ -6,7 +6,9 @@ import '../Chats-UserDetails/body_content.dart';
 import 'package:chitchatapp/constants.dart' as Constants;
 
 class GoogleSignInProviderClass with ChangeNotifier {
-  final GoogleSignIn _googleSignIn = Constants.googleSignIn;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+      clientId:
+          '172976090138-upc2i80p6q4juq8oq7fru3clahk8ko64.apps.googleusercontent.com');
 
   GoogleSignInAccount? _user;
   GoogleSignInAccount get user => _user!;
@@ -32,7 +34,7 @@ class GoogleSignInProviderClass with ChangeNotifier {
           await users.doc(FirebaseAuth.instance.currentUser!.uid).set({
             'fname': _user!.displayName!.split(' ')[0],
             'lname': _user!.displayName?.split(' ')[1],
-            'display_name': _user!.displayName,
+            'display_name': _user!.displayName?.toLowerCase(),
             'email': _user!.email,
             'uid': _user!.id,
             'role': 'USER',
