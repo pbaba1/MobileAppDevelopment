@@ -10,7 +10,6 @@ import 'package:mime_type/mime_type.dart';
 import 'package:recase/recase.dart';
 import '../Login-SignIn/login.dart';
 import 'package:path/path.dart' as Path;
-import 'package:firebase_storage/firebase_storage.dart' as FBS;
 
 class UserProfile extends StatefulWidget {
   final String? userImageURL;
@@ -33,7 +32,7 @@ class _UserProfileState extends State<UserProfile> {
   String currentUserName = '';
   String currentUserID = '';
   String currentUserProfileImage = '';
-  double _rating = 0;
+  int _rating = 0;
   List<dynamic> _ratings = [];
 
   @override
@@ -76,19 +75,19 @@ class _UserProfileState extends State<UserProfile> {
                     currentUserID = snapshot.id;
                     if (currentUserID == widget.userID) {
                       currentUserProfileImage = snapshot['image_url'];
-                    }
-                    print('SEEE SEEEEEEE NOOOOOOOOOOOO');
-                    print(snapshot.data() as Map<String, dynamic>);
-                    if ((snapshot.data() as Map<String, dynamic>)
-                        .containsKey("rating")) {
-                      _ratings = snapshot['rating'];
-                      print('SEEE SEEEEEEE');
-                      print(_ratings);
-                      if (_ratings.isNotEmpty) {
-                        print('Ratings not empty!');
-                        _calculateRating();
-                      } else {
-                        _rating = 0;
+                      print('SEEE SEEEEEEE NOOOOOOOOOOOO');
+                      print(snapshot.data() as Map<String, dynamic>);
+                      if ((snapshot.data() as Map<String, dynamic>)
+                          .containsKey("rating")) {
+                        _ratings = snapshot['rating'];
+                        print('SEEE SEEEEEEE');
+                        print(_ratings);
+                        if (_ratings.isNotEmpty) {
+                          print('Ratings not empty!');
+                          _calculateRating();
+                        } else {
+                          _rating = 0;
+                        }
                       }
                     }
                   })
@@ -144,8 +143,9 @@ class _UserProfileState extends State<UserProfile> {
 /******************************************RATING RELATED CODE*************************************************** */
   _calculateRating() {
     setState(() {
-      _rating = _ratings.fold(0, (previous, current) => previous + current);
-      _rating = _rating / _ratings.length;
+      _rating =
+          _ratings.fold(0, (previous, current) => (previous + current) as int);
+      _rating = (_rating / _ratings.length) as int;
     });
   }
 
@@ -236,21 +236,23 @@ class _UserProfileState extends State<UserProfile> {
                                 as ImageProvider
                             : NetworkImage(currentUserProfileImage),
                         radius: 100),
-                    Positioned(
-                      bottom: 0,
-                      right: 25,
-                      child: IconButton(
-                          onPressed: () {
-                            // _showPicker(context);
-                            imagePicker();
-                          },
-                          tooltip: 'Edit profile picture',
-                          icon: const Icon(
-                            Icons.camera_enhance,
-                            color: Colors.indigo,
-                            size: 30,
-                          )),
-                    )
+                    widget.userID == currentUserID
+                        ? Positioned(
+                            bottom: 0,
+                            right: 25,
+                            child: IconButton(
+                                onPressed: () {
+                                  // _showPicker(context);
+                                  imagePicker();
+                                },
+                                tooltip: 'Edit profile picture',
+                                icon: const Icon(
+                                  Icons.camera_enhance,
+                                  color: Colors.indigo,
+                                  size: 30,
+                                )),
+                          )
+                        : SizedBox()
                   ],
                 ),
               ],

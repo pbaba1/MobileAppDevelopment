@@ -1,10 +1,8 @@
-import 'package:chitchatapp/Chats-UserDetails/chat_with_user.dart';
-import 'package:chitchatapp/Chats-UserDetails/user_directory.dart';
 import 'package:chitchatapp/Widgets/conversationList.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FBA;
 import 'package:flutter/material.dart';
+import 'package:recase/recase.dart';
 
 import '../Login-SignIn/login.dart';
 import '../models/chat_users_model.dart';
@@ -61,12 +59,20 @@ class _ChatsState extends State<Chats> {
 
   _fetchConversations() async {
     List<String> users = [];
+    List<Timestamp> time = [];
+    List<String> messages = [];
     var snapshot =
         await FirebaseFirestore.instance.collection('messages').get();
     var list = snapshot.docs.map((doc) => [doc.data()['messages'], doc.id]);
     list.forEach((element) {
       print('Printing element!!!');
-      print(element);
+      print(element[0]);
+      time.add(element[0][element[0].length - 1]['createdAt']);
+      messages.add(element[0][element[0].length - 1]['content']);
+
+      print('MESSAGES IS::: ');
+      print(messages);
+      print(time);
       // print(element[0]);
       if (element[1].contains(currentUserID)) {
         for (var el in element[0]) {
@@ -82,11 +88,9 @@ class _ChatsState extends State<Chats> {
       }
     });
 
-    // print('&&&&&&&&&&&&&&&&&&&&&');
-    // print(users);
-
+    int i = 1;
     for (var u in users) {
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('users')
           .doc(u)
           .get()
@@ -99,15 +103,15 @@ class _ChatsState extends State<Chats> {
                 email: snapshot['email'],
                 userID: snapshot.id,
                 name: snapshot['display_name'],
-                messageText: '',
+                messageText: messages[i],
                 imageURL: snapshot['image_url'],
-                time: snapshot['user_creation_timestamp']));
+                time: time[i]));
+            i++;
           });
         }
       });
+      chatUsers.sort((a, b) => b.time.compareTo(a.time));
     }
-
-    print(chatUsers);
   }
 
   @override

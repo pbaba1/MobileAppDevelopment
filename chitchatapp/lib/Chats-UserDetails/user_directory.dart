@@ -18,11 +18,9 @@ class _UserDirectoryState extends State<UserDirectory> {
   String? loggedInUserName = '';
 
   @override
-  void initState() {
-    setState(() {
-      loggedInUserName = FirebaseAuth.instance.currentUser!.displayName;
-    });
-    loggedInUserName ??= _fetchUserDetails();
+  initState() {
+    super.initState();
+    _fetchUserDetails();
   }
 
   _fetchUserDetails() {
@@ -65,13 +63,12 @@ class _UserDirectoryState extends State<UserDirectory> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 onChanged: (value) {
+                  print('*************VALUE IS: ' + value);
                   setState(() {
                     _users = FirebaseFirestore.instance
                         .collection('users')
-                        .where('display_name',
-                            isGreaterThanOrEqualTo: value.toLowerCase())
-                        .where('display_name',
-                            isLessThan: value.toLowerCase() + '\uf7ff')
+                        .where('display_name', isGreaterThanOrEqualTo: value)
+                        .where('display_name', isLessThan: value + '\uf7ff')
                         .snapshots();
                   });
                 },
@@ -92,7 +89,7 @@ class _UserDirectoryState extends State<UserDirectory> {
                 ),
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             // LIST OF CONTACTS
             StreamBuilder<QuerySnapshot>(
               stream: _users,
@@ -122,6 +119,12 @@ class _UserDirectoryState extends State<UserDirectory> {
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
+                    double r = 0;
+                    if (data['rating'].isNotEmpty) {
+                      r = data['rating']
+                          .fold(0, (previous, current) => (previous + current));
+                      r = (r / data['rating'].length);
+                    }
 
                     return Column(children: [
                       data['display_name'] != loggedInUserName
@@ -147,14 +150,30 @@ class _UserDirectoryState extends State<UserDirectory> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            ReCase(data['display_name'])
-                                                .titleCase,
-                                            style: const TextStyle(
-                                                color: Colors.blueAccent,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.justify,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                ReCase(data['display_name'])
+                                                    .titleCase,
+                                                style: const TextStyle(
+                                                    color: Colors.blueAccent,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                textAlign: TextAlign.justify,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  for (var i = 0;
+                                                      i < r.toInt();
+                                                      i++)
+                                                    const Icon(Icons.star,
+                                                        color: Colors.indigo)
+                                                ],
+                                              )
+                                            ],
                                           ),
                                           Text(
                                             data['email'],

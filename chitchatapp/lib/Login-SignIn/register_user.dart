@@ -77,7 +77,8 @@ class _RegisterUserState extends State<RegisterUser> {
                     .toLowerCase(),
             'email': _emailController.text,
             'user_creation_timestamp': DateTime.now(),
-            'image_url': url
+            'image_url': url,
+            'rating': []
           });
           FBA.FirebaseAuth.instance.signOut();
           ScaffoldMessenger.of(context)
