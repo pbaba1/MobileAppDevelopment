@@ -17,3 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Logo update reference - 
 https://www.geeksforgeeks.org/flutter-changing-app-icon/
+
+## Web App Run -
+flutter run -d chrome --web-hostname localhost --web-port 5000
