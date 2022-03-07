@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:chitchatapp/Login-SignIn/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chitchatapp/constants.dart' as c;
+import 'package:chitchatapp/services/constants.dart' as c;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

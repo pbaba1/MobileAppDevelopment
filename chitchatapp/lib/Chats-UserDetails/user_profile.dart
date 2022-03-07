@@ -1,9 +1,9 @@
-import 'package:chitchatapp/get_current_location.dart';
+import 'package:chitchatapp/services/get_current_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FBA;
 import 'package:flutter/material.dart';
-import 'package:chitchatapp/constants.dart' as c;
+import 'package:chitchatapp/services/constants.dart' as c;
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker_web/image_picker_web.dart';
