@@ -1,3 +1,4 @@
+import 'package:chitchatapp/get_current_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FBA;
@@ -114,7 +115,7 @@ class _UserProfileState extends State<UserProfile> {
       UploadTask uploadTask = storageReference.put(mediaInfo.data, metaData);
       var imageUri;
       uploadTask.future.then((snapshot) => {
-            Future.delayed(Duration(seconds: 1)).then((value) => {
+            Future.delayed(const Duration(seconds: 1)).then((value) => {
                   snapshot.ref.getDownloadURL().then((dynamic uri) {
                     imageUri = uri;
                     print('Download URL: ${imageUri.toString()}');
@@ -252,7 +253,7 @@ class _UserProfileState extends State<UserProfile> {
                                   size: 30,
                                 )),
                           )
-                        : SizedBox()
+                        : const SizedBox()
                   ],
                 ),
               ],
@@ -320,14 +321,25 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   )
                 : _rating > 0
-                    ? Text(
-                        'Your rating is: ' + _rating.toString(),
-                        style: const TextStyle(
-                            fontSize: 16, fontStyle: FontStyle.italic),
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Your rating is: ',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.italic),
+                          ),
+                          for (var i = 0; i < _rating.toInt(); i++)
+                            const Icon(Icons.star, color: Colors.indigo)
+                        ],
                       )
                     : const Text('You have not been rated yet.',
                         style: TextStyle(
-                            fontSize: 16, fontStyle: FontStyle.italic)),
+                            fontSize: 18, fontStyle: FontStyle.italic)),
+            const SizedBox(height: 5),
+            currentUserID == widget.userID
+                ? const GetCurrentLocation()
+                : Container()
           ],
         ),
       ),

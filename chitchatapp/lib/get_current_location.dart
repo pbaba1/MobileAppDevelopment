@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
 
 class GetCurrentLocation extends StatefulWidget {
   const GetCurrentLocation({Key? key}) : super(key: key);
@@ -21,6 +20,7 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
       speed: 0,
       speedAccuracy: 0);
   String _currentAddress = '';
+  bool showLocation = false;
 
   @override
   void initState() {
@@ -31,17 +31,36 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Column(
-        children: [
-          if (_currentPosition != null)
-            Text(
-                "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
-          Text('Current address: ${_currentAddress}'),
-        ],
-      ),
-    ));
+    return Column(
+      children: [
+        if (_currentPosition != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                tooltip: !showLocation
+                    ? 'Click here to display your location.'
+                    : 'Click here to hide your location',
+                icon: Icon(
+                    !showLocation ? Icons.location_on : Icons.location_off),
+                color: Colors.indigo,
+                onPressed: () {
+                  setState(() {
+                    showLocation = !showLocation;
+                  });
+                },
+              ),
+              showLocation
+                  ? Text(
+                      "LAT: ${_currentPosition.latitude}\nLNG: ${_currentPosition.longitude}",
+                      style: const TextStyle(fontSize: 16))
+                  : const SizedBox(),
+            ],
+          )
+
+        // Text('Current address: ${_currentAddress}'),
+      ],
+    );
   }
 
   _getCurrentLocation() {
