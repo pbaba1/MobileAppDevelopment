@@ -21,6 +21,7 @@ class _BodyContentState extends State<BodyContent> {
   String? userImageUrl = '';
   String? userName = '';
   String? email = '';
+  String currentUserID = '';
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
@@ -38,6 +39,7 @@ class _BodyContentState extends State<BodyContent> {
       userImageUrl = FirebaseAuth.instance.currentUser!.photoURL;
       userName = FirebaseAuth.instance.currentUser!.displayName;
       email = FirebaseAuth.instance.currentUser!.email;
+      currentUserID = FirebaseAuth.instance.currentUser!.uid;
     });
     userImageUrl ??= _fetchUserDetails();
   }
@@ -63,6 +65,7 @@ class _BodyContentState extends State<BodyContent> {
                     userImageUrl = snapshot['image_url'];
                     userName = snapshot['display_name'];
                     email = snapshot['email'];
+                    currentUserID = snapshot.id;
                   })
                 });
       }
@@ -124,7 +127,10 @@ class _BodyContentState extends State<BodyContent> {
         ),
         body: _selectedIndex == 2
             ? UserProfile(
-                userImageURL: userImageUrl, displayName: userName, email: email)
+                userID: currentUserID,
+                userImageURL: userImageUrl,
+                displayName: userName,
+                email: email)
             : _widgetOptions[_selectedIndex]);
   }
 }

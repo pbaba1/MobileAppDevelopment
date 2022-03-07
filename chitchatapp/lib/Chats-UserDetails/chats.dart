@@ -1,9 +1,12 @@
+import 'package:chitchatapp/Chats-UserDetails/chat_with_user.dart';
 import 'package:chitchatapp/Chats-UserDetails/user_directory.dart';
 import 'package:chitchatapp/Widgets/conversationList.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FBA;
 import 'package:flutter/material.dart';
 
+import '../Login-SignIn/login.dart';
 import '../models/chat_users_model.dart';
 
 class Chats extends StatefulWidget {
@@ -14,64 +17,102 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-  List<ChatUsers> chatUsers = [
-    ChatUsers(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        imageURL: "assets/dummy_user.jpg",
-        time: "Now"),
-    ChatUsers(
-        name: "Glady's Murphy",
-        messageText: "That's Great",
-        imageURL: "assets/dummy_user.jpg",
-        time: "Yesterday"),
-    ChatUsers(
-        name: "Jorge Henry",
-        messageText: "Hey where are you?",
-        imageURL: "assets/dummy_user.jpg",
-        time: "31 Mar"),
-    ChatUsers(
-        name: "Philip Fox",
-        messageText: "Busy! Call me in 20 mins",
-        imageURL: "assets/dummy_user.jpg",
-        time: "28 Mar"),
-    ChatUsers(
-        name: "Debra Hawkins",
-        messageText: "Thankyou, It's awesome",
-        imageURL: "assets/dummy_user.jpg",
-        time: "23 Mar"),
-    ChatUsers(
-        name: "Jacob Pena",
-        messageText: "will update you in evening",
-        imageURL: "assets/dummy_user.jpg",
-        time: "17 Mar"),
-    ChatUsers(
-        name: "Andrey Jones",
-        messageText: "Can you please share the file?",
-        imageURL: "assets/dummy_user.jpg",
-        time: "24 Feb"),
-    ChatUsers(
-        name: "John Wick",
-        messageText: "How are you?",
-        imageURL: "assets/dummy_user.jpg",
-        time: "18 Feb"),
-  ];
+  List<ChatUsers> chatUsers = [];
+  String currentUserID = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    setState(() {
+      currentUserID = FBA.FirebaseAuth.instance.currentUser!.uid;
+    });
+
+    _fetchUserDetails();
+    _fetchConversations();
+  }
+
+  _fetchUserDetails() async {
+    FBA.FirebaseAuth _firebaseAuth = FBA.FirebaseAuth.instance;
+    FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+    FBA.User? user;
+    _firebaseAuth.authStateChanges().listen((FBA.User? u) {
+      user = u as FBA.User;
+      if (user == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+            (Route route) => false);
+      } else {
+        print('WHATS IS USER UID: ' + user!.uid);
+        _firebaseFirestore
+            .collection('users')
+            .doc(user?.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {
+                  setState(() {
+                    currentUserID = snapshot.id;
+                  })
+                });
+      }
+    });
+  }
+
+  _fetchConversations() async {
+    List<String> users = [];
+    var snapshot =
+        await FirebaseFirestore.instance.collection('messages').get();
+    var list = snapshot.docs.map((doc) => [doc.data()['messages'], doc.id]);
+    list.forEach((element) {
+      print('Printing element!!!');
+      print(element);
+      // print(element[0]);
+      if (element[1].contains(currentUserID)) {
+        for (var el in element[0]) {
+          if (!users.contains(el['createdBy'])) {
+            users.add(el['createdBy']);
+          }
+        }
+
+        String newID = element[1].replaceAll(currentUserID, '').trim();
+        if (!users.contains(newID)) {
+          users.add(newID);
+        }
+      }
+    });
+
+    // print('&&&&&&&&&&&&&&&&&&&&&');
+    // print(users);
+
+    for (var u in users) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(u)
+          .get()
+          .then((DocumentSnapshot snapshot) {
+        if (u != currentUserID) {
+          setState(() {
+            print('snapshot ID: ' + snapshot.id);
+            print('currentUserID ' + currentUserID);
+            chatUsers.add(ChatUsers(
+                email: snapshot['email'],
+                userID: snapshot.id,
+                name: snapshot['display_name'],
+                messageText: '',
+                imageURL: snapshot['image_url'],
+                time: snapshot['user_creation_timestamp']));
+          });
+        }
+      });
+    }
+
+    print(chatUsers);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*  floatingActionButton: FloatingActionButton(
-          shape: const RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(15.0))),
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.add),
-          ),
-          tooltip: 'Chat with a new user',
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const UserDirectory()));
-          }), */
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: ListView.builder(
@@ -81,11 +122,14 @@ class _ChatsState extends State<Chats> {
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].imageURL,
-                  time: chatUsers[index].time,
-                  isMessageRead: (index == 0 || index == 3) ? true : false);
+                name: chatUsers[index].name,
+                messageText: chatUsers[index].messageText,
+                imageUrl: chatUsers[index].imageURL,
+                userID: chatUsers[index].userID,
+                email: chatUsers[index].email,
+                time: chatUsers[index]
+                    .time, /* isMessageRead: (index == 0 || index == 3) ? true : false */
+              );
             }),
       ),
     );

@@ -171,7 +171,8 @@ class _UserDirectoryState extends State<UserDirectory> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ChatWithUser(data,
+                                        builder: (context) => ChatWithUser(
+                                            userID: document.id,
                                             userImageURL: data['image_url'],
                                             displayName: data['display_name'],
                                             email: data['email'])));

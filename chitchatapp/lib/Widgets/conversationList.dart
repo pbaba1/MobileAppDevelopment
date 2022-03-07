@@ -1,17 +1,26 @@
+import 'package:chitchatapp/Chats-UserDetails/chat_with_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ConversationList extends StatefulWidget {
   String name;
   String messageText;
   String imageUrl;
-  String time;
-  bool isMessageRead;
-  ConversationList(
-      {required this.name,
-      required this.messageText,
-      required this.imageUrl,
-      required this.time,
-      required this.isMessageRead});
+  Timestamp time;
+  String userID;
+  String email;
+  // bool isMessageRead;
+  ConversationList({
+    Key? key,
+    required this.name,
+    required this.messageText,
+    required this.imageUrl,
+    required this.time,
+    required this.userID,
+    required this.email,
+    /* required this.isMessageRead */
+  }) : super(key: key);
   @override
   _ConversationListState createState() => _ConversationListState();
 }
@@ -19,10 +28,20 @@ class ConversationList extends StatefulWidget {
 class _ConversationListState extends State<ConversationList> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatWithUser(
+                    userID: widget.userID,
+                    userImageURL: widget.imageUrl,
+                    displayName: widget.name,
+                    email: widget.email)));
+      },
       child: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -32,7 +51,7 @@ class _ConversationListState extends State<ConversationList> {
                     backgroundImage: NetworkImage(widget.imageUrl),
                     maxRadius: 30,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   Expanded(
@@ -45,17 +64,15 @@ class _ConversationListState extends State<ConversationList> {
                             widget.name,
                             style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 6,
                           ),
                           Text(
-                            widget.messageText,
+                            widget.email,
                             style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade600,
-                                fontWeight: widget.isMessageRead
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
+                              fontSize: 13,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
                         ],
                       ),
@@ -65,13 +82,15 @@ class _ConversationListState extends State<ConversationList> {
               ),
             ),
             Text(
-              widget.time,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: widget.isMessageRead
-                      ? FontWeight.bold
-                      : FontWeight.normal),
+              DateFormat("H:m, MMMM d y")
+                  .format(DateTime.fromMillisecondsSinceEpoch(
+                      widget.time.seconds * 1000))
+                  .toString(),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
+            const Divider(height: 1, color: Colors.grey)
           ],
         ),
       ),

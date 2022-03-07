@@ -1,10 +1,13 @@
 import 'package:chitchatapp/Login-SignIn/login.dart';
+import 'package:firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FBA;
 import 'package:firebase_storage/firebase_storage.dart' as FBS;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io' as i;
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart' as Path;
 
 class RegisterUser extends StatefulWidget {
@@ -24,10 +27,9 @@ class _RegisterUserState extends State<RegisterUser> {
   final FBA.FirebaseAuth _firebaseAuthInstance = FBA.FirebaseAuth.instance;
 
   // file upload
-  bool _isImageUploadError = false;
   String? userName = '';
-  var downloadUrl = '';
-  i.File _imageFile = new i.File('');
+  // var downloadUrl = '';
+  // i.File _imageFile = new i.File('');
 
   Widget fetchIcon(String fieldName) {
     switch (fieldName) {
@@ -61,7 +63,7 @@ class _RegisterUserState extends State<RegisterUser> {
         border: fieldName == 'bio' ? const OutlineInputBorder() : null);
   }
 
-  _registerUser() async {
+  _registerUser(String url) async {
     try {
       FBA.UserCredential userCredential =
           await _firebaseAuthInstance.createUserWithEmailAndPassword(
@@ -78,7 +80,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     .toLowerCase(),
             'email': _emailController.text,
             'user_creation_timestamp': DateTime.now(),
-            'image_url': downloadUrl
+            'image_url': url
           });
           FBA.FirebaseAuth.instance.signOut();
           ScaffoldMessenger.of(context)
@@ -104,77 +106,49 @@ class _RegisterUserState extends State<RegisterUser> {
     }
   }
 
-  Future _uploadToFirebase(BuildContext context) async {
-    String fileName = Path.basename(_imageFile.path);
-    FBS.FirebaseStorage storage = FBS.FirebaseStorage.instance;
-    FBS.Reference ref =
-        storage.ref().child('images/' + DateTime.now().toString());
-    try {
-      FBS.UploadTask uploadTask = ref.putFile(_imageFile);
-      uploadTask.then((res) {
-        res.ref.getDownloadURL();
-      });
+  //**********************************************************IMAGE PICKER********************************************************************* */
+  imagePicker() {
+    return ImagePickerWeb.getImageInfo.then((MediaInfo mediaInfo) {
+      uploadFile(mediaInfo, 'images', mediaInfo.fileName.toString());
+    });
+  }
 
-      downloadUrl = await (await uploadTask).ref.getDownloadURL();
-      setState(() {
-        _isImageUploadError = false;
-      });
+  //Getting Downloaded URI directly
+  uploadFile(MediaInfo mediaInfo, String ref, String fileName) {
+    try {
+      String mimeType =
+          mime(Path.basename(mediaInfo.fileName.toString())).toString();
+      var metaData = UploadMetadata(contentType: mimeType);
+      StorageReference storageReference = storage().ref(ref).child(fileName);
+
+      UploadTask uploadTask = storageReference.put(mediaInfo.data, metaData);
+      var imageUri;
+      uploadTask.future.then((snapshot) => {
+            Future.delayed(Duration(seconds: 1)).then((value) => {
+                  snapshot.ref.getDownloadURL().then((dynamic uri) {
+                    imageUri = uri;
+                    print('Download URL: ${imageUri.toString()}');
+                    _registerUser(uri.toString());
+                  })
+                })
+          });
     } catch (e) {
-      setState(() {
-        _isImageUploadError = true;
-      });
+      print('File Upload Error: $e');
     }
   }
 
-  _imgFromCamera() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+  /* updateProfileLinkInDB(String url) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserID)
+        .update({'image_url': url});
+
     setState(() {
-      _imageFile = i.File(pickedFile!.path);
-    });
+      currentUserProfileImage = url.toString();
+    }); 
+  }*/
 
-    _uploadToFirebase(context);
-  }
-
-  _imgFromGallery() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _imageFile = i.File(pickedFile!.path);
-    });
-
-    _uploadToFirebase(context);
-  }
-
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text('Photo Library'),
-                    onTap: () {
-                      _imgFromGallery();
-                      Navigator.of(context).pop();
-                    }),
-                Builder(builder: (context) {
-                  return ListTile(
-                    leading: const Icon(Icons.photo_camera),
-                    title: const Text('Camera'),
-                    onTap: () {
-                      _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  );
-                }),
-              ],
-            ),
-          );
-        });
-  }
+//**********************************************************end of IMAGE PICKER********************************************************************* */
 
   @override
   Widget build(BuildContext context) {
@@ -297,10 +271,11 @@ class _RegisterUserState extends State<RegisterUser> {
                         IconButton(
                             onPressed: () {
                               // _showPicker(context);
+                              imagePicker();
                             },
                             icon: const Icon(Icons.camera_alt_rounded))
                       ]),
-                  onPressed: () => _showPicker(context)),
+                  onPressed: () => imagePicker()),
               const SizedBox(height: 10),
               // REGISTER BUTTON
               Container(
@@ -316,7 +291,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     ),
                     onPressed: () {
                       _registerForm.currentState!.validate()
-                          ? _registerUser()
+                          ? _registerUser('')
                           : null;
                     },
                   )),
