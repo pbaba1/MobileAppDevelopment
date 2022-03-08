@@ -51,9 +51,18 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
                 },
               ),
               showLocation
-                  ? Text(
-                      "LAT: ${_currentPosition.latitude}\nLNG: ${_currentPosition.longitude}",
-                      style: const TextStyle(fontSize: 16))
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            "LAT: ${_currentPosition.latitude}\nLNG: ${_currentPosition.longitude}t(",
+                            style: const TextStyle(fontSize: 16)),
+                        const Text(
+                          '\n*Address cannot be generated as the geocoding library doesn\'t have this feature for web.',
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        )
+                      ],
+                    )
                   : const SizedBox(),
             ],
           )
