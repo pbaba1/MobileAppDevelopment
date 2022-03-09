@@ -11,6 +11,7 @@ class ConversationList extends StatefulWidget {
   Timestamp time;
   String userID;
   String email;
+  Timestamp dateCreated;
   // bool isMessageRead;
   ConversationList({
     Key? key,
@@ -19,6 +20,7 @@ class ConversationList extends StatefulWidget {
     required this.imageUrl,
     required this.time,
     required this.userID,
+    required this.dateCreated,
     required this.email,
     /* required this.isMessageRead */
   }) : super(key: key);
@@ -35,6 +37,7 @@ class _ConversationListState extends State<ConversationList> {
             context,
             MaterialPageRoute(
                 builder: (context) => ChatWithUser(
+                    dateCreated: widget.dateCreated,
                     userID: widget.userID,
                     userImageURL: widget.imageUrl,
                     displayName: widget.name,

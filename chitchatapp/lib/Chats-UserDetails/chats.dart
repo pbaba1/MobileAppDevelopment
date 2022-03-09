@@ -17,6 +17,7 @@ class Chats extends StatefulWidget {
 class _ChatsState extends State<Chats> {
   List<ChatUsers> chatUsers = [];
   String currentUserID = '';
+  DateTime dateCreated = DateTime.now();
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _ChatsState extends State<Chats> {
             .then((DocumentSnapshot snapshot) => {
                   setState(() {
                     currentUserID = snapshot.id;
+                    dateCreated = snapshot['user_creation_timestamp'];
                   })
                 });
       }
@@ -127,6 +129,7 @@ class _ChatsState extends State<Chats> {
             itemBuilder: (context, index) {
               return ConversationList(
                 name: chatUsers[index].name,
+                dateCreated: Timestamp.fromDate(dateCreated),
                 messageText: chatUsers[index].messageText,
                 imageUrl: chatUsers[index].imageURL,
                 userID: chatUsers[index].userID,

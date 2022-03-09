@@ -12,11 +12,13 @@ class ChatWithUser extends StatefulWidget {
   final String? displayName;
   final String? email;
   final String userID;
+  final Timestamp dateCreated;
   const ChatWithUser(
       {Key? key,
       required this.userID,
       required this.userImageURL,
       required this.displayName,
+      required this.dateCreated,
       required this.email})
       : super(key: key);
 
@@ -161,6 +163,7 @@ class _ChatWithUserState extends State<ChatWithUser> {
                         snapshot['display_name'] == widget.displayName;
                     currentUserName = snapshot['display_name'];
                     currentUserID = snapshot.id;
+    
                     // _fetchUserChats();
                   })
                 });
@@ -249,6 +252,7 @@ class _ChatWithUserState extends State<ChatWithUser> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => up.UserProfile(
                       userImageURL: widget.userImageURL,
+                      dateCreated: widget.dateCreated,
                       displayName: widget.displayName,
                       email: widget.email,
                       userID: widget.userID,
