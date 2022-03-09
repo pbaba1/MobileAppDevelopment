@@ -17,11 +17,13 @@ class UserProfile extends StatefulWidget {
   final String? displayName;
   final String? email;
   final String userID;
+  final Timestamp dateCreated;
   const UserProfile(
       {Key? key,
       required this.userImageURL,
       required this.displayName,
       required this.email,
+      required this.dateCreated,
       required this.userID})
       : super(key: key);
 
@@ -339,7 +341,9 @@ class _UserProfileState extends State<UserProfile> {
             const SizedBox(height: 5),
             currentUserID == widget.userID
                 ? const GetCurrentLocation()
-                : Container()
+                : Container(),
+            Text(
+                'Date on which user joined the system: ${widget.dateCreated.toDate()}')
           ],
         ),
       ),

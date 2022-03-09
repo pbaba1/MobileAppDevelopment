@@ -1,11 +1,15 @@
 // import 'dart:html';
 import 'dart:io' as i;
+import 'package:universal_io/io.dart';
 // import 'dart:typed_data';
 // import 'dart:html' as html;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart' as FBA;
 import 'package:flutter/foundation.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as FBS;
 import 'package:image_picker/image_picker.dart';
@@ -79,51 +83,56 @@ class _CreatePostsState extends State<CreatePosts> {
     }
   }
 
-  /*  _imagePickerWeb({required Function(html.File file) onSelected}) {
-    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-    uploadInput.accept = '.png,.jpg,.jpeg';
-    uploadInput.click();
-
-    uploadInput.onChange.listen((event) {
-      html.File file = uploadInput.files!.first;
-      final reader = html.FileReader();
-      reader.readAsDataUrl(file);
-      print('FILe is');
-      print(file.toString());
-      reader.onLoadEnd.listen((event) {
-        onSelected(file);
-      });
+  //web
+  imagePickerWeb(BuildContext context) {
+    return ImagePickerWeb.getImageInfo.then((MediaInfo mediaInfo) {
+      uploadFile(mediaInfo, 'images', mediaInfo.fileName.toString(), context);
     });
-  } */
+  }
+
+  //Getting Downloaded URI directly
+  uploadFile(
+      MediaInfo mediaInfo, String ref, String fileName, BuildContext context) {
+    try {
+      String mimeType =
+          mime(basename(mediaInfo.fileName.toString())).toString();
+      var metaData = UploadMetadata(contentType: mimeType);
+      StorageReference storageReference = storage().ref(ref).child(fileName);
+
+      UploadTask uploadTask = storageReference.put(mediaInfo.data, metaData);
+      var imageUri;
+      uploadTask.future.then((snapshot) => {
+            Future.delayed(const Duration(seconds: 1)).then((value) => {
+                  snapshot.ref.getDownloadURL().then((dynamic uri) {
+                    imageUri = uri;
+                    print('Download URL: ${imageUri.toString()}');
+                    setState(() {
+                      downloadUrl = imageUri.toString();
+                      _uploadToFirebase(context);
+                    });
+                  })
+                })
+          });
+    } catch (e) {
+      print('File Upload Error: $e');
+    }
+  }
+
+  //web
 
   _imagePicker(context) async {
-    if (defaultTargetPlatform == TargetPlatform.windows) {
-    } else {
+    if (Platform.operatingSystem != 'windows') {
       final picker = ImagePicker();
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
       setState(() {
         _imageFile = i.File(pickedFile!.path);
       });
+    } else {
+      imagePickerWeb(context);
     }
 
     _uploadToFirebase(context);
   }
-
-/*   _uploadToStorage() {
-    final dateTime = DateTime.now();
-    FBS.FirebaseStorage storage = FBS.FirebaseStorage.instance;
-    _imagePickerWeb(onSelected: (file) async {
-      i.File newFile = file as i.File;
-      FBS.Reference ref =
-          storage.ref().child('images/' + DateTime.now().toString());
-      FBS.UploadTask uploadTask = ref.putFile(newFile);
-      uploadTask.then((res) {
-        res.ref.getDownloadURL();
-      });
-
-      downloadUrl = await (await uploadTask).ref.getDownloadURL();
-    });
-  } */
 
   Future _uploadToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile.path);
@@ -190,7 +199,7 @@ class _CreatePostsState extends State<CreatePosts> {
                               style:
                                   TextStyle(color: Colors.green, fontSize: 14))
                           : Container(),
-                      _isImageUploadError
+                      /* _isImageUploadError
                           ? const Text(
                               'The image could not be uploaded. Please try again later',
                               style: TextStyle(color: Colors.red, fontSize: 14))
@@ -200,7 +209,7 @@ class _CreatePostsState extends State<CreatePosts> {
                           ? const Text('Image uploaded successfully!',
                               style:
                                   TextStyle(color: Colors.green, fontSize: 14))
-                          : Container(),
+                          : Container(), */
                       const SizedBox(height: 10),
                       Column(mainAxisSize: MainAxisSize.min, children: [
                         TextFormField(

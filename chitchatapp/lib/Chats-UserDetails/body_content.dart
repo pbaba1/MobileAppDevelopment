@@ -22,6 +22,7 @@ class _BodyContentState extends State<BodyContent> {
   String? userName = '';
   String? email = '';
   String currentUserID = '';
+  DateTime dateCreated = DateTime.now();
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
@@ -65,6 +66,7 @@ class _BodyContentState extends State<BodyContent> {
                     userImageUrl = snapshot['image_url'];
                     userName = snapshot['display_name'];
                     email = snapshot['email'];
+                    dateCreated = snapshot['user_creation_timestamp'];
                     currentUserID = snapshot.id;
                   })
                 });
@@ -128,6 +130,7 @@ class _BodyContentState extends State<BodyContent> {
         body: _selectedIndex == 2
             ? UserProfile(
                 userID: currentUserID,
+                dateCreated: Timestamp.fromDate(dateCreated),
                 userImageURL: userImageUrl,
                 displayName: userName,
                 email: email)

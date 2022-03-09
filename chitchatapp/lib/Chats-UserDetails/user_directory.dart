@@ -16,6 +16,7 @@ class _UserDirectoryState extends State<UserDirectory> {
   Stream<QuerySnapshot> _users =
       FirebaseFirestore.instance.collection('users').snapshots();
   String? loggedInUserName = '';
+  DateTime dateCreated = DateTime.now();
 
   @override
   initState() {
@@ -42,6 +43,7 @@ class _UserDirectoryState extends State<UserDirectory> {
             .then((DocumentSnapshot snapshot) => {
                   setState(() {
                     loggedInUserName = snapshot['display_name'];
+                    dateCreated = snapshot['user_creation_timestamp'];
                   })
                 });
       }
@@ -191,6 +193,8 @@ class _UserDirectoryState extends State<UserDirectory> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ChatWithUser(
+                                            dateCreated:
+                                                Timestamp.fromDate(dateCreated),
                                             userID: document.id,
                                             userImageURL: data['image_url'],
                                             displayName: data['display_name'],
