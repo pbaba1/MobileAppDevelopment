@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../Homepage/homepage.dart';
+import 'package:veershaivlingayat/Homepage/homepage.dart';
+import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -16,10 +16,8 @@ class _LoginState extends State<Login> {
   // final FirebaseAuth _auth = FirebaseAuth.instance;
   // FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool _visibility = true;
-  // ignore: non_constant_identifier_names
-  bool email_success = true;
-  // ignore: non_constant_identifier_names
-  bool password_success = true;
+  bool emailSuccess = true;
+  bool passwordSuccess = true;
 
   void _login() async {
     try {
@@ -27,26 +25,28 @@ class _LoginState extends State<Login> {
       //   email: _username.text.toLowerCase(),
       //   password: _password.text,
       // );
-      if (_username.text == 'admin' && _password.text == 'admin') {
-        setState(() {
-          email_success = true;
-          password_success = true;
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Logging in.......")));
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const Homepage()));
-        });
-      }
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const Homepage()));
+      // if (_username.text == 'admin' && _password.text == 'admin') {
+      //   setState(() {
+      //     emailSuccess = true;
+      //     passwordSuccess = true;
+      //     ScaffoldMessenger.of(context)
+      //         .showSnackBar(const SnackBar(content: Text("Logging in.......")));
+      //     Navigator.pushReplacement(
+      //         context, MaterialPageRoute(builder: (_) => const Homepage()));
+      //   });
+      // }
     } catch (e) {
       // if (e.code == 'user-not-found') {
       //   setState(() {
-      //     email_success = false;
-      //     password_success = true;
+      //     emailSuccess = false;
+      //     passwordSuccess = true;
       //   });
       // } else if (e.code == 'wrong-password') {
       //   setState(() {
-      //     email_success = true;
-      //     password_success = false;
+      //     emailSuccess = true;
+      //     passwordSuccess = false;
       //     _password.clear();
       //   });
       // }
@@ -58,11 +58,6 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   title: const Text("Login Page"),
-        //   centerTitle: true,
-        //   backgroundColor: Colors.red.shade700,
-        // ),
         body: Center(
           child: Form(
             key: _form,
@@ -78,8 +73,8 @@ class _LoginState extends State<Login> {
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        email_success
-                            ? (password_success
+                        emailSuccess
+                            ? (passwordSuccess
                                 ? ''
                                 : 'Wrong password provided.')
                             : 'No user found for that username.',
@@ -149,14 +144,18 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(32.0)),
                       child: FlatButton(
                         onPressed: () {
-                          _form.currentState!.validate() ? _login() : null;
+                          // _form.currentState!.validate() ? _login() : null;
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const Homepage()));
                           // print("hello");
                         },
                         child: const Text(
                           'Login',
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
-                        color: const Color(0xFFCA0000),
+                        color: Color(c.appColor),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32.0)),
                       ),
