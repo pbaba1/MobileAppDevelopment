@@ -70,12 +70,10 @@ class _NavdrawerState extends State<Navdrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           const DrawerHeader(
-            child: Text(
-              '',
-            ),
+            child: SizedBox(),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    fit: BoxFit.fill, image: AssetImage('assets/banner.jpg'))),
+                    fit: BoxFit.cover, image: AssetImage('assets/banner.jpg'))),
           ),
           ListTile(
             leading:
@@ -188,13 +186,6 @@ class _NavdrawerState extends State<Navdrawer> {
               ),
             ],
           ),
-          // ListTile(
-          //   leading:
-          //       Icon(Icons.menu_book, color: checkMenuActivation('Quick Menu')),
-          //   title: Text('Quick Menu',
-          //       style: TextStyle(color: checkMenuActivation('Quick Menu'))),
-          //   onTap: () => {performAction('Quick Menu')},
-          // ),
           ListTile(
             leading: Icon(FontAwesomeIcons.starOfDavid,
                 color: checkMenuActivation('Astrology')),
@@ -216,8 +207,9 @@ class _NavdrawerState extends State<Navdrawer> {
                 style: TextStyle(color: checkMenuActivation('Contact Us'))),
             onTap: () => {performAction('Contact Us')},
           ),
+          const Divider(thickness: 2),
           Padding(
-            padding: const EdgeInsets.fromLTRB(40, 40, 40, 15),
+            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
             child: FlatButton(
               height: 40,
               onPressed: () {
