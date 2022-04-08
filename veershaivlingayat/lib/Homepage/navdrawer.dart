@@ -14,13 +14,20 @@ class Navdrawer extends StatefulWidget {
 }
 
 class _NavdrawerState extends State<Navdrawer> {
+  String currentPageRecorded = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() => currentPageRecorded = widget.currentPage);
+  }
+
   void navigate(Widget widgetToReturn) {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => widgetToReturn),
         (Route route) => false);
-    // Widget returnableWidget = ;
-    // return widgetToReturn;
   }
 
   void performAction(String requiredAction) {
@@ -71,10 +78,8 @@ class _NavdrawerState extends State<Navdrawer> {
                     fit: BoxFit.fill, image: AssetImage('assets/banner.jpg'))),
           ),
           ListTile(
-            leading: Icon(
-              Icons.home,
-              color: checkMenuActivation('Home'),
-            ),
+            leading:
+                Icon(Icons.home, color: checkMenuActivation('Home'), size: 22),
             title: Text(
               'Home',
               style: TextStyle(color: checkMenuActivation('Home')),
@@ -83,19 +88,113 @@ class _NavdrawerState extends State<Navdrawer> {
           ),
           ListTile(
             leading: Icon(Icons.business_outlined,
-                color: checkMenuActivation('About Us')),
+                color: checkMenuActivation('About Us'), size: 22),
             title: Text('About Us',
                 style: TextStyle(color: checkMenuActivation('About Us'))),
             onTap: () => {performAction('About Us')},
           ),
           // to have another drawer
-          ListTile(
-            leading:
-                Icon(Icons.menu_book, color: checkMenuActivation('Quick Menu')),
+          ExpansionTile(
+            onExpansionChanged: (expanded) {
+              if (expanded) {
+                setState(() => widget.currentPage = 'Quick Menu');
+              } else {
+                setState(() => widget.currentPage = currentPageRecorded);
+              }
+            },
+            leading: Icon(Icons.menu_book,
+                color: checkMenuActivation('Quick Menu'), size: 22),
             title: Text('Quick Menu',
                 style: TextStyle(color: checkMenuActivation('Quick Menu'))),
-            onTap: () => {performAction('Quick Menu')},
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: ListTile(
+                  leading: Icon(Icons.search,
+                      color: checkMenuActivation(c.menuSubOptions[0]),
+                      size: 22),
+                  title: Text(c.menuSubOptions[0],
+                      style: TextStyle(
+                          color: checkMenuActivation(c.menuSubOptions[0]))),
+                  onTap: () => {performAction(c.menuSubOptions[0])},
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: ListTile(
+                  leading: Icon(Icons.list,
+                      color: checkMenuActivation(c.menuSubOptions[1]),
+                      size: 22),
+                  title: Text(c.menuSubOptions[1],
+                      style: TextStyle(
+                          color: checkMenuActivation(c.menuSubOptions[1]))),
+                  onTap: () => {performAction(c.menuSubOptions[1])},
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 15,
+                    backgroundColor: Colors.transparent,
+                    child: GestureDetector(
+                      onTap: () {
+                        // perform click here
+                      },
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.thumb_up,
+                              color: checkMenuActivation(c.menuSubOptions[2]),
+                              size: 13,
+                            ),
+                            Icon(Icons.thumb_down,
+                                color: checkMenuActivation(c.menuSubOptions[2]),
+                                size: 13),
+                          ]),
+                    ),
+                  ),
+                  title: Text(c.menuSubOptions[2],
+                      style: TextStyle(
+                          color: checkMenuActivation(c.menuSubOptions[2]))),
+                  onTap: () => {performAction(c.menuSubOptions[2])},
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: ListTile(
+                  leading: Icon(Icons.people,
+                      color: checkMenuActivation(c.menuSubOptions[3]),
+                      size: 22),
+                  title: Text(c.menuSubOptions[3],
+                      style: TextStyle(
+                          color: checkMenuActivation(c.menuSubOptions[3]))),
+                  onTap: () => {performAction(c.menuSubOptions[3])},
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: ListTile(
+                  leading: Icon(FontAwesomeIcons.starOfDavid,
+                      color: checkMenuActivation(c.menuSubOptions[4]),
+                      size: 22),
+                  title: Text(c.menuSubOptions[4],
+                      style: TextStyle(
+                          color: checkMenuActivation(c.menuSubOptions[4]))),
+                  onTap: () => {performAction(c.menuSubOptions[4])},
+                ),
+              ),
+            ],
           ),
+          // ListTile(
+          //   leading:
+          //       Icon(Icons.menu_book, color: checkMenuActivation('Quick Menu')),
+          //   title: Text('Quick Menu',
+          //       style: TextStyle(color: checkMenuActivation('Quick Menu'))),
+          //   onTap: () => {performAction('Quick Menu')},
+          // ),
           ListTile(
             leading: Icon(FontAwesomeIcons.starOfDavid,
                 color: checkMenuActivation('Astrology')),
