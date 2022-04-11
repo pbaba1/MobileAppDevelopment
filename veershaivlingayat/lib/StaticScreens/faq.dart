@@ -6,24 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 class FAQ extends StatelessWidget {
   const FAQ({Key? key}) : super(key: key);
-//   @override
-//   State<FAQ> createState() => _FAQState();
-// }
-
-// class _FAQState extends State<FAQ> {
-//   late TabController _tabController;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(vsync: this, length: 4);
-//   }
-
-//  @override
-//  void dispose() {
-//    _tabController.dispose();
-//    super.dispose();
-//  }
 
   @override
   Widget build(BuildContext context) {
