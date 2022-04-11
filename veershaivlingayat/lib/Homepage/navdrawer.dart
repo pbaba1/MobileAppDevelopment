@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:veershaivlingayat/StaticScreens/about-us.dart';
+import 'package:veershaivlingayat/StaticScreens/astrology.dart';
+import 'package:veershaivlingayat/StaticScreens/contact-us.dart';
+import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 import 'homepage.dart';
@@ -43,12 +46,19 @@ class _NavdrawerState extends State<Navdrawer> {
             : Navigator.pop(context);
         break;
       case 'Contact Us':
+        widget.currentPage != 'Contact Us'
+            ? navigate(ContactUs())
+            : Navigator.pop(context);
         break;
       case 'FAQ':
+        widget.currentPage != 'FAQ' ? navigate(FAQ()) : Navigator.pop(context);
         break;
       case 'Logout':
         break;
       case 'Astrology':
+        widget.currentPage != 'Astrology'
+            ? navigate(Astrology())
+            : Navigator.pop(context);
         break;
       case 'Quick Menu':
         break;
