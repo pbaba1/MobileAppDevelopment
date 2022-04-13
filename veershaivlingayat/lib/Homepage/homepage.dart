@@ -3,7 +3,8 @@ import 'package:veershaivlingayat/Homepage/navdrawer.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+  String pageTitle;
+  Homepage({Key? key, required this.pageTitle}) : super(key: key);
 
   @override
   _HomepageState createState() => _HomepageState();

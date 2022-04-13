@@ -5,7 +5,8 @@ import 'package:veershaivlingayat/utils/constants.dart' as c;
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUs extends StatelessWidget {
-  const ContactUs({Key? key}) : super(key: key);
+  String pageTitle;
+  ContactUs({Key? key, required this.pageTitle}) : super(key: key);
 
   _launchURL() async {
     const url = 'https://www.facebook.com/public/Veershaivlingayat-Zirpe';
@@ -21,7 +22,7 @@ class ContactUs extends StatelessWidget {
     return Scaffold(
       drawer: Navdrawer(currentPage: 'Contact Us'),
       appBar: AppBar(
-        title: const Text('Contact Us'),
+        title: Text(pageTitle),
         backgroundColor: Color(c.appColor),
       ),
       body: SingleChildScrollView(
