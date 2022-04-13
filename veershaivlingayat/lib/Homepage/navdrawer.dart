@@ -67,8 +67,8 @@ class _NavdrawerState extends State<Navdrawer> {
             ? navigate(const Astrology())
             : Navigator.pop(context);
         break;
-      case 'Interest Sent/Recevied':
-        widget.currentPage != 'Interest Sent/Recevied'
+      case 'Interest Sent/Received':
+        widget.currentPage != 'Interest Sent/Received'
             ? navigate(const InterestSentRecevied())
             : Navigator.pop(context);
         break;
@@ -97,7 +97,10 @@ class _NavdrawerState extends State<Navdrawer> {
 
   Color checkMenuActivation(String fromWhere) {
     Color color = Colors.grey.shade600;
-    if (widget.currentPage == fromWhere) {
+    // if (c.menuSubOptions.contains(fromWhere)) {
+    //   setState(() => widget.currentPage = fromWhere);
+    // }
+    if (widget.currentPage == fromWhere || fromWhere == 'Quick Menu') {
       color = Color(c.appColor);
     }
     return color;
@@ -133,17 +136,24 @@ class _NavdrawerState extends State<Navdrawer> {
           ),
           // to have another drawer
           ExpansionTile(
-            onExpansionChanged: (expanded) {
+            /*  onExpansionChanged: (expanded) {
               if (expanded) {
                 setState(() => widget.currentPage = 'Quick Menu');
               } else {
                 setState(() => widget.currentPage = currentPageRecorded);
               }
-            },
-            leading:
-                Icon(Icons.menu_book, color: Colors.grey.shade600, size: 22),
+            }, */
+            leading: Icon(Icons.menu_book,
+                color: c.menuSubOptions.contains(widget.currentPage)
+                    ? Color(c.appColor)
+                    : Colors.grey.shade600,
+                size: 22),
             title: Text('Quick Menu',
-                style: TextStyle(color: Colors.grey.shade600)),
+                style: TextStyle(
+                  color: c.menuSubOptions.contains(widget.currentPage)
+                      ? Color(c.appColor)
+                      : Colors.grey.shade600,
+                )),
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
