@@ -110,10 +110,10 @@ class _NavdrawerState extends State<Navdrawer> {
                 setState(() => widget.currentPage = currentPageRecorded);
               }
             },
-            leading: Icon(Icons.menu_book,
-                color: checkMenuActivation('Quick Menu'), size: 22),
+            leading:
+                Icon(Icons.menu_book, color: Colors.grey.shade600, size: 22),
             title: Text('Quick Menu',
-                style: TextStyle(color: checkMenuActivation('Quick Menu'))),
+                style: TextStyle(color: Colors.grey.shade600)),
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
