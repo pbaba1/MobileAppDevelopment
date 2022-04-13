@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/navdrawer.dart';
+import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
+import 'package:veershaivlingayat/QuickMenu/melawa-information.dart';
+import 'package:veershaivlingayat/QuickMenu/search-profiles.dart';
+import 'package:veershaivlingayat/QuickMenu/shortlisted-blocked.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Homepage extends StatefulWidget {
@@ -50,18 +54,22 @@ class _HomepageState extends State<Homepage> {
                             style: BorderStyle.solid)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Flexible(
+                      children: [
+                        const Flexible(
                           child: Text('Your last visit',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 14.0, color: Colors.black)),
                         ),
                         Flexible(
-                          child: Text('13/04/2022 11:38 PM',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
+                          child: Row(
+                            children: const [
+                              Text('13/04/2022 11:38 PM',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.black)),
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -76,18 +84,22 @@ class _HomepageState extends State<Homepage> {
                             style: BorderStyle.solid)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Flexible(
+                      children: [
+                        const Flexible(
                           child: Text('Expires on',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 14.0, color: Colors.black)),
                         ),
                         Flexible(
-                          child: Text('20/02/2022',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
+                          child: Row(
+                            children: const [
+                              Text('20/02/2022',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.black)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -102,18 +114,28 @@ class _HomepageState extends State<Homepage> {
                             style: BorderStyle.solid)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Flexible(
+                      children: [
+                        const Flexible(
                           child: Text('Profile Completeness',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 14.0, color: Colors.black)),
                         ),
                         Flexible(
-                          child: Text('94%',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Flexible(
+                                child: Text('94%',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.black)),
+                              ),
+                              Flexible(
+                                  child:
+                                      Icon(Icons.arrow_circle_right_outlined)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -128,103 +150,169 @@ class _HomepageState extends State<Homepage> {
                             style: BorderStyle.solid)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Flexible(
+                      children: [
+                        const Flexible(
                           child: Text('Credit Remaining',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 14.0, color: Colors.black)),
                         ),
                         Flexible(
-                          child: Text('Rs. 0 / -',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
+                          child: Row(
+                            children: const [
+                              Text('Rs. 0 / -',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: Colors.black)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                            style: BorderStyle.solid)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Flexible(
-                          child: Text('Interest Sent / Received',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
-                        ),
-                        Flexible(
-                          child: Text('0 / 0',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
-                        ),
-                      ],
+                  InkWell(
+                    onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const InterestSentRecevied())),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Flexible(
+                            child: Text('Interest Sent / Received',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.black)),
+                          ),
+                          Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Flexible(
+                                  child: Text('0 / 0',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 14.0, color: Colors.black)),
+                                ),
+                                Flexible(
+                                    child: Icon(
+                                        Icons.arrow_circle_right_outlined)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                            style: BorderStyle.solid)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Flexible(
-                          child: Text('Shortlisted / Blocked Profiles',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
-                        ),
-                        Flexible(
-                          child: Text('0 / 0',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black)),
-                        ),
-                      ],
+                  InkWell(
+                    onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ShortlistedBlocked())),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Flexible(
+                            child: Text('Shortlisted / Blocked Profiles',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.black)),
+                          ),
+                          Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Flexible(
+                                  child: Text('0 / 0',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 14.0, color: Colors.black)),
+                                ),
+                                Flexible(
+                                    child: Icon(
+                                        Icons.arrow_circle_right_outlined)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                            style: BorderStyle.solid)),
-                    child: const Text('Search Profiles',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
+                  InkWell(
+                    onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const SearchProfiles())),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Flexible(
+                            child: Text('Search Profiles',
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          Flexible(
+                              child: Icon(Icons.arrow_circle_right_outlined)),
+                        ],
+                      ),
+                    ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                            style: BorderStyle.solid)),
-                    child: const Text('Melawa Information',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
+                  InkWell(
+                    onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const MelawaInformation())),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Flexible(
+                            child: Text('Melawa Information',
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          Flexible(
+                              child: Icon(Icons.arrow_circle_right_outlined)),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               )),
