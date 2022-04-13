@@ -73,6 +73,22 @@ class AboutUs extends StatelessWidget {
                     fontSize: 14.0,
                     color: Colors.black,
                   ))),
+          Padding(
+            padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
+            child: Column(
+              children: const [
+                CircleAvatar(
+                    backgroundImage: AssetImage('assets/about_us_img1.jpeg'),
+                    radius: 75),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
+                    child: Text(
+                      'Ramling Zirpe',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ))
+              ],
+            ),
+          ),
         ]),
       ),
     );
