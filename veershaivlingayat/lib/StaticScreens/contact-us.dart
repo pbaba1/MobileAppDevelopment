@@ -36,7 +36,7 @@ class ContactUs extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               )),
           Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 15.0, 5.0),
             child: Icon(
               Icons.location_pin,
               size: 30,
