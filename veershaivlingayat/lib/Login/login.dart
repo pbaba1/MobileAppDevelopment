@@ -26,7 +26,11 @@ class _LoginState extends State<Login> {
       //   password: _password.text,
       // );
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const Homepage()));
+          context,
+          MaterialPageRoute(
+              builder: (_) => Homepage(
+                    pageTitle: 'Welcome, ' + _username.text,
+                  )));
       // if (_username.text == 'admin' && _password.text == 'admin') {
       //   setState(() {
       //     emailSuccess = true;
@@ -148,7 +152,9 @@ class _LoginState extends State<Login> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const Homepage()));
+                                  builder: (_) => Homepage(
+                                        pageTitle: 'Welcome, ' + _username.text,
+                                      )));
                           // print("hello");
                         },
                         child: const Text(

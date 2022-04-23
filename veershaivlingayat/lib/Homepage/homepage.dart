@@ -7,7 +7,8 @@ import 'package:veershaivlingayat/QuickMenu/shortlisted-blocked.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+  String pageTitle;
+  Homepage({Key? key, required this.pageTitle}) : super(key: key);
 
   @override
   _HomepageState createState() => _HomepageState();
@@ -174,7 +175,9 @@ class _HomepageState extends State<Homepage> {
                     onTap: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const InterestSentRecevied())),
+                            builder: (_) => InterestSentRecevied(
+                                  pageTitle: "Interest Sent/Received",
+                                ))),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       padding: const EdgeInsets.all(10.0),
@@ -216,7 +219,9 @@ class _HomepageState extends State<Homepage> {
                     onTap: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const ShortlistedBlocked())),
+                            builder: (_) => ShortlistedBlocked(
+                                  pageTitle: "Shortlisted/Blocked",
+                                ))),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       padding: const EdgeInsets.all(10.0),
@@ -258,7 +263,9 @@ class _HomepageState extends State<Homepage> {
                     onTap: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const SearchProfiles())),
+                            builder: (_) => SearchProfiles(
+                                  pageTitle: "Search Profiles",
+                                ))),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       padding: const EdgeInsets.all(10.0),
@@ -288,7 +295,9 @@ class _HomepageState extends State<Homepage> {
                     onTap: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const MelawaInformation())),
+                            builder: (_) => MelawaInformation(
+                                  pageTitle: "Melawa Information",
+                                ))),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       padding: const EdgeInsets.all(10.0),
