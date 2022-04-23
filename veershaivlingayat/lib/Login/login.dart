@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -148,13 +150,13 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(32.0)),
                       child: FlatButton(
                         onPressed: () {
-                          // _form.currentState!.validate() ? _login() : null;
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => Homepage(
-                                        pageTitle: 'Welcome, ' + _username.text,
-                                      )));
+                          _form.currentState!.validate() ? _login() : null;
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (_) => Homepage(
+                          //               pageTitle: 'Welcome, ' + _username.text,
+                          //             )));
                           // print("hello");
                         },
                         child: const Text(
