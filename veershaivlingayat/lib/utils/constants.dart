@@ -229,3 +229,9 @@ List<DropdownMenuItem<String>> get tongueDropdownItems {
   ];
   return menuItems;
 }
+
+var apiKey = 'AIzaSyDM19z6XKAX3-bodbHGsie0ypMmKwAamts';
+var appId = '1:943598611591:android:b390352f441a135aec1c22';
+var messagingSenderId = '943598611591';
+var projectId = 'veershaiv-lingayat';
+var storageBucket = 'veershaiv-lingayat.appspot.com';

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:veershaivlingayat/utils/models/users.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,34 +19,27 @@ class _LoginState extends State<Login> {
   final _form = GlobalKey<FormState>();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final LocalStorage localStorage = LocalStorage('user_data');
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool _visibility = true;
   bool emailSuccess = true;
   bool passwordSuccess = true;
 
   void _login() async {
     try {
-      // await _auth.signInWithEmailAndPassword(
-      //   email: _username.text.toLowerCase(),
-      //   password: _password.text,
-      // );
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => Homepage(
-                    pageTitle: 'Welcome, ' + _username.text,
-                  )));
-      // if (_username.text == 'admin' && _password.text == 'admin') {
-      //   setState(() {
-      //     emailSuccess = true;
-      //     passwordSuccess = true;
-      //     ScaffoldMessenger.of(context)
-      //         .showSnackBar(const SnackBar(content: Text("Logging in.......")));
-      //     Navigator.pushReplacement(
-      //         context, MaterialPageRoute(builder: (_) => const Homepage()));
-      //   });
-      // }
+      await _auth.signInWithEmailAndPassword(
+        email: _username.text.toLowerCase(),
+        password: _password.text,
+      );
+      fetchLoggedInUserDetails();
+      // print(_auth.currentUser);
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (_) => Homepage(
+      //               pageTitle: 'Welcome, ' + _username.text,
+      //             )));
     } catch (e) {
       // if (e.code == 'user-not-found') {
       //   setState(() {
@@ -57,6 +54,23 @@ class _LoginState extends State<Login> {
       //   });
       // }
       print('logging issue');
+    }
+  }
+
+  void fetchLoggedInUserDetails() async {
+    try {
+      var user = await firestore
+          .collection('users')
+          .where('username', isEqualTo: _username.text)
+          .get()
+          .then((querySnapshot) =>
+              {querySnapshot.docs.map((document) => document.data())});
+      // });
+      print('USER');
+      print(jsonDecode(user.toList()[0].toString()));
+      // localStorage.setItem('username', user['name']);
+    } catch (e) {
+      print('Error fetching user details!');
     }
   }
 
