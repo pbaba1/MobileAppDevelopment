@@ -3,14 +3,15 @@ import 'package:veershaivlingayat/Homepage/navdrawer.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Astrology extends StatelessWidget {
-  const Astrology({Key? key}) : super(key: key);
+  String pageTitle;
+  Astrology({Key? key, required this.pageTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Navdrawer(currentPage: 'Astrology'),
       appBar: AppBar(
-        title: const Text('Astrology'),
+        title: Text(pageTitle),
         backgroundColor: Color(c.appColor),
       ),
       body: SingleChildScrollView(

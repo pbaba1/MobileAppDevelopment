@@ -3,14 +3,15 @@ import 'package:veershaivlingayat/Homepage/navdrawer.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class AboutUs extends StatelessWidget {
-  const AboutUs({Key? key}) : super(key: key);
+  String pageTitle;
+  AboutUs({Key? key, required this.pageTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Navdrawer(currentPage: 'About Us'),
       appBar: AppBar(
-        title: const Text('About Us'),
+        title: Text(pageTitle),
         backgroundColor: Color(c.appColor),
       ),
       body: SingleChildScrollView(

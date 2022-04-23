@@ -5,14 +5,15 @@ import 'package:veershaivlingayat/utils/constants.dart' as c;
 import 'package:url_launcher/url_launcher.dart';
 
 class FAQ extends StatelessWidget {
-  const FAQ({Key? key}) : super(key: key);
+  String pageTitle;
+  FAQ({Key? key, required this.pageTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Navdrawer(currentPage: 'FAQ'),
       appBar: AppBar(
-        title: const Text('FAQ'),
+        title: Text(pageTitle),
         backgroundColor: Color(c.appColor),
       ),
       body: SingleChildScrollView(
@@ -20,14 +21,8 @@ class FAQ extends StatelessWidget {
           const Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
-                  child: Text(
-                    'Frequently Asked Questions',
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ))),
+                padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
+              )),
           Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
               child: Column(
@@ -509,7 +504,8 @@ class FAQ extends StatelessWidget {
                                                       color:
                                                           Colors.grey.shade600,
                                                       child: const Padding(
-                                                        padding: EdgeInsets.all(8.0),
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
                                                         child: Text(
                                                           "Mr. Ramling Keshav Zirpe",
                                                           style: TextStyle(
@@ -523,10 +519,11 @@ class FAQ extends StatelessWidget {
                                                       border: TableBorder.all(
                                                           color: Colors.black),
                                                       children: const [
-                                                        TableRow(
-                                                          children: [
+                                                        TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                               'Bank name, Branch',
                                                               style: TextStyle(
@@ -536,7 +533,9 @@ class FAQ extends StatelessWidget {
                                                             ),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                               'A/c No',
                                                               style: TextStyle(
@@ -546,7 +545,9 @@ class FAQ extends StatelessWidget {
                                                             ),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                               'IFSC Code / MICR Code',
                                                               style: TextStyle(
@@ -558,98 +559,140 @@ class FAQ extends StatelessWidget {
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'State Bank of India, Dhankawdi'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('31598129115'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '31598129115'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'SBIN0005413 / 411002048'),
                                                           ),
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'Central Bank of India, Swarget'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('3519151133'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '3519151133'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'CBIN0280662 / 411016007'),
                                                           ),
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'Bank Of Maharashtra, Dhankwadi'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('20104742549'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '20104742549'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'MAHB0000776 / 411014015'),
                                                           ),
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'HDFC Bank, Araneshwar'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 '04371160001069'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'HDFC0000359 / 411240011'),
                                                           ),
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'ICICI Bank, Shivajinagar'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('003901211800'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '003901211800'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'ICIC00000337 / 411229003'),
                                                           ),
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'IDFC First Bank, Bibvewadi'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('10065861336'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '10065861336'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('IDFB0041372'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                'IDFB0041372'),
                                                           ),
                                                         ])
                                                       ],
@@ -663,7 +706,8 @@ class FAQ extends StatelessWidget {
                                                       color:
                                                           Colors.grey.shade600,
                                                       child: const Padding(
-                                                        padding:  EdgeInsets.all(8.0),
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
                                                         child: Text(
                                                           "Veershaiv Vivah Mandal",
                                                           style: TextStyle(
@@ -679,16 +723,23 @@ class FAQ extends StatelessWidget {
                                                       children: const [
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'Central Bank of India, Swarget'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('3338551919'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '3338551919'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'CBIN0280662 / 411016007'),
                                                           ),
@@ -704,7 +755,8 @@ class FAQ extends StatelessWidget {
                                                       color:
                                                           Colors.grey.shade600,
                                                       child: const Padding(
-                                                        padding: EdgeInsets.all(8.0),
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
                                                         child: Text(
                                                           "Mrs. Renuka Ramling Zirpe",
                                                           style: TextStyle(
@@ -720,34 +772,48 @@ class FAQ extends StatelessWidget {
                                                       children: const [
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'Axis Bank, Sahakar Nagar'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 '35001010032522'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'UTIB0000350 / 411211011'),
                                                           ),
                                                         ]),
                                                         TableRow(children: [
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
                                                             child: Text(
                                                                 'HDFC Bank, Sahakar Nagar'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('5010025007884'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                '5010025007884'),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('HDFC0000359'),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                'HDFC0000359'),
                                                           ),
                                                         ]),
                                                       ],

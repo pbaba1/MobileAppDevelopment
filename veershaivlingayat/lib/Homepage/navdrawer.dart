@@ -42,54 +42,55 @@ class _NavdrawerState extends State<Navdrawer> {
     switch (requiredAction) {
       case 'Home':
         widget.currentPage != 'Home'
-            ? navigate(const Homepage())
+            ? navigate(Homepage(pageTitle: 'Welcome'))
             : Navigator.pop(context);
         break;
       case 'About Us':
         widget.currentPage != 'About Us'
-            ? navigate(const AboutUs())
+            ? navigate(AboutUs(pageTitle: 'About Us'))
             : Navigator.pop(context);
         break;
       case 'Contact Us':
         widget.currentPage != 'Contact Us'
-            ? navigate(const ContactUs())
+            ? navigate(ContactUs(pageTitle: 'Contact Us'))
             : Navigator.pop(context);
         break;
       case 'FAQ':
         widget.currentPage != 'FAQ'
-            ? navigate(const FAQ())
+            ? navigate(FAQ(pageTitle: 'Frequently Asked Questions'))
             : Navigator.pop(context);
         break;
       case 'Logout':
         break;
       case 'Astrology':
         widget.currentPage != 'Astrology'
-            ? navigate(const Astrology())
+            ? navigate(Astrology(pageTitle: 'Astrology'))
             : Navigator.pop(context);
         break;
       case 'Interest Sent/Received':
         widget.currentPage != 'Interest Sent/Received'
-            ? navigate(const InterestSentRecevied())
+            ? navigate(
+                InterestSentRecevied(pageTitle: 'Interest Sent/Received'))
             : Navigator.pop(context);
         break;
       case 'Search Profiles':
         widget.currentPage != 'Search Profiles'
-            ? navigate(const SearchProfiles())
+            ? navigate(SearchProfiles(pageTitle: 'Search Profiles'))
             : Navigator.pop(context);
         break;
       case 'Shortlisted/Blocked':
         widget.currentPage != 'Shortlisted/Blocked'
-            ? navigate(const ShortlistedBlocked())
+            ? navigate(ShortlistedBlocked(pageTitle: 'Shortlisted/Blocked'))
             : Navigator.pop(context);
         break;
       case 'Melawa Information':
         widget.currentPage != 'Melawa Information'
-            ? navigate(const MelawaInformation())
+            ? navigate(MelawaInformation(pageTitle: 'Melawa Information'))
             : Navigator.pop(context);
         break;
       case 'Gunmilan':
         widget.currentPage != 'Gunmilan'
-            ? navigate(const Gunmilan())
+            ? navigate(Gunmilan(pageTitle: 'Gunmilan'))
             : Navigator.pop(context);
         break;
     }
