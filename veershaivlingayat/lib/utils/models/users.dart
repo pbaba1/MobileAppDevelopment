@@ -1,165 +1,203 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:convert';
+
+ProfileUser userFromJson(String str) {
+  final jsonData = json.decode(str);
+  return ProfileUser.fromMap(jsonData);
+}
+
+String userToJson(ProfileUser data) {
+  final dyn = data.toMap();
+  return json.encode(dyn);
+}
+
 class ProfileUser {
-  final String name;
-  final BirthDetails birth_details;
-  final String blood_group;
-  final String body_type;
-  final String caste;
-  final String charan;
-  final String complexion;
-  final String education_level;
-  final String education_qualification;
-  final String employment_history;
-  final String gender;
-  final String income;
-  final DateTime last_visited_timestamp;
-  final LocationDetails location_details;
-  final bool manglik;
-  final String marital_status;
-  final String nakshatra;
-  final String occupation;
-  final MatchDetails match_details;
-  final PersonalDetails personal_details;
-  final List<String> photos;
-  final String rasi;
-  final DateTime registered_date;
-  final String relative_information;
-  final String subcaste;
-  final String work_city;
+  int id;
+  String name;
+  String birth_city;
+  String birth_country;
+  String birth_state;
+  DateTime birth_date_time;
+  String blood_group;
+  String body_type;
+  String caste;
+  String charan;
+  String complexion;
+  String education_level;
+  String education_qualification;
+  String employment_history;
+  String gender;
+  String income;
+  DateTime last_visited_timestamp;
+  String contact_city;
+  String contact_country;
+  String contact_email;
+  String contact_phone;
+  String contact_state;
+  String permanent_address;
+  bool manglik;
+  String marital_status;
+  String nakshatra;
+  String occupation;
+  bool marry_divorced;
+  bool marry_outside_caste;
+  bool marry_outside_subcaste;
+  String match_education;
+  String match_education_qualification;
+  bool match_manglik;
+  String match_occupation;
+  String match_special_characteristics;
+  bool drink;
+  bool smoke;
+  int height;
+  int weight;
+  List<String> photos;
+  String rasi;
+  DateTime registered_date;
+  String relative_information;
+  String subcaste;
+  String work_city;
 
   ProfileUser(
-      String name,
-      BirthDetails birth_details,
-      String blood_group,
-      String body_type,
-      String caste,
-      String charan,
-      String complexion,
-      String education_level,
-      String education_qualification,
-      String employment_history,
-      String gender,
-      String income,
-      DateTime last_visited_timestamp,
-      LocationDetails location_details,
-      MatchDetails match_details,
-      PersonalDetails personal_details,
-      bool manglik,
-      String marital_status,
-      String nakshatra,
-      String occupation,
-      List<String> photos,
-      String rasi,
-      DateTime registered_date,
-      String relative_information,
-      String subcaste,
-      String work_city)
-      : this.name = name,
-        this.birth_details = birth_details,
-        this.blood_group = blood_group,
-        this.body_type = body_type,
-        this.caste = caste,
-        this.charan = charan,
-        this.complexion = complexion,
-        this.education_level = education_level,
-        this.education_qualification = education_qualification,
-        this.employment_history = employment_history,
-        this.gender = gender,
-        this.income = income,
-        this.last_visited_timestamp = last_visited_timestamp,
-        this.location_details = location_details,
-        this.match_details = match_details,
-        this.personal_details = personal_details,
-        this.manglik = manglik,
-        this.marital_status = marital_status,
-        this.nakshatra = nakshatra,
-        this.occupation = occupation,
-        this.photos = photos,
-        this.rasi = rasi,
-        this.registered_date = registered_date,
-        this.relative_information = relative_information,
-        this.subcaste = subcaste,
-        this.work_city = work_city;
-}
+      {required this.id,
+      required this.name,
+      required this.birth_city,
+      required this.birth_country,
+      required this.birth_state,
+      required this.birth_date_time,
+      required this.blood_group,
+      required this.body_type,
+      required this.caste,
+      required this.charan,
+      required this.complexion,
+      required this.education_level,
+      required this.education_qualification,
+      required this.employment_history,
+      required this.gender,
+      required this.income,
+      required this.last_visited_timestamp,
+      required this.contact_city,
+      required this.contact_country,
+      required this.contact_email,
+      required this.contact_phone,
+      required this.contact_state,
+      required this.permanent_address,
+      required this.marry_divorced,
+      required this.marry_outside_caste,
+      required this.marry_outside_subcaste,
+      required this.match_education,
+      required this.match_education_qualification,
+      required this.match_manglik,
+      required this.match_occupation,
+      required this.match_special_characteristics,
+      required this.drink,
+      required this.smoke,
+      required this.height,
+      required this.weight,
+      required this.manglik,
+      required this.marital_status,
+      required this.nakshatra,
+      required this.occupation,
+      required this.photos,
+      required this.rasi,
+      required this.registered_date,
+      required this.relative_information,
+      required this.subcaste,
+      required this.work_city});
 
-// **************************************MINI OBJECTS********************************************
-// MATCH DETAILS
-class MatchDetails {
-  final bool marry_divorced;
-  final bool marry_outside_caste;
-  final bool marry_outside_subcaste;
-  final String match_education;
-  final String match_education_qualification;
-  final bool match_manglik;
-  final String match_occupation;
-  final String match_special_characteristics;
+  factory ProfileUser.fromMap(Map<String, dynamic> json) => ProfileUser(
+      id: json['id'],
+      name: json['name'],
+      birth_city: json['birth_city'],
+      birth_country: json['birth_country'],
+      birth_state: json['birth_state'],
+      birth_date_time: json['birth_date_time'],
+      blood_group: json['blood_group'],
+      body_type: json['body_type'],
+      caste: json['caste'],
+      charan: json['charan'],
+      complexion: json['complexion'],
+      education_level: json['education_level'],
+      education_qualification: json['education_qualification'],
+      employment_history: json['employment_history'],
+      gender: json['gender'],
+      income: json['income'],
+      last_visited_timestamp: json['last_visited_timestamp'],
+      contact_city: json['contact_city'],
+      contact_country: json['contact_country'],
+      contact_email: json['contact_email'],
+      contact_phone: json['contact_phone'],
+      contact_state: json['contact_state'],
+      permanent_address: json['permanent_address'],
+      marry_divorced: json['marry_divorced'],
+      marry_outside_caste: json['marry_outside_caste'],
+      marry_outside_subcaste: json['marry_outside_subcaste'],
+      match_education: json['match_education'],
+      match_education_qualification: json['match_education_qualification'],
+      match_manglik: json['match_manglik'],
+      match_occupation: json['match_occupation'],
+      match_special_characteristics: json['match_special_characteristics'],
+      drink: json['drink'],
+      smoke: json['smoke'],
+      height: json['height'],
+      weight: json['weight'],
+      manglik: json['manglik'],
+      marital_status: json['marital_status'],
+      nakshatra: json['nakshatra'],
+      occupation: json['occupation'],
+      photos: json['photos'],
+      rasi: json['rasi'],
+      registered_date: json['registered_date'],
+      relative_information: json['relative_information'],
+      subcaste: json['subcaste'],
+      work_city: json['work_city']);
 
-  MatchDetails(
-      bool marry_divorced,
-      bool marry_outside_caste,
-      bool marry_outside_subcaste,
-      String match_education,
-      String match_education_qualification,
-      bool match_maglik,
-      String match_occupation,
-      String match_special_characteristics)
-      : this.marry_divorced = marry_divorced,
-        this.marry_outside_caste = marry_outside_caste,
-        this.marry_outside_subcaste = marry_outside_subcaste,
-        this.match_education = match_education,
-        this.match_education_qualification = match_education_qualification,
-        this.match_manglik = match_maglik,
-        this.match_occupation = match_occupation,
-        this.match_special_characteristics = match_special_characteristics;
-}
-
-// PERSONAL DETAILS
-class PersonalDetails {
-  final bool drink;
-  final bool smoke;
-  final int height;
-  final int weight;
-  PersonalDetails(bool drink, bool smoke, int height, int weight)
-      : this.drink = drink,
-        this.smoke = smoke,
-        this.height = height,
-        this.weight = weight;
-}
-
-// LOCATION DETAILS
-class LocationDetails {
-  final String contact_city;
-  final String contact_country;
-  final String contact_email;
-  final String contact_phone;
-  final String contact_state;
-  final String permanent_address;
-
-  LocationDetails(
-      String contact_city,
-      String contact_country,
-      String contact_email,
-      String contact_phone,
-      String contact_state,
-      String permanent_address)
-      : this.contact_city = contact_city,
-        this.contact_country = contact_country,
-        this.contact_email = contact_email,
-        this.contact_phone = contact_phone,
-        this.contact_state = contact_state,
-        this.permanent_address = permanent_address;
-}
-
-// BIRTH DETAILS
-class BirthDetails {
-  final String birth_city;
-  final String birth_country;
-  final String birth_state;
-  final DateTime birth_date_time;
-
-  BirthDetails(String birth_city, String birth_country, String birth_state,
-      DateTime birth_date_time)
-      : this.birth_city = birth_city,
-        this.birth_country = birth_country,
-        this.birth_state = birth_state,
-        this.birth_date_time = birth_date_time;
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "name": name,
+        "birth_city": birth_city,
+        "birth_country": birth_country,
+        "birth_state": birth_state,
+        "birth_date_time": birth_date_time,
+        "blood_group": blood_group,
+        "body_type": body_type,
+        "caste": caste,
+        "charan": charan,
+        "complexion": complexion,
+        "education_level": education_level,
+        "education_qualification": education_qualification,
+        "employment_history": employment_history,
+        "gender": gender,
+        "income": income,
+        "last_visited_timestamp": last_visited_timestamp,
+        "contact_city": contact_city,
+        "contact_country": contact_country,
+        "contact_email": contact_email,
+        "contact_phone": contact_phone,
+        "contact_state": contact_state,
+        "permanent_address": permanent_address,
+        "marry_divorced": marry_divorced,
+        "marry_outside_caste": marry_outside_caste,
+        "marry_outside_subcaste": marry_outside_subcaste,
+        "match_education": match_education,
+        "match_education_qualification": match_education_qualification,
+        "match_manglik": match_manglik,
+        "match_occupation": match_occupation,
+        "match_special_characteristics": match_special_characteristics,
+        "drink": drink,
+        "smoke": smoke,
+        "height": height,
+        "weight": weight,
+        "manglik": manglik,
+        "marital_status": marital_status,
+        "nakshatra": nakshatra,
+        "occupation": occupation,
+        "photos": photos,
+        "rasi": rasi,
+        "registered_date": registered_date,
+        "relative_information": relative_information,
+        "subcaste": subcaste,
+        "work_city": work_city
+      };
 }

@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^3.1.8
   firebase_storage: ^10.2.9
   localstorage: ^4.0.0+1
+  sqflite:  "^0.11.0+1"
 
 dev_dependencies:
   flutter_test:
