@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veershaivlingayat/Login/login.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 import 'package:veershaivlingayat/utils/models/users.dart';
 
@@ -20,8 +21,11 @@ class _RegisterState extends State<Register> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String selectedSubCaste = 'Beda';
+  String selectedCaste = 'Jangam';
+
+  int IDcounter = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var user = {
@@ -74,38 +78,48 @@ class _RegisterState extends State<Register> {
     'blocked_profiles': [],
     'interest_sent': []
   };
-
-  // String gender = '';
   DateTime selectedDate = DateTime.now();
-  // String selectedCasteValue = 'Jangam';
-  // String selectedSubCasteValue = 'Beda';
-  // String selectedMartialStatus = 'Never Married';
-  // String selectedGender = 'Male';
+
+  void _prepareData(
+      String id, CollectionReference coll, UserCredential userCred) async {
+    CollectionReference profileIds = firestore.collection('profile-ids');
+    await profileIds
+        .doc(c.profileIdsDocID)
+        .get()
+        .then((DocumentSnapshot snapshot) => setState(() {
+              IDcounter = snapshot['counter'];
+              user['name'] = fullName.text;
+              user['height'] = height.text;
+              user['contact_phone'] = mobileNumber.text;
+              user['contact_email'] = email.text;
+              user['birth_date_time'] = selectedDate;
+              user['uid'] = id;
+              user['id'] = IDcounter;
+              user['subcaste'] = selectedSubCaste;
+              user['caste'] = selectedCaste;
+            }));
+
+    await profileIds.doc(c.profileIdsDocID).set({'counter': IDcounter + 1});
+    await coll.doc(userCred.user!.uid).set(user).then;
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('User created!')));
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => const Login()));
+  }
 
   void _submit() async {
     try {
-      final User = await _auth.createUserWithEmailAndPassword(
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email.text.toLowerCase(),
         password: password.text,
       );
 
-      // users
-      //     .doc(User.uid)
-      //     .set({
-      //       'uid': user.uid,
-      //       'displayName': _displayname.text,
-      //       'email': _email.text.toLowerCase(),
-      //       'imageURL': "Null",
-      //       "createdAt": DateTime.now(),
-      //       "displayNameLower": _displayname.text.toLowerCase(),
-      //       "rating": 0,
-      //       "countOfRaters": 0,
-      //       "motto": "Null"
-      //     })
+      CollectionReference users = firestore.collection("users");
 
-
-      print('###########################');
-      print(User);
+      _prepareData(userCredential.user!.uid, users, userCredential);
     } catch (e) {
       print('Error registering user!');
     }
@@ -253,13 +267,13 @@ class _RegisterState extends State<Register> {
                     ),
                     SizedBox(height: 5),
                     DropdownButton(
-                        value: user['caste'].toString(),
+                        value: selectedCaste,
                         onChanged: (String? newValue) {
                           setState(() {
-                            user['caste'] = newValue!;
-                            user['caste'] = user['caste'] == 'Jangam'
+                            selectedCaste = newValue!;
+                            selectedSubCaste = selectedCaste == 'Jangam'
                                 ? 'Beda'
-                                : (user['caste'] == 'Lingayat'
+                                : (selectedCaste == 'Lingayat'
                                     ? 'Aadi-Banajgar'
                                     : 'Lad Wani');
                           });
@@ -281,15 +295,15 @@ class _RegisterState extends State<Register> {
                     ),
                     SizedBox(height: 5),
                     DropdownButton(
-                        value: user['subcaste'].toString(),
+                        value: selectedSubCaste,
                         onChanged: (String? newValue) {
                           setState(() {
-                            user['subcaste'] = newValue!;
+                            selectedSubCaste = newValue!;
                           });
                         },
-                        items: user['subcaste'] == 'Jangam'
+                        items: selectedCaste == 'Jangam'
                             ? c.subcastesOfJangam
-                            : (user['subcaste'] == 'Lingayat'
+                            : (selectedCaste == 'Lingayat'
                                 ? c.subcastesOfLingayat
                                 : c.subcastesOfLadWani)),
                   ],
