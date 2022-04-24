@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
+import 'package:veershaivlingayat/Login/forgot-password.dart';
 import 'package:veershaivlingayat/Login/register.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -99,7 +100,7 @@ class _LoginState extends State<Login> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Please enter a username";
+                                return "Please enter your email address";
                               }
                               return null;
                             },
@@ -107,8 +108,8 @@ class _LoginState extends State<Login> {
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(32.0)),
-                                labelText: 'Username',
-                                hintText: 'Enter username',
+                                labelText: 'Email Address',
+                                hintText: 'Enter email address',
                                 suffix: const Icon(Icons.person)),
                           )),
                     ),
@@ -175,11 +176,12 @@ class _LoginState extends State<Login> {
                     const Padding(padding: EdgeInsets.all(5.0)),
                     FlatButton(
                       onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (_) => const ForgotPassword()));
-                        print("Forgot");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ForgotPassword(
+                                    pageTitle: 'Forgot Password')));
+                        // print("Forgot");
                       },
                       child: const Text(
                         'Forgot Password',
