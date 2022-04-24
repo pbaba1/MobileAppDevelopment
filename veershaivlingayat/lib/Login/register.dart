@@ -1,0 +1,512 @@
+import 'package:flutter/material.dart';
+import 'package:veershaivlingayat/utils/constants.dart' as c;
+import 'package:veershaivlingayat/utils/models/users.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
+
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final _form = GlobalKey<FormState>();
+  final TextEditingController fullName = TextEditingController();
+  final TextEditingController height = TextEditingController();
+  final TextEditingController mobileNumber = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  final TextEditingController confirmPassword = TextEditingController();
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  var user = {
+    'uid': null,
+    'id': 0,
+    'name': null,
+    'birth_city': null,
+    'birth_country': null,
+    'birth_state': null,
+    'birth_date_time': DateTime.now(),
+    'blood_group': null,
+    'body_type': null,
+    'caste': 'Jangam',
+    'charan': null,
+    'complexion': null,
+    'education_level': null,
+    'education_qualification': null,
+    'employment_history': null,
+    'gender': 'Male',
+    'income': null,
+    'last_visited_timestamp': null,
+    'contact_city': null,
+    'contact_country': null,
+    'contact_email': null,
+    'contact_phone': null,
+    'contact_state': null,
+    'permanent_address': null,
+    'marry_divorced': null,
+    'marry_outside_caste': null,
+    'marry_outside_subcaste': null,
+    'match_education': null,
+    'match_education_qualification': null,
+    'match_manglik': null,
+    'match_occupation': null,
+    'match_special_characteristics': null,
+    'drink': null,
+    'smoke': null,
+    'height': null,
+    'weight': null,
+    'manglik': null,
+    'marital_status': 'Never Married',
+    'nakshatra': null,
+    'occupation': null,
+    'photos': null,
+    'rasi': null,
+    'registered_date': null,
+    'relative_information': null,
+    'subcaste': 'Beda',
+    'work_city': null,
+    'blocked_profiles': [],
+    'interest_sent': []
+  };
+
+  // String gender = '';
+  DateTime selectedDate = DateTime.now();
+  // String selectedCasteValue = 'Jangam';
+  // String selectedSubCasteValue = 'Beda';
+  // String selectedMartialStatus = 'Never Married';
+  // String selectedGender = 'Male';
+
+  void _submit() async {
+    try {
+      final User = await _auth.createUserWithEmailAndPassword(
+        email: email.text.toLowerCase(),
+        password: password.text,
+      );
+
+      // users
+      //     .doc(User.uid)
+      //     .set({
+      //       'uid': user.uid,
+      //       'displayName': _displayname.text,
+      //       'email': _email.text.toLowerCase(),
+      //       'imageURL': "Null",
+      //       "createdAt": DateTime.now(),
+      //       "displayNameLower": _displayname.text.toLowerCase(),
+      //       "rating": 0,
+      //       "countOfRaters": 0,
+      //       "motto": "Null"
+      //     })
+
+
+      print('###########################');
+      print(User);
+    } catch (e) {
+      print('Error registering user!');
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1970, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Register User'),
+        backgroundColor: Color(c.appColor),
+      ),
+      backgroundColor: Colors.white,
+      body: Form(
+        key: _form,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 1,
+                child: Image.asset('assets/banner.jpg'),
+              ),
+              const SizedBox(height: 2),
+              // full name
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Full Name *',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your full name";
+                            }
+                            return null;
+                          },
+                          controller: fullName,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            // labelText: 'Full Name',
+                            hintText: 'Enter your full name',
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Gender',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 30,
+                        child: ListTile(
+                          title: const Text('Male'),
+                          leading: Radio(
+                            value: 'Male',
+                            onChanged: (value) {
+                              setState(() {
+                                user['gender'] = value.toString();
+                              });
+                            },
+                            groupValue: user['gender'],
+                          ),
+                        )),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 30,
+                        child: ListTile(
+                          title: const Text('Female'),
+                          leading: Radio(
+                            value: 'Female',
+                            onChanged: (value) {
+                              setState(() {
+                                user['gender'] = value.toString();
+                              });
+                            },
+                            groupValue: user['gender'],
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              // gender
+              SizedBox(height: 2),
+              // date picker
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 20, 20),
+                child: Row(children: [
+                  const Text('Birth Date',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  IconButton(
+                      onPressed: () => _selectDate(context),
+                      icon: Icon(Icons.calendar_month_outlined),
+                      color: Color(c.appColor)),
+                  SizedBox(width: 2),
+                  Text(
+                      selectedDate.toString().substring(0, 10) ==
+                              DateTime.now().toString().substring(0, 10)
+                          ? '(Select your birth date)'
+                          : selectedDate.toString().substring(0, 10),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16)),
+                ]),
+              ),
+              // caste dropdown
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Caste *',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    DropdownButton(
+                        value: user['caste'].toString(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            user['caste'] = newValue!;
+                            user['caste'] = user['caste'] == 'Jangam'
+                                ? 'Beda'
+                                : (user['caste'] == 'Lingayat'
+                                    ? 'Aadi-Banajgar'
+                                    : 'Lad Wani');
+                          });
+                        },
+                        items: c.casteDropdownItems),
+                  ],
+                ),
+              ),
+              // subcaste dropdown
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'SubCaste *',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    DropdownButton(
+                        value: user['subcaste'].toString(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            user['subcaste'] = newValue!;
+                          });
+                        },
+                        items: user['subcaste'] == 'Jangam'
+                            ? c.subcastesOfJangam
+                            : (user['subcaste'] == 'Lingayat'
+                                ? c.subcastesOfLingayat
+                                : c.subcastesOfLadWani)),
+                  ],
+                ),
+              ),
+              //Height text box
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Height * (in cms)',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a height";
+                            }
+                            return null;
+                          },
+                          controller: height,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            // labelText: 'Username',
+                            hintText: 'Enter height',
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              // Marital Status
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Marital Status',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    DropdownButton(
+                        value: user['marital_status'].toString(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            user['marital_status'] = newValue!;
+                          });
+                        },
+                        items: c.maritalDropdownItems),
+                  ],
+                ),
+              ),
+              // mobile Number text box
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Mobile No*',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter mobile number";
+                            }
+                            return null;
+                          },
+                          controller: mobileNumber,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            // labelText: 'Mobile No',
+                            hintText: 'Enter mobile number',
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              // email address text box
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Email *',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter email address";
+                            }
+                            return null;
+                          },
+                          controller: email,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            // labelText: 'Email Address',
+                            hintText: 'Enter email address',
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              // Password
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Password *',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 5),
+                      SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width * .9,
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter password";
+                              }
+                              return null;
+                            },
+                            controller: password,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0)),
+                              // labelText: 'Password',
+                              hintText: 'Enter password',
+                            ),
+                          )),
+                    ]),
+              ), //Confirm Password
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Confirm Password *',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter password";
+                            } else if (value != password.text) {
+                              return 'Passwords do not match';
+                            }
+                            return null;
+                          },
+                          controller: confirmPassword,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            // labelText: 'Password',
+                            hintText: 'Enter password same as above',
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * .5,
+                  child: FlatButton(
+                    onPressed: () {
+                      _form.currentState!.validate() ? _submit() : null;
+                    },
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    color: Color(c.appColor),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0)),
+                  ),
+                ),
+              ])
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
