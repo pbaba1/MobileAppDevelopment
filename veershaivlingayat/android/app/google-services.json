@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "943598611591",
+    "project_id": "veershaiv-lingayat",
+    "storage_bucket": "veershaiv-lingayat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943598611591:android:b390352f441a135aec1c22",
+        "android_client_info": {
+          "package_name": "com.vslappdevs.veershaivlingayat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943598611591-3ingibup69j56gcskbvnt9n8r330kfd0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vslappdevs.veershaivlingayat",
+            "certificate_hash": "897bf8c1aed3cc6edc47372eb99a4fc52f8fd9c3"
+          }
+        },
+        {
+          "client_id": "943598611591-ovk32c35q82qe7itgbeekd49ec6t8f5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM19z6XKAX3-bodbHGsie0ypMmKwAamts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943598611591-ovk32c35q82qe7itgbeekd49ec6t8f5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
