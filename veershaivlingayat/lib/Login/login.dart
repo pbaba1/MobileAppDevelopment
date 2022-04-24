@@ -191,7 +191,7 @@ class _LoginState extends State<Login> {
                     ),
                     FlatButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => const Register()));

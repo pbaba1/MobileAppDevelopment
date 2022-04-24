@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Login/login.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //     options: FirebaseOptions(
-  //   apiKey: c.apiKey,
-  //   projectId: c.projectId,
-  //   storageBucket: c.storageBucket,
-  //   messagingSenderId: c.messagingSenderId,
-  //   appId: c.appId,
-  // ));
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+    apiKey: c.apiKey,
+    projectId: c.projectId,
+    storageBucket: c.storageBucket,
+    messagingSenderId: c.messagingSenderId,
+    appId: c.appId,
+  ));
   runApp(const MyApp());
 }
 

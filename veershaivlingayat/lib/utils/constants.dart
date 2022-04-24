@@ -20,6 +20,79 @@ List<DropdownMenuItem<String>> get casteDropdownItems {
   return menuItems;
 }
 
+List<DropdownMenuItem<String>> get subcastesOfJangam {
+  List<DropdownMenuItem<String>> menuItems = const [
+    DropdownMenuItem(child: Text("All"), value: "All"),
+    DropdownMenuItem(child: Text("Beda"), value: "Beda"),
+    DropdownMenuItem(child: Text("Ghanger"), value: "Ghanger"),
+    DropdownMenuItem(child: Text("Jader"), value: "Jader"),
+    DropdownMenuItem(child: Text("Kudwakalger"), value: "Kudwakalger"),
+    DropdownMenuItem(child: Text("Mala"), value: "Mala"),
+    DropdownMenuItem(child: Text("Malgar"), value: "Malgar"),
+    DropdownMenuItem(child: Text("Mathapati"), value: "Mathapati"),
+    DropdownMenuItem(child: Text("Swami"), value: "Swami"),
+  ];
+  return menuItems;
+}
+
+List<DropdownMenuItem<String>> get subcastesOfLadWani {
+  List<DropdownMenuItem<String>> menuItems = const [
+    DropdownMenuItem(child: Text("All"), value: "All"),
+    DropdownMenuItem(child: Text("Lad Wani"), value: "Lad Wani"),
+  ];
+  return menuItems;
+}
+
+List<DropdownMenuItem<String>> get subcastesOfLingayat {
+  List<DropdownMenuItem<String>> menuItems = const [
+    DropdownMenuItem(child: Text("All"), value: "All"),
+    DropdownMenuItem(child: Text("Aadi-Banajgar"), value: "Aadi-Banajgar"),
+    DropdownMenuItem(child: Text("Aadi-Wani"), value: "Aadi-Wani"),
+    DropdownMenuItem(child: Text("Banagar"), value: "Banagar"),
+    DropdownMenuItem(child: Text("Banajigi"), value: "Banajigi"),
+    DropdownMenuItem(child: Text("Bangar(Rangari)"), value: "Bangar(Rangari)"),
+    DropdownMenuItem(child: Text("Bramhan"), value: "Bramhan"),
+    DropdownMenuItem(child: Text("Chatur"), value: "Chatur"),
+    DropdownMenuItem(child: Text("Chilwant"), value: "Chilwant"),
+    DropdownMenuItem(child: Text("Deeksha"), value: "Deeksha"),
+    DropdownMenuItem(child: Text("Devang"), value: "Devang"),
+    DropdownMenuItem(child: Text("Dikshawant"), value: "Dikshawant"),
+    DropdownMenuItem(child: Text("Full Mali"), value: "Full Mali"),
+    DropdownMenuItem(child: Text("Ganiga"), value: "Ganiga"),
+    DropdownMenuItem(child: Text("Gavali"), value: "Gavali"),
+    DropdownMenuItem(child: Text("Gowda"), value: "Gowda"),
+    DropdownMenuItem(child: Text("Gurav"), value: "Gurav"),
+    DropdownMenuItem(child: Text("Hadpad"), value: "Hadpad"),
+    DropdownMenuItem(child: Text("Hatgar-Koshti"), value: "Hatgar-Koshti"),
+    DropdownMenuItem(child: Text("Hatgar"), value: "Hatgar"),
+    DropdownMenuItem(child: Text("Jadar"), value: "Jadar"),
+    DropdownMenuItem(child: Text("Kari Kul Ganiga"), value: "Kari Kul Ganiga"),
+    DropdownMenuItem(child: Text("Koshti"), value: "Koshti"),
+    DropdownMenuItem(child: Text("Kudwakkaliga"), value: "Kudwakkaliga"),
+    DropdownMenuItem(child: Text("Kulwant"), value: "Kulwant"),
+    DropdownMenuItem(child: Text("Kumbhar"), value: "Kumbhar"),
+    DropdownMenuItem(child: Text("Kuruba"), value: "Kuruba"),
+    DropdownMenuItem(child: Text("Kuruhina Shetty"), value: "Kuruhina Shetty"),
+    DropdownMenuItem(child: Text("Mitakri-Wani"), value: "Mitakri-Wani"),
+    DropdownMenuItem(child: Text("Nhavi/Hadpad"), value: "Nhavi/Hadpad"),
+    DropdownMenuItem(child: Text("Pancham"), value: "Pancham"),
+    DropdownMenuItem(child: Text("Panchamsali"), value: "Panchamsali"),
+    DropdownMenuItem(child: Text("Panchapeeta"), value: "Panchapeeta"),
+    DropdownMenuItem(child: Text("Pattsali"), value: "Pattsali"),
+    DropdownMenuItem(child: Text("Raswant Wani"), value: "Raswant Wani"),
+    DropdownMenuItem(child: Text("Reddy"), value: "Reddy"),
+    DropdownMenuItem(child: Text("Sadar/Sadharu"), value: "Sadar/Sadharu"),
+    DropdownMenuItem(child: Text("Sajjana"), value: "Sajjana"),
+    DropdownMenuItem(child: Text("Shilwant"), value: "Shilwant"),
+    DropdownMenuItem(child: Text("Shivshimpi"), value: "Shilwant"),
+    DropdownMenuItem(child: Text("Shuddha-shaiv"), value: "Shuddha-shaiv"),
+    DropdownMenuItem(child: Text("Tamboli"), value: "Tamboli"),
+    DropdownMenuItem(child: Text("Teli"), value: "Teli"),
+    DropdownMenuItem(child: Text("Yellam"), value: "Yellam"),
+  ];
+  return menuItems;
+}
+
 List<DropdownMenuItem<String>> get educationDropdownItems {
   List<DropdownMenuItem<String>> menuItems = const [
     DropdownMenuItem(child: Text("All"), value: "All"),
