@@ -14,7 +14,7 @@ class _InterestSentReceviedState extends State<InterestSentRecevied> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Navdrawer(currentPage: 'Interest Sent/Received'),
+      drawer: Navdrawer(currentPage: 'Interest Sent'),
       appBar: AppBar(
         title: Text(widget.pageTitle),
         backgroundColor: Color(c.appColor),
