@@ -1,5 +1,8 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/navdrawer.dart';
+import 'package:veershaivlingayat/Profile/profile.dart';
 import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
 import 'package:veershaivlingayat/QuickMenu/melawa-information.dart';
 import 'package:veershaivlingayat/QuickMenu/search-profiles.dart';
@@ -15,6 +18,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String _imageURL = "Null";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +29,29 @@ class _HomepageState extends State<Homepage> {
         appBar: AppBar(
           title: const Text('Home'),
           backgroundColor: Color(c.appColor),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Profile(
+                                // user: firestore
+                                //     .collection("users")
+                                //     .doc(auth.currentUser?.uid)
+                                //     .get(),
+                                fromPage: "home",
+                                isSelf: true,
+                              )));
+                },
+                padding: const EdgeInsets.only(left: 20.0),
+                child: CircleAvatar(
+                  backgroundImage: _imageURL == "Null"
+                      ? const AssetImage("assets/dummy_user.jpg")
+                          as ImageProvider
+                      : NetworkImage(_imageURL),
+                ))
+          ],
         ),
         body: Center(
           child: Padding(
@@ -37,13 +67,15 @@ class _HomepageState extends State<Homepage> {
                             color: Colors.black,
                             width: 1.0,
                             style: BorderStyle.solid)),
-                    child: const Text(
-                        'Hi, Pooja Basavraj Baba (ID: 37957) - Profile has been expired. Click Here to make Payment online and renew your profile or contact Veershaiv Vivah Mandal Office',
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
+                    child: const Flexible(
+                      child: Text(
+                          'Hi, Pooja Basavraj Baba (ID: 37957) - Profile has been expired. Click Here to make Payment online and renew your profile or contact Veershaiv Vivah Mandal Office',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -65,10 +97,12 @@ class _HomepageState extends State<Homepage> {
                         Flexible(
                           child: Row(
                             children: const [
-                              Text('13/04/2022 11:38 PM',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.black)),
+                              Flexible(
+                                child: Text('13/04/2022 11:38 PM',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.black)),
+                              ),
                             ],
                           ),
                         )
@@ -95,10 +129,12 @@ class _HomepageState extends State<Homepage> {
                         Flexible(
                           child: Row(
                             children: const [
-                              Text('20/02/2022',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.black)),
+                              Flexible(
+                                child: Text('20/02/2022',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.black)),
+                              ),
                             ],
                           ),
                         ),
@@ -161,10 +197,12 @@ class _HomepageState extends State<Homepage> {
                         Flexible(
                           child: Row(
                             children: const [
-                              Text('Rs. 0 / -',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.black)),
+                              Flexible(
+                                child: Text('Rs. 0 / -',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.black)),
+                              ),
                             ],
                           ),
                         ),
@@ -176,7 +214,7 @@ class _HomepageState extends State<Homepage> {
                         context,
                         MaterialPageRoute(
                             builder: (_) => InterestSentRecevied(
-                                  pageTitle: "Interest Sent/Received",
+                                  pageTitle: "Interest Sent",
                                 ))),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,

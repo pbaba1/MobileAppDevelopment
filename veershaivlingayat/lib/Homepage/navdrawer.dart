@@ -67,10 +67,9 @@ class _NavdrawerState extends State<Navdrawer> {
             ? navigate(Astrology(pageTitle: 'Astrology'))
             : Navigator.pop(context);
         break;
-      case 'Interest Sent/Received':
-        widget.currentPage != 'Interest Sent/Received'
-            ? navigate(
-                InterestSentRecevied(pageTitle: 'Interest Sent/Received'))
+      case 'Interest Sent':
+        widget.currentPage != 'Interest Sent'
+            ? navigate(InterestSentRecevied(pageTitle: 'Interest Sent'))
             : Navigator.pop(context);
         break;
       case 'Search Profiles':
