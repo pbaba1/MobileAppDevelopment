@@ -15,6 +15,8 @@ import 'package:veershaivlingayat/StaticScreens/astrology.dart';
 import 'package:veershaivlingayat/StaticScreens/contact-us.dart';
 import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
+import 'package:provider/provider.dart';
+import 'dart:io';
 
 class Profile extends StatefulWidget {
   final Future<DocumentSnapshot<Map<String, dynamic>>> user;
@@ -35,11 +37,78 @@ class _ProfileState extends State<Profile> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String _imageURL = "Null";
-  String _name = "Pooja Basavraj Baba";
+  int _profileID = 0;
+  String _name = "";
+  String _contactPhone = "";
+  String _contactPhoneOther = "";
+  String _address = "";
   String _email = "";
-  String _profileID = "";
-  bool _rated = false;
+  String _city = "";
+  String _state = "";
+  String _workCity = "";
+  String _birthCity = "";
+  String _birthState = "";
+  String _weight = "";
+  String _qualification = "";
+  String _matchQualification = "";
+  String _info = "";
+  String _family = "";
+  String _relative = "";
+  String _occupation = "";
+  String _special = "";
+  List<dynamic> photos = [];
+  List<dynamic> _imagesURL = [];
+  String? userID = '';
+  String _downloadUrl = '';
+  final File _imageFile = File('');
   String _currentAddress = '';
+  String selectedUrgencyValue = "No Hurry";
+  String _gender = "Male";
+  String selectedMaritalStatusValue = "Never Married";
+  String selectedCasteValue = "Jangam";
+  String selectedSubCasteValue = "Beda";
+  String selectedIntercasteValue = "No";
+  String selectedOccupationValue = "Select Occupation>";
+  String selectedIncomeValue = "Rs.50,001 - 1,00,000";
+  String selectedEducationValue = "Select any one option";
+  String selectedMatchEducationValue = "Select any one option";
+  String selectedSettlingAbroadValue = "Select any one option";
+  String selectedResidencyValue = "Select any one option";
+  String selectedCountryValue = "Please select";
+  String selectedBirthCountryValue = "Please select";
+  String _refOne = "";
+  String _refOnePhone = "";
+  String _refTwo = "";
+  String _refTwoPhone = "";
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  String selectedRasiValue = "Mesh";
+  String selectedNakshatraValue = "Ashwini";
+  String selectedCharanValue = "1";
+  String selectedNadiValue = "Adhya";
+  String selectedGanValue = "Manushya";
+  String selectedManglikValue = "NonManglik";
+  String selectedBloodValue = "Not Applicable";
+  String selectedBodyValue = "Please select";
+  String selectedSpectaclesValue = "No";
+  String selectedComplexionValue = "Please select";
+  String selectedDietValue = "Please select";
+  String selectedSmokeValue = "No";
+  String selectedDrinkValue = "No";
+  double _currentHeightValue = 129;
+  double _heightLowValue = 129;
+  double _heightHighValue = 201;
+  RangeValues _currentHeightValues = const RangeValues(129, 201);
+  double _ageLowValue = 20;
+  double _ageHighValue = 50;
+  RangeValues _currentAgeValues = const RangeValues(20, 50);
+  String selectedPhyValue = "No";
+  String selectedTongueValue = "Please select";
+  String selectedMatchManglikValue = "NonManglik";
+  String selectedOutsideSubcasteValue = "No";
+  String selectedOutsideCasteValue = "No";
+  String selectedDivorcedValue = "No";
+  String selectedMarryIntercasteValue = "No";
   User? user;
 
   @override
@@ -57,11 +126,167 @@ class _ProfileState extends State<Profile> {
             MaterialPageRoute(builder: (context) => const Login()),
             (Route route) => false);
       } else {
-        firestore
-            .collection('users')
-            .doc(user?.uid)
-            .get()
-            .then((DocumentSnapshot snapshot) => {setState(() {})});
+        widget.user.then((DocumentSnapshot snapshot) {
+          if (snapshot['profile_picture'] != null &&
+              snapshot['profile_picture'] != 'Null') {
+            setState(() {
+              _imageURL = snapshot['profile_picture'];
+            });
+          } else {
+            setState(() {
+              _imageURL = "Null";
+            });
+          }
+          setState(() {
+            userID = snapshot['uid'];
+            _profileID = snapshot['id'];
+            photos = snapshot['photos'];
+            _imagesURL = photos;
+            _name = snapshot["name"] ?? "";
+            selectedUrgencyValue = snapshot["urgency"] == null
+                ? (snapshot["urgency"] == "Select any one option"
+                    ? ""
+                    : snapshot["urgency"])
+                : "";
+            _gender = snapshot["gender"];
+            selectedMaritalStatusValue =
+                snapshot["marital_status"] ?? "Never Married";
+            selectedCasteValue = snapshot["caste"] ?? "";
+            selectedSubCasteValue = snapshot["subcaste"] ?? "";
+            selectedIntercasteValue = snapshot['intercaste_parents'] ?? "";
+            selectedOccupationValue = snapshot['occupation'] == null
+                ? (snapshot["occupation"] == "Select Occupation>"
+                    ? ""
+                    : snapshot["occupation"])
+                : "";
+            selectedIncomeValue = snapshot['income'] ?? "";
+            selectedEducationValue = snapshot['education_level'] == null
+                ? (snapshot["education_level"] == "Select any one option"
+                    ? ""
+                    : snapshot["education_level"])
+                : "";
+            _qualification = snapshot['education_qualification'] ?? "";
+            selectedSettlingAbroadValue = snapshot['settling_abroad'] == null
+                ? (snapshot["settling_abroad"] == "Select any one option"
+                    ? ""
+                    : snapshot["settling_abroad"])
+                : "";
+            selectedResidencyValue = snapshot['residency_status'] == null
+                ? (snapshot["residency_status"] == "Select any one option"
+                    ? ""
+                    : snapshot["residency_status"])
+                : "";
+            _contactPhone = snapshot['contact_phone'] ?? "";
+            _contactPhoneOther = snapshot['contact_phone_other'] ?? "";
+            _address = snapshot['permanent_address'] ?? "";
+            _email = snapshot['contact_email'] ?? "";
+            _city = snapshot['contact_city'] ?? "";
+            _state = snapshot['contact_state'] ?? "";
+            selectedCountryValue = snapshot['contact_country'] == null
+                ? (snapshot["contact_country"] == "Please select"
+                    ? ""
+                    : snapshot["contact_country"])
+                : "";
+            _workCity = snapshot['work_city'] ?? "";
+            _refOne = snapshot['reference_one'] ?? "";
+            _refOnePhone = snapshot['reference_one_phone'] ?? "";
+            _refTwo = snapshot['reference_two'] ?? "";
+            _refTwoPhone = snapshot['reference_two_phone'] ?? "";
+            selectedDate =
+                DateTime.parse(snapshot['birth_date_time'].toDate().toString());
+            selectedTime = TimeOfDay.fromDateTime(DateTime.parse(
+                snapshot['birth_date_time'].toDate().toString()));
+            _birthCity = snapshot['birth_city'] ?? "";
+            _birthState = snapshot['birth_state'] ?? "";
+            selectedBirthCountryValue = snapshot['birth_country'] == null
+                ? (snapshot["birth_country"] == "Please select"
+                    ? ""
+                    : snapshot["birth_country"])
+                : "";
+            selectedRasiValue = snapshot['rasi'] == null
+                ? (snapshot["rasi"] == "Not Applicable" ? "" : snapshot["rasi"])
+                : "";
+            selectedNakshatraValue = snapshot['nakshatra'] == null
+                ? (snapshot["nakshatra"] == "Not Applicable"
+                    ? ""
+                    : snapshot["nakshatra"])
+                : "";
+            selectedCharanValue = snapshot['charan'] == null
+                ? (snapshot["charan"] == "Not Applicable"
+                    ? ""
+                    : snapshot["charan"])
+                : "";
+            selectedNadiValue = snapshot['nadi'] == null
+                ? (snapshot["nadi"] == "Not Applicable" ? "" : snapshot["nadi"])
+                : "";
+            selectedGanValue = snapshot['gan'] == null
+                ? (snapshot["gan"] == "Not Applicable" ? "" : snapshot["gan"])
+                : "";
+            selectedManglikValue = snapshot['manglik'] == null
+                ? (snapshot["manglik"] == "Not Applicable"
+                    ? ""
+                    : snapshot["manglik"])
+                : "";
+            selectedBloodValue = snapshot['blood_group'] == null
+                ? (snapshot["blood_group"] == "Not Applicable"
+                    ? ""
+                    : snapshot["blood_group"])
+                : "";
+            _currentHeightValue = snapshot['height'];
+            _weight = snapshot['weight'] ?? "";
+            selectedBodyValue = snapshot['body_type'] == null
+                ? (snapshot["body_type"] == "Please select"
+                    ? ""
+                    : snapshot["body_type"])
+                : "";
+            selectedSpectaclesValue = snapshot['spectacles'] ?? "";
+            selectedComplexionValue = snapshot['complexion'] == null
+                ? (snapshot["complexion"] == "Please select"
+                    ? ""
+                    : snapshot["complexion"])
+                : "";
+            selectedDietValue = snapshot['diet'] == null
+                ? (snapshot["diet"] == "Please select" ? "" : snapshot["diet"])
+                : "";
+            selectedSmokeValue = snapshot['smoke'] ?? "";
+            selectedDrinkValue = snapshot['drink'] ?? "";
+            selectedPhyValue = snapshot['physically_challenged'] ?? "";
+            selectedTongueValue = snapshot['mother_tongue'] == null
+                ? (snapshot["mother_tongue"] == "Please select"
+                    ? ""
+                    : snapshot["mother_tongue"])
+                : "";
+            _info = snapshot['information'] ?? "";
+            _family = snapshot['family_background'] ?? "";
+            _relative = snapshot['relative_information'] ?? "";
+            _occupation = snapshot['employment_history'] ?? "";
+            _heightLowValue = snapshot['match_height_low'];
+            _heightHighValue = snapshot['match_height_high'];
+            _currentHeightValues =
+                RangeValues(_heightLowValue, _heightHighValue);
+            _ageLowValue = snapshot['match_age_low'];
+            _ageHighValue = snapshot['match_age_high'];
+            _currentAgeValues = RangeValues(_ageLowValue, _ageHighValue);
+            selectedMatchEducationValue = snapshot['match_education'] == null
+                ? (snapshot["match_education"] == "Select any one option"
+                    ? ""
+                    : snapshot["match_education"])
+                : "";
+            _matchQualification =
+                snapshot['match_education_qualification'] ?? "";
+            _special = snapshot['match_special_characteristics'] ?? "";
+            selectedMatchManglikValue = snapshot['match_manglik'] == null
+                ? (snapshot["match_manglik"] == "Not Applicable"
+                    ? ""
+                    : snapshot["match_manglik"])
+                : "";
+            selectedOutsideSubcasteValue =
+                snapshot['marry_outside_subcaste'] ?? "";
+            selectedOutsideCasteValue = snapshot['marry_outside_caste'] ?? "";
+            selectedDivorcedValue = snapshot['marry_divorced'] ?? "";
+            selectedMarryIntercasteValue = snapshot['marry_intercaste'] ?? "";
+          });
+        });
       }
     });
   }
@@ -222,7 +447,7 @@ class _ProfileState extends State<Profile> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   padding: const EdgeInsets.all(10.0),
                   child: Flexible(
-                    child: Text(_name + " " + _profileID,
+                    child: Text(_name + " " + _profileID.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold)),
@@ -270,11 +495,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('F',
+                              child: Text(_gender == "Male" ? "M" : "F",
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -297,11 +522,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Within 2 years',
+                              child: Text(selectedUrgencyValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -324,11 +549,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Lingayat',
+                              child: Text(selectedCasteValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -351,11 +576,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Koshti',
+                              child: Text(selectedSubCasteValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -378,11 +603,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Never Married',
+                              child: Text(selectedMaritalStatusValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -405,11 +630,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Software Professional',
+                              child: Text(selectedOccupationValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -432,11 +657,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Pune',
+                              child: Text(_city,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -450,24 +675,12 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Flexible(
+                    children: const [
+                      Flexible(
                         child: Text('Occupation Details',
                             textAlign: TextAlign.start,
                             style:
                                 TextStyle(fontSize: 14.0, color: Colors.black)),
-                      ),
-                      Flexible(
-                        child: Row(
-                          children: const [
-                            Flexible(
-                              child: Text('',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.black)),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -486,11 +699,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('NA',
+                              child: Text(selectedIncomeValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -513,11 +726,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Bachelors',
+                              child: Text(selectedEducationValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -540,12 +753,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text(
-                                  'Bachelors in Computer - MIT, Pune (Savitribai Phule Pune University)',
+                              child: Text(_qualification,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -568,11 +780,12 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('06/12/1995',
+                              child: Text(
+                                  selectedDate.toString().substring(0, 10),
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -595,11 +808,12 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('9:28:PM',
+                              child: Text(
+                                  selectedTime.toString().substring(10, 15),
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -622,11 +836,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Solapur',
+                              child: Text(_birthCity,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -649,11 +863,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('India',
+                              child: Text(selectedBirthCountryValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -676,11 +890,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('B+',
+                              child: Text(selectedBloodValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -703,11 +917,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Vrushabh',
+                              child: Text(selectedRasiValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -730,11 +944,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Rohini',
+                              child: Text(selectedNakshatraValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -757,11 +971,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('2',
+                              child: Text(selectedCharanValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -784,11 +998,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Antya',
+                              child: Text(selectedNadiValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -811,11 +1025,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('NonManglik',
+                              child: Text(selectedManglikValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -838,11 +1052,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('none',
+                              child: Text(selectedPhyValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -865,11 +1079,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Average',
+                              child: Text(selectedBodyValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -892,11 +1106,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Fair',
+                              child: Text(selectedComplexionValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -919,11 +1133,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Vegitarian',
+                              child: Text(selectedDietValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -946,11 +1160,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('No',
+                              child: Text(selectedSmokeValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -973,11 +1187,13 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('5\' 7" (169 cm)',
+                              child: Text(
+                                  _currentHeightValue.round().toString() +
+                                      " cm",
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1000,12 +1216,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text(
-                                  'I belong to a nuclear family residing in Pune. I am a technology enthusiast and enjoy hiking, reading and cooking. I have issued B1/B2 visa (U.S.A) in the year 2019 valid through 2029.',
+                              child: Text(_info,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1028,12 +1243,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text(
-                                  'Mama: Suresh Shivayogi Jujagar (State government service) Other relatives: Jujagar (Solapur, Maindargi), Patil (Maindargi), Sindagi (Solapur), Mhetre (Solapur - Angar)',
+                              child: Text(_relative,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1056,12 +1270,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text(
-                                  'Father: Basavraj Shivasharan Baba (Retired) Mother: Sridevi Basavraj Baba (Housewife) Sibling(s): None',
+                              child: Text(_family,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1084,12 +1297,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text(
-                                  'Firm: ZS Associates Pvt. Ltd., Pune (since 2018). Position: Business Technology Solutions Associate Consultant (Promoted in Dec-2020).',
+                              child: Text(_occupation,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1112,11 +1324,92 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('babapooja6@gmail.com',
+                              child: Text(_email,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
+                                      fontSize: 14.0, color: Colors.black)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Flexible(
+                        child: Text('Mobile Number',
+                            textAlign: TextAlign.start,
+                            style:
+                                TextStyle(fontSize: 14.0, color: Colors.black)),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(_contactPhone,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
+                                      fontSize: 14.0, color: Colors.black)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Flexible(
+                        child: Text('Other Mobile Number',
+                            textAlign: TextAlign.start,
+                            style:
+                                TextStyle(fontSize: 14.0, color: Colors.black)),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(_contactPhoneOther,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
+                                      fontSize: 14.0, color: Colors.black)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Flexible(
+                        child: Text('Contact Address',
+                            textAlign: TextAlign.start,
+                            style:
+                                TextStyle(fontSize: 14.0, color: Colors.black)),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(_address,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1139,11 +1432,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Masters',
+                              child: Text(selectedMatchEducationValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1166,11 +1459,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('',
+                              child: Text(_matchQualification,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1186,46 +1479,18 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Flexible(
-                        child: Text('Match Expected Occupation',
+                        child: Text('Match Expected Special Characteristics',
                             textAlign: TextAlign.start,
                             style:
                                 TextStyle(fontSize: 14.0, color: Colors.black)),
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text(
-                                  'Computer Engineer,Engineer,IT/Telecommunications,Software Professional',
+                              child: Text(_special,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: Colors.black)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Flexible(
-                        child: Text('Match Expected Special Characters',
-                            textAlign: TextAlign.start,
-                            style:
-                                TextStyle(fontSize: 14.0, color: Colors.black)),
-                      ),
-                      Flexible(
-                        child: Row(
-                          children: const [
-                            Flexible(
-                              child: Text('',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1248,11 +1513,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('No',
+                              child: Text(selectedOutsideCasteValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1275,11 +1540,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('Yes',
+                              child: Text(selectedOutsideSubcasteValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1302,11 +1567,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('NonManglik',
+                              child: Text(selectedMatchManglikValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
@@ -1329,11 +1594,11 @@ class _ProfileState extends State<Profile> {
                       ),
                       Flexible(
                         child: Row(
-                          children: const [
+                          children: [
                             Flexible(
-                              child: Text('No',
+                              child: Text(selectedDivorcedValue,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
                             ),
                           ],
