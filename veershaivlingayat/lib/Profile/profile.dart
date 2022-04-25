@@ -383,7 +383,7 @@ class _ProfileState extends State<Profile> {
                     MaterialPageRoute(
                         builder: (_) =>
                             InterestSentRecevied(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "Shortlisted/Blocked") {
+              } else if (widget.fromPage == "Blocked") {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

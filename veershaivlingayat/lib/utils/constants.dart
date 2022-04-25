@@ -5,7 +5,7 @@ var appColor = 0xFFCA0000;
 var menuSubOptions = [
   'Search Profiles',
   'Interest Sent',
-  'Shortlisted/Blocked',
+  'Blocked',
   'Melawa Information',
   'Gunmilan'
 ];
