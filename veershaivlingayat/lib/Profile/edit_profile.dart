@@ -1,10 +1,11 @@
-// ignore_for_file: deprecated_member_use
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
+import 'package:veershaivlingayat/Login/login.dart';
+import 'package:veershaivlingayat/Profile/profile-images.dart';
 import 'dart:io';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
@@ -16,97 +17,101 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String _imageURL = "Null";
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<dynamic> photos = [];
+  List<dynamic> _imagesURL = [];
+  String? userID = '';
+  String _imageUrl = '';
   String _name = "Pooja Basavraj Baba";
   bool _isImageUploadError = false;
-  var _downloadUrl = '';
+  String _downloadUrl = '';
   File _imageFile = new File('');
   final TextEditingController _displayname = TextEditingController();
   final TextEditingController _messages = TextEditingController();
+  User? user;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   firestore
-  //       .collection("users")
-  //       .doc(auth.currentUser?.uid)
-  //       .get()
-  //       .then((DocumentSnapshot snapshot) {
-  //     if (snapshot['imageURL'] != "Null") {
-  //       setState(() {
-  //         _imageURL = snapshot['imageURL'];
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _imageURL = "Null";
-  //       });
-  //     }
-  //     setState(() {
-  //       _name = snapshot["displayName"];
-  //       _motto = snapshot["motto"];
-  //     });
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
 
-  // _update(context, _newName, _newImageURL, _newMotto) async {
-  //   await firestore
-  //       .collection("users")
-  //       .doc(auth.currentUser?.uid)
-  //       .get()
-  //       .then((DocumentSnapshot snapshot) {
-  //     firestore.collection("users").doc(snapshot['uid']).set({
-  //       'uid': snapshot['uid'],
-  //       'displayName': _newName,
-  //       'email': snapshot['email'],
-  //       'imageURL': _imageURL,
-  //       "createdAt": snapshot['createdAt'],
-  //       "displayNameLower": _newName.toLowerCase(),
-  //       "rating": snapshot['rating'],
-  //       "countOfRaters": snapshot['countOfRaters'],
-  //       "motto": _newMotto
-  //     });
-  //   });
-  //   Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) => Profile(
-  //                 user: firestore
-  //                     .collection("users")
-  //                     .doc(auth.currentUser?.uid)
-  //                     .get(),
-  //                 fromPage: "edit",
-  //                 fromHome: false,
-  //                 isSelf: true,
-  //               )));
-  // }
+  void _fetchUserDetails() {
+    auth.authStateChanges().listen((User? u) {
+      user = u;
+      if (user == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+            (Route route) => false);
+      } else {
+        firestore
+            .collection('users')
+            .doc(user?.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {
+                  setState(() {
+                    userID = snapshot['uid'];
+                    photos = snapshot['photos'];
+                    _imagesURL = photos;
+                    print('%%%%%%%%%%%%%%%');
+                    print(_imagesURL);
+                    print(photos);
+                  })
+                });
+      }
+    });
+  }
 
-  // Future _uploadToFirebase(BuildContext context) async {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("Uploading the picture....")));
+  _update() async {
+    await firestore
+        .collection("users")
+        .doc(auth.currentUser?.uid)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      firestore
+          .collection("users")
+          .doc(snapshot['uid'])
+          .update({'photos': _imagesURL});
+      _fetchUserDetails();
+    });
+  }
 
-  //   FirebaseStorage storage = FirebaseStorage.instance;
-  //   Reference ref = storage.ref().child('images/' + DateTime.now().toString());
-  //   try {
-  //     UploadTask uploadTask = ref.putFile(_imageFile);
-  //     uploadTask.then((res) {
-  //       res.ref.getDownloadURL();
-  //     });
+  Future _uploadToFirebase(BuildContext context) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Uploading the picture....")));
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref =
+        storage.ref().child(userID! + '/' + DateTime.now().toString());
+    try {
+      UploadTask uploadTask = ref.putFile(_imageFile);
+      uploadTask.then((res) {
+        res.ref.getDownloadURL();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Picture uploaded!")));
+      });
 
-  //     _downloadUrl = await (await uploadTask).ref.getDownloadURL();
-  //     setState(() {
-  //       _imageURL = _downloadUrl;
-  //     });
-  //     setState(() {
-  //       _isImageUploadError = false;
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       _isImageUploadError = true;
-  //     });
-  //   }
-  // }
+      _downloadUrl = await (await uploadTask).ref.getDownloadURL();
+      setState(() {
+        if (_imagesURL.length == 6) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                  "You can upload only 6 images. Please view gallery in case you want to update the images.")));
+        } else {
+          _imagesURL.add(_downloadUrl);
+        }
+        _update();
+      });
+      setState(() {
+        _isImageUploadError = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isImageUploadError = true;
+      });
+    }
+  }
 
   _imgFromCamera(BuildContext context) async {
     final pickedFile =
@@ -116,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     Navigator.of(context).pop();
-    // _uploadToFirebase(context);
+    _uploadToFirebase(context);
   }
 
   _imgFromGallery(BuildContext context) async {
@@ -127,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     Navigator.of(context).pop();
-    // _uploadToFirebase(context);
+    _uploadToFirebase(context);
   }
 
   void _picker(context) {
@@ -161,11 +166,31 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit Profile"),
-        centerTitle: true,
-        backgroundColor: Color(c.appColor),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text("Edit Profile"),
+          centerTitle: true,
+          backgroundColor: Color(c.appColor),
+        ),
+        body: Column(
+          children: [
+            TextButton(
+              child: Text('Upload Images'),
+              onPressed: () {
+                _picker(context);
+              },
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              child: Text('View Gallery'),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ProfileImages(
+                        pageTitle: 'Photo Gallery',
+                        images: photos,
+                        viewMode: c.EDITMODE)));
+              },
+            )
+          ],
+        ));
   }
 }
