@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:veershaivlingayat/QuickMenu/gunmilan.dart';
 import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
-import 'package:veershaivlingayat/QuickMenu/melawa-information.dart';
 import 'package:veershaivlingayat/QuickMenu/search-profiles.dart';
 import 'package:veershaivlingayat/QuickMenu/shortlisted-blocked.dart';
 import 'package:veershaivlingayat/StaticScreens/about-us.dart';
@@ -105,16 +103,6 @@ class _NavdrawerState extends State<Navdrawer> {
       case 'Blocked':
         widget.currentPage != 'Blocked'
             ? navigate(ShortlistedBlocked(pageTitle: 'Blocked'))
-            : Navigator.pop(context);
-        break;
-      case 'Melawa Information':
-        widget.currentPage != 'Melawa Information'
-            ? navigate(MelawaInformation(pageTitle: 'Melawa Information'))
-            : Navigator.pop(context);
-        break;
-      case 'Gunmilan':
-        widget.currentPage != 'Gunmilan'
-            ? navigate(Gunmilan(pageTitle: 'Gunmilan'))
             : Navigator.pop(context);
         break;
     }

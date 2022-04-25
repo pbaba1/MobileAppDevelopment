@@ -5,9 +5,7 @@ import 'package:veershaivlingayat/Homepage/homepage.dart';
 import 'package:veershaivlingayat/Login/login.dart';
 import 'package:veershaivlingayat/Profile/edit_profile.dart';
 import 'package:veershaivlingayat/Profile/profile-images.dart';
-import 'package:veershaivlingayat/QuickMenu/gunmilan.dart';
 import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
-import 'package:veershaivlingayat/QuickMenu/melawa-information.dart';
 import 'package:veershaivlingayat/QuickMenu/search-profiles.dart';
 import 'package:veershaivlingayat/QuickMenu/shortlisted-blocked.dart';
 import 'package:veershaivlingayat/StaticScreens/about-us.dart';
@@ -392,17 +390,6 @@ class _ProfileState extends State<Profile> {
                     MaterialPageRoute(
                         builder: (_) =>
                             ShortlistedBlocked(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "Melawa Information") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) =>
-                            MelawaInformation(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "Gunmilan") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => Gunmilan(pageTitle: widget.fromPage)));
               }
             },
           ),
@@ -451,10 +438,10 @@ class _ProfileState extends State<Profile> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   padding: const EdgeInsets.all(10.0),
                   child: Flexible(
-                    child: Text(_name + " " + _profileID.toString(),
+                    child: Text("Profile ID " + _profileID.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold)),
+                            fontSize: 25, fontWeight: FontWeight.bold)),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(4.0)),
