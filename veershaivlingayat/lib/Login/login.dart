@@ -44,7 +44,7 @@ class _LoginState extends State<Login> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => Homepage(
-                                pageTitle: 'Welcome!',
+                                pageTitle: 'Welcome',
                               )),
                       (Route route) => false)
                 });
