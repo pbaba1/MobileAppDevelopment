@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:veershaivlingayat/QuickMenu/gunmilan.dart';
@@ -11,6 +13,7 @@ import 'package:veershaivlingayat/StaticScreens/contact-us.dart';
 import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
+import '../Login/login.dart';
 import 'homepage.dart';
 
 class Navdrawer extends StatefulWidget {
@@ -23,12 +26,34 @@ class Navdrawer extends StatefulWidget {
 
 class _NavdrawerState extends State<Navdrawer> {
   String currentPageRecorded = '';
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  User? user;
 
   @override
   void initState() {
     super.initState();
 
     setState(() => currentPageRecorded = widget.currentPage);
+    _fetchUserDetails();
+  }
+
+  void _fetchUserDetails() {
+    auth.authStateChanges().listen((User? u) {
+      user = u;
+      if (user == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+            (Route route) => false);
+      } else {
+        firestore
+            .collection('users')
+            .doc(user?.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {setState(() {})});
+      }
+    });
   }
 
   void navigate(Widget widgetToReturn) {
@@ -262,8 +287,8 @@ class _NavdrawerState extends State<Navdrawer> {
             padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
             child: FlatButton(
               height: 40,
-              onPressed: () {
-                print("Logout clicked");
+              onPressed: () async {
+                await auth.signOut();
               },
               child: const Text(
                 'Logout',

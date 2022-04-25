@@ -1,8 +1,8 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
+import 'package:veershaivlingayat/Login/login.dart';
 import 'package:veershaivlingayat/Profile/edit_profile.dart';
 import 'package:veershaivlingayat/Profile/profile-images.dart';
 import 'package:veershaivlingayat/QuickMenu/gunmilan.dart';
@@ -32,34 +32,39 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   String _imageURL = "Null";
   String _name = "Pooja Basavraj Baba";
   String _email = "";
   String _profileID = "";
   bool _rated = false;
   String _currentAddress = '';
+  User? user;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   widget.user.then((DocumentSnapshot snapshot) {
-  //     if (snapshot['imageURL'] != "Null") {
-  //       setState(() {
-  //         _imageURL = snapshot['imageURL'];
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _imageURL = "Null";
-  //       });
-  //     }
-  //     setState(() {
-  //       _name = snapshot["displayName"];
-  //       _email = snapshot['email'];
-  //     });
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
+
+  void _fetchUserDetails() {
+    auth.authStateChanges().listen((User? u) {
+      user = u;
+      if (user == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+            (Route route) => false);
+      } else {
+        firestore
+            .collection('users')
+            .doc(user?.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {setState(() {})});
+      }
+    });
+  }
 
   // _update(value) {
   //   widget.user.then((DocumentSnapshot snapshot) {
@@ -191,11 +196,8 @@ class _ProfileState extends State<Profile> {
                   )
                 : const Text(""),
             IconButton(
-              onPressed: () {
-                // showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) => _logout(context));
-                print("logout");
+              onPressed: () async {
+                await auth.signOut();
               },
               icon: const Icon(Icons.logout),
               tooltip: "Logout",
@@ -1344,12 +1346,15 @@ class _ProfileState extends State<Profile> {
                   child: Text('View Gallery'),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) =>
-                            ProfileImages(pageTitle: 'Profile Images', images: const [
-                              'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2Fprofile%20image.jpg?alt=media&token=ea4c19a0-0f94-496b-bd32-c965e5ff5c75',
-                              'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG_20220113_095444.jpg?alt=media&token=1a5069aa-a4c0-438e-85f7-fdef689c7943',
-                              'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG-20211221-WA0012.jpg?alt=media&token=b43d9b4a-4e08-4dac-a555-7534469343cc'
-                            ])));
+                        builder: (_) => ProfileImages(
+                              pageTitle: 'Profile Images',
+                              images: const [
+                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2Fprofile%20image.jpg?alt=media&token=ea4c19a0-0f94-496b-bd32-c965e5ff5c75',
+                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG_20220113_095444.jpg?alt=media&token=1a5069aa-a4c0-438e-85f7-fdef689c7943',
+                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG-20211221-WA0012.jpg?alt=media&token=b43d9b4a-4e08-4dac-a555-7534469343cc'
+                              ],
+                              viewMode: c.READMODE,
+                            )));
                   },
                 )
               ],

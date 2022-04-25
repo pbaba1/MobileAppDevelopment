@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
   bool _visibility = true;
   bool emailSuccess = true;
   bool passwordSuccess = true;
+  User? user;
 
   @override
   void initState() {
@@ -51,14 +52,30 @@ class _LoginState extends State<Login> {
     });
   }
 
+  _updateLastVisitedTime(DateTime? lastSignInTime) {
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        firestore
+            .collection('users')
+            .doc(user.uid)
+            .update({'last_visited_timestamp': lastSignInTime});
+      }
+    });
+  }
+
   void _login() async {
     try {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => Homepage(
-                    pageTitle: 'Welcome, ' + _username.text,
-                  )));
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _username.text.trim(), password: _password.text);
+      user = userCredential.user;
+      if (user != null) {
+        _updateLastVisitedTime(user?.metadata.lastSignInTime);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => Homepage(
+                  pageTitle: 'Welcome!',
+                )));
+      }
     } on FirebaseException catch (e) {
       if (e.code == 'user-not-found') {
         setState(() {
@@ -72,7 +89,6 @@ class _LoginState extends State<Login> {
           _password.clear();
         });
       }
-      // print('logging issue');
     }
   }
 
@@ -167,13 +183,6 @@ class _LoginState extends State<Login> {
                       child: FlatButton(
                         onPressed: () {
                           _form.currentState!.validate() ? _login() : null;
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => Homepage(
-                          //               pageTitle: 'Welcome, ' + _username.text,
-                          //             )));
-                          // print("hello");
                         },
                         child: const Text(
                           'Login',
