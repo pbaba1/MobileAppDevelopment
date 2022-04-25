@@ -499,6 +499,35 @@ class _EditProfileState extends State<EditProfile> {
         child: SingleChildScrollView(
           child: Column(children: [
             Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    InkWell(
+                      child: CircleAvatar(
+                        backgroundImage: _imageURL == null
+                            ? const AssetImage("assets/dummy_user.jpg")
+                                as ImageProvider
+                            : NetworkImage(_imageURL),
+                        backgroundColor: Color(c.appColor),
+                        radius: 100,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProfileImages(
+                                pageTitle: 'Image Gallery',
+                                images: photos,
+                                viewMode: c.EDITMODE)));
+                      },
+                    ),
+                    const SizedBox(height: 5),
+                    Text('*Click on the image to update the profile picture',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 14,
+                            color: Color(c.appColor)))
+                  ],
+                )),
+            Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 15.0, bottom: 0),
               child: Container(

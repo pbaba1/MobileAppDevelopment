@@ -22,7 +22,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String _imageURL = "Null";
+  String _imageURL = '';
 
   String userName = '';
   DateTime expirationDate = DateTime.now();
@@ -131,6 +131,9 @@ class _HomepageState extends State<Homepage> {
                     profileID = snapshot['id'];
                     interestSentCount = snapshot['interest_sent'].length;
                     blockedProfiles = snapshot['blocked_profiles'].length;
+                    if (snapshot['profile_picture'] != null) {
+                      _imageURL = snapshot['profile_picture'];
+                    }
                     calculateProfileCompleteness(snapshot);
                   })
                 });
@@ -251,6 +254,7 @@ class _HomepageState extends State<Homepage> {
                       ? const AssetImage("assets/dummy_user.jpg")
                           as ImageProvider
                       : NetworkImage(_imageURL),
+                  backgroundColor: Color(c.appColor),
                 ))
           ],
         ),

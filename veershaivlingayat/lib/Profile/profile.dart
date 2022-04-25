@@ -34,7 +34,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String _imageURL = "Null";
+  String _imageURL = '';
   String _name = "Pooja Basavraj Baba";
   String _email = "";
   String _profileID = "";
@@ -61,7 +61,13 @@ class _ProfileState extends State<Profile> {
             .collection('users')
             .doc(user?.uid)
             .get()
-            .then((DocumentSnapshot snapshot) => {setState(() {})});
+            .then((DocumentSnapshot snapshot) => {
+                  setState(() {
+                    if (snapshot['profile_picture'] != null) {
+                      _imageURL = snapshot['profile_picture'];
+                    }
+                  })
+                });
       }
     });
   }
@@ -211,10 +217,11 @@ class _ProfileState extends State<Profile> {
                 child: Column(
               children: [
                 CircleAvatar(
-                  backgroundImage: _imageURL == "Null"
+                  backgroundImage: _imageURL == null
                       ? const AssetImage("assets/dummy_user.jpg")
                           as ImageProvider
                       : NetworkImage(_imageURL),
+                  backgroundColor: Color(c.appColor),
                   radius: 100,
                 ),
                 const SizedBox(height: 15),
