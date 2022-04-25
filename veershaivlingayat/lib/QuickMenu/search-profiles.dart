@@ -14,20 +14,23 @@ class _SearchProfilesState extends State<SearchProfiles> {
   final _form = GlobalKey<FormState>();
   final TextEditingController _profileid = TextEditingController();
   final TextEditingController _name = TextEditingController();
+  final TextEditingController _cityCont = TextEditingController();
+  final TextEditingController _nativeCityCont = TextEditingController();
+  final TextEditingController _workCityCont = TextEditingController();
   RangeValues _currentHeightValues = const RangeValues(129, 201);
   RangeValues _currentAgeValues = const RangeValues(20, 50);
   String selectedCasteValue = "All";
   String selectedSubCasteValue = "All";
   String selectedEducationValue = "All";
-  String selectedUrgencyValue = " ";
+  String selectedUrgencyValue = "Select any one option";
   String selectedOccupationValue = "Any";
-  String selectedMaritalValue = "NA";
-  String selectedManglikValue = "NA";
-  String selectedRCasteValue = "NA";
-  String selectedRSubcasteValue = "NA";
-  String selectedIntercasteValue = "NA";
-  String selectedRIntercasteValue = "NA";
-  String selectedTongueValue = " ";
+  String selectedMaritalValue = "Not Applicable";
+  String selectedManglikValue = "Not Applicable";
+  String selectedRCasteValue = "Not Applicable";
+  String selectedRSubcasteValue = "Not Applicable";
+  String selectedIntercasteValue = "Not Applicable";
+  String selectedRIntercasteValue = "Not Applicable";
+  String selectedTongueValue = "Please select";
   bool _advanced = false;
 
   @override
@@ -196,8 +199,16 @@ class _SearchProfilesState extends State<SearchProfiles> {
                 DropdownButton(
                     value: selectedSubCasteValue,
                     // style: const TextStyle(color: Colors.red, fontSize: 30),
-                    onChanged: null,
-                    items: c.casteDropdownItems),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedSubCasteValue = newValue!;
+                      });
+                    },
+                    items: selectedCasteValue == 'Jangam'
+                        ? c.subcastesOfJangam
+                        : (selectedCasteValue == 'Lingayat'
+                            ? c.subcastesOfLingayat
+                            : c.subcastesOfLadWani)),
               ],
             ),
           ),
@@ -292,31 +303,6 @@ class _SearchProfilesState extends State<SearchProfiles> {
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * .9,
                           child: const Text(
-                            'Employment',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15.0, right: 15.0, top: 10.0, bottom: 0),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * .9,
-                        child: TextFormField(
-                            controller: _name,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(32.0)),
-                              hintText: 'Enter Employment',
-                            )),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15.0, right: 15.0, top: 15.0, bottom: 0),
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: const Text(
                             'Contact City',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
@@ -328,7 +314,7 @@ class _SearchProfilesState extends State<SearchProfiles> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * .9,
                         child: TextFormField(
-                            controller: _name,
+                            controller: _cityCont,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(32.0)),
@@ -353,7 +339,7 @@ class _SearchProfilesState extends State<SearchProfiles> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * .9,
                         child: TextFormField(
-                            controller: _name,
+                            controller: _nativeCityCont,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(32.0)),
@@ -494,7 +480,7 @@ class _SearchProfilesState extends State<SearchProfiles> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * .9,
                         child: TextFormField(
-                            controller: _name,
+                            controller: _workCityCont,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(32.0)),
@@ -669,14 +655,25 @@ class _SearchProfilesState extends State<SearchProfiles> {
                         //     MaterialPageRoute(
                         //         builder: (_) => const Homepage()));
                         setState(() {
+                          _profileid.clear();
+                          _name.clear();
+                          _cityCont.clear();
+                          _nativeCityCont.clear();
+                          _workCityCont.clear();
                           _currentHeightValues = const RangeValues(129, 201);
                           _currentAgeValues = const RangeValues(20, 50);
                           selectedCasteValue = "All";
                           selectedSubCasteValue = "All";
                           selectedEducationValue = "All";
-                          selectedUrgencyValue = " ";
-                          _name.clear();
-                          _profileid.clear();
+                          selectedUrgencyValue = "Select any one option";
+                          selectedOccupationValue = "Any";
+                          selectedMaritalValue = "Not Applicable";
+                          selectedManglikValue = "Not Applicable";
+                          selectedRCasteValue = "Not Applicable";
+                          selectedRSubcasteValue = "Not Applicable";
+                          selectedIntercasteValue = "Not Applicable";
+                          selectedRIntercasteValue = "Not Applicable";
+                          selectedTongueValue = "Please select";
                         });
                       },
                       child: const Text(
