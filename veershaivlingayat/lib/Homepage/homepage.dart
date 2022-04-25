@@ -120,7 +120,6 @@ class _HomepageState extends State<Homepage> {
             .then((DocumentSnapshot snapshot) => {
                   setState(() {
                     userName = snapshot['name'];
-                    print(userName);
                     var tempDate = DateTime.parse(
                         snapshot['registered_date'].toDate().toString());
                     expirationDate = DateTime(
@@ -132,15 +131,17 @@ class _HomepageState extends State<Homepage> {
                     profileID = snapshot['id'];
                     interestSentCount = snapshot['interest_sent'].length;
                     blockedProfiles = snapshot['blocked_profiles'].length;
-                    calculateProfileCompleteness();
+                    calculateProfileCompleteness(snapshot);
                   })
                 });
       }
     });
   }
 
-  calculateProfileCompleteness() {
-    // var
+  calculateProfileCompleteness(DocumentSnapshot snapshot) {
+    
+    var list = user.values.toList();
+    print(list);
   }
 
   @override
