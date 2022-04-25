@@ -189,6 +189,7 @@ class _ProfileState extends State<Profile> {
                     : snapshot["contact_country"])
                 : "";
             _workCity = snapshot['work_city'] ?? "";
+            photos = snapshot['photos'];
             _refOne = snapshot['reference_one'] ?? "";
             _refOnePhone = snapshot['reference_one_phone'] ?? "";
             _refTwo = snapshot['reference_two'] ?? "";
@@ -438,7 +439,7 @@ class _ProfileState extends State<Profile> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   padding: const EdgeInsets.all(10.0),
                   child: Flexible(
-                    child: Text("Profile ID " + _profileID.toString(),
+                    child: Text(_name.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold)),
@@ -452,7 +453,7 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Flexible(
-                        child: Text('Name',
+                        child: Text('Profile ID',
                             textAlign: TextAlign.start,
                             style:
                                 TextStyle(fontSize: 14.0, color: Colors.black)),
@@ -461,7 +462,7 @@ class _ProfileState extends State<Profile> {
                         child: Row(
                           children: [
                             Flexible(
-                              child: Text(_name,
+                              child: Text(_profileID.toString(),
                                   textAlign: TextAlign.start,
                                   style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
@@ -1604,11 +1605,7 @@ class _ProfileState extends State<Profile> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => ProfileImages(
                               pageTitle: 'Profile Images',
-                              images: const [
-                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2Fprofile%20image.jpg?alt=media&token=ea4c19a0-0f94-496b-bd32-c965e5ff5c75',
-                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG_20220113_095444.jpg?alt=media&token=1a5069aa-a4c0-438e-85f7-fdef689c7943',
-                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG-20211221-WA0012.jpg?alt=media&token=b43d9b4a-4e08-4dac-a555-7534469343cc'
-                              ],
+                              images: photos,
                               viewMode: c.READMODE,
                             )));
                   },
