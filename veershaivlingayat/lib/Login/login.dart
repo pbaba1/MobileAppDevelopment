@@ -1,4 +1,6 @@
 // import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
@@ -20,12 +22,34 @@ class _LoginState extends State<Login> {
   final _form = GlobalKey<FormState>();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final LocalStorage localStorage = LocalStorage('user_data');
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool _visibility = true;
   bool emailSuccess = true;
   bool passwordSuccess = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        firestore
+            .collection('users')
+            .doc(user.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Homepage(
+                                pageTitle: 'Welcome!',
+                              )),
+                      (Route route) => false)
+                });
+      }
+    });
+  }
 
   void _login() async {
     try {

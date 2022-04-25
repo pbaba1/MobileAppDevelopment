@@ -1,8 +1,10 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
 import 'package:veershaivlingayat/Profile/edit_profile.dart';
+import 'package:veershaivlingayat/Profile/profile-images.dart';
 import 'package:veershaivlingayat/QuickMenu/gunmilan.dart';
 import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
 import 'package:veershaivlingayat/QuickMenu/melawa-information.dart';
@@ -1338,6 +1340,18 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
+                TextButton(
+                  child: Text('View Gallery'),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) =>
+                            ProfileImages(pageTitle: 'Profile Images', images: const [
+                              'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2Fprofile%20image.jpg?alt=media&token=ea4c19a0-0f94-496b-bd32-c965e5ff5c75',
+                              'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG_20220113_095444.jpg?alt=media&token=1a5069aa-a4c0-438e-85f7-fdef689c7943',
+                              'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG-20211221-WA0012.jpg?alt=media&token=b43d9b4a-4e08-4dac-a555-7534469343cc'
+                            ])));
+                  },
+                )
               ],
             )),
           ),
