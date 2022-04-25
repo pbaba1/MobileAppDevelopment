@@ -307,9 +307,7 @@ class _EditProfileState extends State<EditProfile> {
             selectedGanValue = snapshot['gan'] ?? "Not Applicable";
             selectedManglikValue = snapshot['manglik'] ?? "Not Applicable";
             selectedBloodValue = snapshot['blood_group'] ?? "Not Applicable";
-            _currentHeightValue = snapshot['height'] == null
-                ? 129
-                : double.parse(snapshot['height']);
+            _currentHeightValue = snapshot['height'] ?? 129;
             _weight = snapshot['weight'] ?? "";
             _weightCont.text = snapshot['weight'] ?? "";
             selectedBodyValue = snapshot['body_type'] ?? "Please select";
@@ -328,20 +326,12 @@ class _EditProfileState extends State<EditProfile> {
             _relativeCont.text = snapshot['relative_information'] ?? "";
             _occupation = snapshot['employment_history'] ?? "";
             _occupationCont.text = snapshot['employment_history'] ?? "";
-            _heightLowValue = snapshot['match_height_low'] == null
-                ? 129
-                : double.parse(snapshot['match_height_low']);
-            _heightHighValue = snapshot['match_height_high'] == null
-                ? 201
-                : double.parse(snapshot['match_height_high']);
+            _heightLowValue = snapshot['match_height_low'] ?? 129;
+            _heightHighValue = snapshot['match_height_high'] ?? 201;
             _currentHeightValues =
                 RangeValues(_heightLowValue, _heightHighValue);
-            _ageLowValue = snapshot['match_age_low'] == null
-                ? 20
-                : double.parse(snapshot['match_age_low']);
-            _ageHighValue = snapshot['match_age_high'] == null
-                ? 50
-                : double.parse(snapshot['match_age_high']);
+            _ageLowValue = snapshot['match_age_low'] ?? 20;
+            _ageHighValue = snapshot['match_age_high'] ?? 50;
             _currentAgeValues = RangeValues(_ageLowValue, _ageHighValue);
             selectedMatchEducationValue =
                 snapshot['match_education'] ?? "Select any one option";
