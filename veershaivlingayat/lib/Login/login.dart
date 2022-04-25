@@ -52,6 +52,17 @@ class _LoginState extends State<Login> {
     });
   }
 
+  _updateLastVisitedTime(DateTime? lastSignInTime) {
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        firestore
+            .collection('users')
+            .doc(user.uid)
+            .update({'last_visited_timestamp': lastSignInTime});
+      }
+    });
+  }
+
   void _login() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
@@ -59,14 +70,13 @@ class _LoginState extends State<Login> {
               email: _username.text.trim(), password: _password.text);
       user = userCredential.user;
       if (user != null) {
+        _updateLastVisitedTime(user?.metadata.lastSignInTime);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => Homepage(
                   pageTitle: 'Welcome!',
                 )));
       }
     } on FirebaseException catch (e) {
-      print('errorrrr');
-      print(e);
       if (e.code == 'user-not-found') {
         setState(() {
           emailSuccess = false;

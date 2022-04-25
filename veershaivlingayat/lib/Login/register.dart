@@ -97,6 +97,7 @@ class _RegisterState extends State<Register> {
               user['id'] = IDcounter;
               user['subcaste'] = selectedSubCaste;
               user['caste'] = selectedCaste;
+              user['registered_date'] = DateTime.now();
             }));
 
     await profileIds.doc(c.profileIdsDocID).set({'counter': IDcounter + 1});
