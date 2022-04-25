@@ -1,7 +1,10 @@
 // import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
+import 'package:veershaivlingayat/Login/forgot-password.dart';
 import 'package:veershaivlingayat/Login/register.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -19,49 +22,74 @@ class _LoginState extends State<Login> {
   final _form = GlobalKey<FormState>();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final LocalStorage localStorage = LocalStorage('user_data');
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool _visibility = true;
   bool emailSuccess = true;
   bool passwordSuccess = true;
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        firestore
+            .collection('users')
+            .doc(user.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) => {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Homepage(
+                                pageTitle: 'Welcome!',
+                              )),
+                      (Route route) => false)
+                });
+      }
+    });
+  }
+
+  _updateLastVisitedTime(DateTime? lastSignInTime) {
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        firestore
+            .collection('users')
+            .doc(user.uid)
+            .update({'last_visited_timestamp': lastSignInTime});
+      }
+    });
+  }
 
   void _login() async {
     try {
-      // await _auth.signInWithEmailAndPassword(
-      //   email: _username.text.toLowerCase(),
-      //   password: _password.text,
-      // );
-      fetchLoggedInUserDetails();
-      // print(_auth.currentUser);
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (_) => ()));
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => Homepage(
-                    pageTitle: 'Welcome',
-                  )));
-    } catch (e) {
-      // if (e.code == 'user-not-found') {
-      //   setState(() {
-      //     emailSuccess = false;
-      //     passwordSuccess = true;
-      //   });
-      // } else if (e.code == 'wrong-password') {
-      //   setState(() {
-      //     emailSuccess = true;
-      //     passwordSuccess = false;
-      //     _password.clear();
-      //   });
-      // }
-      print('logging issue');
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _username.text.trim(), password: _password.text);
+      user = userCredential.user;
+      if (user != null) {
+        _updateLastVisitedTime(user?.metadata.lastSignInTime);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => Homepage(
+                  pageTitle: 'Welcome!',
+                )));
+      }
+    } on FirebaseException catch (e) {
+      if (e.code == 'user-not-found') {
+        setState(() {
+          emailSuccess = false;
+          passwordSuccess = true;
+        });
+      } else if (e.code == 'wrong-password') {
+        setState(() {
+          emailSuccess = true;
+          passwordSuccess = false;
+          _password.clear();
+        });
+      }
     }
-  }
-
-  void fetchLoggedInUserDetails() async {
-    // await DatabaseHelper.db.insertIntoCasteTable();
-    // var data = await DatabaseHelper.db.insertIntoCasteTable();
   }
 
   @override
@@ -99,7 +127,7 @@ class _LoginState extends State<Login> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Please enter a username";
+                                return "Please enter your email address";
                               }
                               return null;
                             },
@@ -107,8 +135,8 @@ class _LoginState extends State<Login> {
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(32.0)),
-                                labelText: 'Username',
-                                hintText: 'Enter username',
+                                labelText: 'Email Address',
+                                hintText: 'Enter email address',
                                 suffix: const Icon(Icons.person)),
                           )),
                     ),
@@ -155,13 +183,6 @@ class _LoginState extends State<Login> {
                       child: FlatButton(
                         onPressed: () {
                           _form.currentState!.validate() ? _login() : null;
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => Homepage(
-                          //               pageTitle: 'Welcome, ' + _username.text,
-                          //             )));
-                          // print("hello");
                         },
                         child: const Text(
                           'Login',
@@ -175,11 +196,12 @@ class _LoginState extends State<Login> {
                     const Padding(padding: EdgeInsets.all(5.0)),
                     FlatButton(
                       onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (_) => const ForgotPassword()));
-                        print("Forgot");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ForgotPassword(
+                                    pageTitle: 'Forgot Password')));
+                        // print("Forgot");
                       },
                       child: const Text(
                         'Forgot Password',

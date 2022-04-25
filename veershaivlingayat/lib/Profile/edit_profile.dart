@@ -1,10 +1,11 @@
-// ignore_for_file: deprecated_member_use
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:veershaivlingayat/Login/login.dart';
+import 'package:veershaivlingayat/Profile/profile-images.dart';
 import 'package:veershaivlingayat/Profile/profile.dart';
 import 'dart:io';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
@@ -40,9 +41,11 @@ class _EditProfileState extends State<EditProfile> {
   String _relative = "";
   String _occupation = "";
   String _special = "";
-  bool _isImageUploadError = false;
-  var _downloadUrl = '';
-  File _imageFile = new File('');
+  List<dynamic> photos = [];
+  List<dynamic> _imagesURL = [];
+  String? userID = '';
+  String _downloadUrl = '';
+  File _imageFile = File('');
   final TextEditingController _displayname = TextEditingController();
   final TextEditingController _emailCont = TextEditingController();
   final TextEditingController _cityCont = TextEditingController();
@@ -112,136 +115,12 @@ class _EditProfileState extends State<EditProfile> {
   String selectedOutsideCasteValue = "No";
   String selectedDivorcedValue = "No";
   String selectedMarryIntercasteValue = "No";
+  User? user;
 
   @override
   void initState() {
     super.initState();
-    firestore
-        .collection("users")
-        .doc(auth.currentUser?.uid)
-        .get()
-        .then((DocumentSnapshot snapshot) {
-      if (snapshot['profile_picture'] != null &&
-          snapshot['profile_picture'] != 'Null') {
-        setState(() {
-          _imageURL = snapshot['profile_picture'];
-        });
-      } else {
-        setState(() {
-          _imageURL = "Null";
-        });
-      }
-      setState(() {
-        _name = snapshot["name"] ?? "";
-        _displayname.text = snapshot["name"] ?? "";
-        selectedUrgencyValue = snapshot["urgency"] ?? "Select any one option";
-        _gender = snapshot["gender"] ?? "Male";
-        selectedMaritalStatusValue =
-            snapshot["marital_status"] ?? "Never Married";
-        selectedCasteValue = snapshot["caste"] ?? "Jangam";
-        selectedSubCasteValue = snapshot["subcaste"] ?? "Beda";
-        selectedIntercasteValue = snapshot['intercaste_parents'] ?? "No";
-        selectedOccupationValue =
-            snapshot['occupation'] ?? "Select Occupation>";
-        selectedIncomeValue = snapshot['income'] ?? "Not Applicable";
-        selectedEducationValue =
-            snapshot['education_level'] ?? "Select any one option";
-        _qualification = snapshot['education_qualification'] ?? "";
-        _qualificationCont.text = snapshot['education_qualification'] ?? "";
-        selectedSettlingAbroadValue =
-            snapshot['settling_abroad'] ?? "Select any one option";
-        selectedResidencyValue =
-            snapshot['residency_status'] ?? "Select any one option";
-        _contactPhone = snapshot['contact_phone'] ?? "";
-        _contactPhoneCont.text = snapshot['contact_phone'] ?? "";
-        _contactPhoneOther = snapshot['contact_phone_other'] ?? "";
-        _contactPhoneContOther.text = snapshot['contact_phone_other'] ?? "";
-        _address = snapshot['permanent_address'] ?? "";
-        _addressCont.text = snapshot['permanent_address'] ?? "";
-        _email = snapshot['contact_email'] ?? "";
-        _emailCont.text = snapshot['contact_email'] ?? "";
-        _city = snapshot['contact_city'] ?? "";
-        _cityCont.text = snapshot['contact_city'] ?? "";
-        _state = snapshot['contact_state'] ?? "";
-        _stateCont.text = snapshot['contact_state'] ?? "";
-        selectedCountryValue = snapshot['contact_country'] ?? "Please select";
-        _workCity = snapshot['work_city'] ?? "";
-        _workCityCont.text = snapshot['work_city'] ?? "";
-        _refOne = snapshot['reference_one'] ?? "";
-        _refOneCont.text = snapshot['reference_one'] ?? "";
-        _refOnePhone = snapshot['reference_one_phone'] ?? "";
-        _refOnePhoneCont.text = snapshot['reference_one_phone'] ?? "";
-        _refTwo = snapshot['reference_two'] ?? "";
-        _refTwoCont.text = snapshot['reference_two'] ?? "";
-        _refTwoPhone = snapshot['reference_two_phone'] ?? "";
-        _refTwoPhoneCont.text = snapshot['reference_two_phone'] ?? "";
-        selectedDate =
-            DateTime.parse(snapshot['birth_date_time'].toDate().toString());
-        selectedTime = TimeOfDay.fromDateTime(
-            DateTime.parse(snapshot['birth_date_time'].toDate().toString()));
-        _birthCity = snapshot['birth_city'] ?? "";
-        _birthCityCont.text = snapshot['birth_city'] ?? "";
-        _birthState = snapshot['birth_state'] ?? "";
-        _birthStateCont.text = snapshot['birth_state'] ?? "";
-        selectedBirthCountryValue =
-            snapshot['birth_country'] ?? "Please select";
-        selectedRasiValue = snapshot['rasi'] ?? "Not Applicable";
-        selectedNakshatraValue = snapshot['nakshatra'] ?? "Not Applicable";
-        selectedCharanValue = snapshot['charan'] ?? "Not Applicable";
-        selectedNadiValue = snapshot['nadi'] ?? "Not Applicable";
-        selectedGanValue = snapshot['gan'] ?? "Not Applicable";
-        selectedManglikValue = snapshot['manglik'] ?? "Not Applicable";
-        selectedBloodValue = snapshot['blood_group'] ?? "Not Applicable";
-        _currentHeightValue =
-            snapshot['height'] == null ? 129 : double.parse(snapshot['height']);
-        _weight = snapshot['weight'] ?? "";
-        _weightCont.text = snapshot['weight'] ?? "";
-        selectedBodyValue = snapshot['body_type'] ?? "Please select";
-        selectedSpectaclesValue = snapshot['spectacles'] ?? "No";
-        selectedComplexionValue = snapshot['complexion'] ?? "Please select";
-        selectedDietValue = snapshot['diet'] ?? "Please select";
-        selectedSmokeValue = snapshot['smoke'] ?? "No";
-        selectedDrinkValue = snapshot['drink'] ?? "No";
-        selectedPhyValue = snapshot['physically_challenged'] ?? "No";
-        selectedTongueValue = snapshot['mother_tongue'] ?? "Please select";
-        _info = snapshot['information'] ?? "";
-        _infoCont.text = snapshot['information'] ?? "";
-        _family = snapshot['family_background'] ?? "";
-        _familyCont.text = snapshot['family_background'] ?? "";
-        _relative = snapshot['relative_information'] ?? "";
-        _relativeCont.text = snapshot['relative_information'] ?? "";
-        _occupation = snapshot['employment_history'] ?? "";
-        _occupationCont.text = snapshot['employment_history'] ?? "";
-        _heightLowValue = snapshot['match_height_low'] == null
-            ? 129
-            : double.parse(snapshot['match_height_low']);
-        _heightHighValue = snapshot['match_height_high'] == null
-            ? 201
-            : double.parse(snapshot['match_height_high']);
-        _currentHeightValues = RangeValues(_heightLowValue, _heightHighValue);
-        _ageLowValue = snapshot['match_age_low'] == null
-            ? 20
-            : double.parse(snapshot['match_age_low']);
-        _ageHighValue = snapshot['match_age_high'] == null
-            ? 50
-            : double.parse(snapshot['match_age_high']);
-        _currentAgeValues = RangeValues(_ageLowValue, _ageHighValue);
-        selectedMatchEducationValue =
-            snapshot['match_education'] ?? "Select any one option";
-        _matchQualification = snapshot['match_education_qualification'] ?? "";
-        _matchQualificationCont.text =
-            snapshot['match_education_qualification'] ?? "";
-        _special = snapshot['match_special_characteristics'] ?? "";
-        _specialCont.text = snapshot['match_special_characteristics'] ?? "";
-        selectedMatchManglikValue =
-            snapshot['match_manglik'] ?? "Not Applicable";
-        selectedOutsideSubcasteValue =
-            snapshot['marry_outside_subcaste'] ?? "No";
-        selectedOutsideCasteValue = snapshot['marry_outside_caste'] ?? "No";
-        selectedDivorcedValue = snapshot['marry_divorced'] ?? "No";
-        selectedMarryIntercasteValue = snapshot['marry_intercaste'] ?? "No";
-      });
-    });
+    _fetchUserDetails();
   }
 
   _submit() async {
@@ -305,7 +184,7 @@ class _EditProfileState extends State<EditProfile> {
         'nakshatra': selectedNakshatraValue,
         'nadi': selectedNadiValue,
         'occupation': selectedOccupationValue,
-        'photos': snapshot['photos'],
+        'photos': _imagesURL,
         'rasi': selectedRasiValue,
         'registered_date': snapshot['registered_date'],
         'relative_information': _relativeCont.text,
@@ -338,29 +217,194 @@ class _EditProfileState extends State<EditProfile> {
                 )));
   }
 
+  void _fetchUserDetails() {
+    auth.authStateChanges().listen((User? u) {
+      user = u;
+      if (user == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+            (Route route) => false);
+      } else {
+        firestore
+            .collection("users")
+            .doc(auth.currentUser?.uid)
+            .get()
+            .then((DocumentSnapshot snapshot) {
+          if (snapshot['profile_picture'] != null &&
+              snapshot['profile_picture'] != 'Null') {
+            setState(() {
+              _imageURL = snapshot['profile_picture'];
+            });
+          } else {
+            setState(() {
+              _imageURL = "Null";
+            });
+          }
+          setState(() {
+            userID = snapshot['uid'];
+            photos = snapshot['photos'];
+            _imagesURL = photos;
+            _name = snapshot["name"] ?? "";
+            _displayname.text = snapshot["name"] ?? "";
+            selectedUrgencyValue =
+                snapshot["urgency"] ?? "Select any one option";
+            _gender = snapshot["gender"] ?? "Male";
+            selectedMaritalStatusValue =
+                snapshot["marital_status"] ?? "Never Married";
+            selectedCasteValue = snapshot["caste"] ?? "Jangam";
+            selectedSubCasteValue = snapshot["subcaste"] ?? "Beda";
+            selectedIntercasteValue = snapshot['intercaste_parents'] ?? "No";
+            selectedOccupationValue =
+                snapshot['occupation'] ?? "Select Occupation>";
+            selectedIncomeValue = snapshot['income'] ?? "Not Applicable";
+            selectedEducationValue =
+                snapshot['education_level'] ?? "Select any one option";
+            _qualification = snapshot['education_qualification'] ?? "";
+            _qualificationCont.text = snapshot['education_qualification'] ?? "";
+            selectedSettlingAbroadValue =
+                snapshot['settling_abroad'] ?? "Select any one option";
+            selectedResidencyValue =
+                snapshot['residency_status'] ?? "Select any one option";
+            _contactPhone = snapshot['contact_phone'] ?? "";
+            _contactPhoneCont.text = snapshot['contact_phone'] ?? "";
+            _contactPhoneOther = snapshot['contact_phone_other'] ?? "";
+            _contactPhoneContOther.text = snapshot['contact_phone_other'] ?? "";
+            _address = snapshot['permanent_address'] ?? "";
+            _addressCont.text = snapshot['permanent_address'] ?? "";
+            _email = snapshot['contact_email'] ?? "";
+            _emailCont.text = snapshot['contact_email'] ?? "";
+            _city = snapshot['contact_city'] ?? "";
+            _cityCont.text = snapshot['contact_city'] ?? "";
+            _state = snapshot['contact_state'] ?? "";
+            _stateCont.text = snapshot['contact_state'] ?? "";
+            selectedCountryValue =
+                snapshot['contact_country'] ?? "Please select";
+            _workCity = snapshot['work_city'] ?? "";
+            _workCityCont.text = snapshot['work_city'] ?? "";
+            _refOne = snapshot['reference_one'] ?? "";
+            _refOneCont.text = snapshot['reference_one'] ?? "";
+            _refOnePhone = snapshot['reference_one_phone'] ?? "";
+            _refOnePhoneCont.text = snapshot['reference_one_phone'] ?? "";
+            _refTwo = snapshot['reference_two'] ?? "";
+            _refTwoCont.text = snapshot['reference_two'] ?? "";
+            _refTwoPhone = snapshot['reference_two_phone'] ?? "";
+            _refTwoPhoneCont.text = snapshot['reference_two_phone'] ?? "";
+            selectedDate =
+                DateTime.parse(snapshot['birth_date_time'].toDate().toString());
+            selectedTime = TimeOfDay.fromDateTime(DateTime.parse(
+                snapshot['birth_date_time'].toDate().toString()));
+            _birthCity = snapshot['birth_city'] ?? "";
+            _birthCityCont.text = snapshot['birth_city'] ?? "";
+            _birthState = snapshot['birth_state'] ?? "";
+            _birthStateCont.text = snapshot['birth_state'] ?? "";
+            selectedBirthCountryValue =
+                snapshot['birth_country'] ?? "Please select";
+            selectedRasiValue = snapshot['rasi'] ?? "Not Applicable";
+            selectedNakshatraValue = snapshot['nakshatra'] ?? "Not Applicable";
+            selectedCharanValue = snapshot['charan'] ?? "Not Applicable";
+            selectedNadiValue = snapshot['nadi'] ?? "Not Applicable";
+            selectedGanValue = snapshot['gan'] ?? "Not Applicable";
+            selectedManglikValue = snapshot['manglik'] ?? "Not Applicable";
+            selectedBloodValue = snapshot['blood_group'] ?? "Not Applicable";
+            _currentHeightValue = snapshot['height'] == null
+                ? 129
+                : double.parse(snapshot['height']);
+            _weight = snapshot['weight'] ?? "";
+            _weightCont.text = snapshot['weight'] ?? "";
+            selectedBodyValue = snapshot['body_type'] ?? "Please select";
+            selectedSpectaclesValue = snapshot['spectacles'] ?? "No";
+            selectedComplexionValue = snapshot['complexion'] ?? "Please select";
+            selectedDietValue = snapshot['diet'] ?? "Please select";
+            selectedSmokeValue = snapshot['smoke'] ?? "No";
+            selectedDrinkValue = snapshot['drink'] ?? "No";
+            selectedPhyValue = snapshot['physically_challenged'] ?? "No";
+            selectedTongueValue = snapshot['mother_tongue'] ?? "Please select";
+            _info = snapshot['information'] ?? "";
+            _infoCont.text = snapshot['information'] ?? "";
+            _family = snapshot['family_background'] ?? "";
+            _familyCont.text = snapshot['family_background'] ?? "";
+            _relative = snapshot['relative_information'] ?? "";
+            _relativeCont.text = snapshot['relative_information'] ?? "";
+            _occupation = snapshot['employment_history'] ?? "";
+            _occupationCont.text = snapshot['employment_history'] ?? "";
+            _heightLowValue = snapshot['match_height_low'] == null
+                ? 129
+                : double.parse(snapshot['match_height_low']);
+            _heightHighValue = snapshot['match_height_high'] == null
+                ? 201
+                : double.parse(snapshot['match_height_high']);
+            _currentHeightValues =
+                RangeValues(_heightLowValue, _heightHighValue);
+            _ageLowValue = snapshot['match_age_low'] == null
+                ? 20
+                : double.parse(snapshot['match_age_low']);
+            _ageHighValue = snapshot['match_age_high'] == null
+                ? 50
+                : double.parse(snapshot['match_age_high']);
+            _currentAgeValues = RangeValues(_ageLowValue, _ageHighValue);
+            selectedMatchEducationValue =
+                snapshot['match_education'] ?? "Select any one option";
+            _matchQualification =
+                snapshot['match_education_qualification'] ?? "";
+            _matchQualificationCont.text =
+                snapshot['match_education_qualification'] ?? "";
+            _special = snapshot['match_special_characteristics'] ?? "";
+            _specialCont.text = snapshot['match_special_characteristics'] ?? "";
+            selectedMatchManglikValue =
+                snapshot['match_manglik'] ?? "Not Applicable";
+            selectedOutsideSubcasteValue =
+                snapshot['marry_outside_subcaste'] ?? "No";
+            selectedOutsideCasteValue = snapshot['marry_outside_caste'] ?? "No";
+            selectedDivorcedValue = snapshot['marry_divorced'] ?? "No";
+            selectedMarryIntercasteValue = snapshot['marry_intercaste'] ?? "No";
+          });
+        });
+      }
+    });
+  }
+
+  _update() async {
+    await firestore
+        .collection("users")
+        .doc(auth.currentUser?.uid)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      firestore
+          .collection("users")
+          .doc(snapshot['uid'])
+          .update({'photos': _imagesURL});
+      _fetchUserDetails();
+    });
+  }
+
   Future _uploadToFirebase(BuildContext context) async {
     ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Uploading the picture....")));
-
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage.ref().child('images/' + DateTime.now().toString());
+    Reference ref =
+        storage.ref().child(userID! + '/' + DateTime.now().toString());
     try {
       UploadTask uploadTask = ref.putFile(_imageFile);
       uploadTask.then((res) {
         res.ref.getDownloadURL();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Picture uploaded!")));
       });
 
       _downloadUrl = await (await uploadTask).ref.getDownloadURL();
       setState(() {
-        _imageURL = _downloadUrl;
-      });
-      setState(() {
-        _isImageUploadError = false;
+        if (_imagesURL.length == 6) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                  "You can upload only 6 images. Please view gallery in case you want to update the images.")));
+        } else {
+          _imagesURL.add(_downloadUrl);
+        }
+        _update();
       });
     } catch (e) {
-      setState(() {
-        _isImageUploadError = true;
-      });
+      print(e);
     }
   }
 
@@ -372,7 +416,7 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     Navigator.of(context).pop();
-    // _uploadToFirebase(context);
+    _uploadToFirebase(context);
   }
 
   _imgFromGallery(BuildContext context) async {
@@ -383,7 +427,7 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     Navigator.of(context).pop();
-    // _uploadToFirebase(context);
+    _uploadToFirebase(context);
   }
 
   void _picker(context) {
@@ -2280,7 +2324,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 10.0, bottom: 0),
+                  left: 15.0, right: 15.0, top: 10.0, bottom: 15.0),
               child: Row(
                 children: [
                   const Padding(padding: EdgeInsets.all(15)),
@@ -2297,25 +2341,46 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
             Center(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 10.0, bottom: 15.0),
-                child: Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * .5,
-                  child: FlatButton(
+              child: Column(
+                children: [
+                  TextButton(
+                    child: Text('Upload Images'),
                     onPressed: () {
-                      _form.currentState!.validate() ? _submit() : null;
+                      _picker(context);
                     },
-                    child: const Text(
-                      'Submit',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    color: Color(c.appColor),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0)),
                   ),
-                ),
+                  SizedBox(height: 10),
+                  TextButton(
+                    child: Text('View Gallery'),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProfileImages(
+                              pageTitle: 'Photo Gallery',
+                              images: photos,
+                              viewMode: c.EDITMODE)));
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 10.0, bottom: 15.0),
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * .5,
+                      child: FlatButton(
+                        onPressed: () {
+                          _form.currentState!.validate() ? _submit() : null;
+                        },
+                        child: const Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        color: Color(c.appColor),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ]),

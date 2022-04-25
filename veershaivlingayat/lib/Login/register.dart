@@ -121,6 +121,7 @@ class _RegisterState extends State<Register> {
               user['id'] = IDcounter;
               user['subcaste'] = selectedSubCaste;
               user['caste'] = selectedCaste;
+              user['registered_date'] = DateTime.now();
             }));
 
     await profileIds.doc(c.profileIdsDocID).set({'counter': IDcounter + 1});
@@ -137,15 +138,16 @@ class _RegisterState extends State<Register> {
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
-        email: email.text.toLowerCase(),
+        email: email.text.toLowerCase().trim(),
         password: password.text,
       );
 
       CollectionReference users = firestore.collection("users");
 
       _prepareData(userCredential.user!.uid, users, userCredential);
-    } catch (e) {
+    } on FirebaseException catch (e) {
       print('Error registering user!');
+      print(e);
     }
   }
 
