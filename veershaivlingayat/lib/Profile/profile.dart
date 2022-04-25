@@ -15,7 +15,6 @@ import 'package:veershaivlingayat/StaticScreens/astrology.dart';
 import 'package:veershaivlingayat/StaticScreens/contact-us.dart';
 import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
-import 'package:provider/provider.dart';
 import 'dart:io';
 
 class Profile extends StatefulWidget {
@@ -36,17 +35,12 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-<<<<<<< HEAD
   String _imageURL = '';
-  String _name = "Pooja Basavraj Baba";
-=======
-  String _imageURL = "Null";
   int _profileID = 0;
   String _name = "";
   String _contactPhone = "";
   String _contactPhoneOther = "";
   String _address = "";
->>>>>>> 2a403628681dea588aa84ab08ec9be658af27c44
   String _email = "";
   String _city = "";
   String _state = "";
@@ -133,19 +127,20 @@ class _ProfileState extends State<Profile> {
       } else {
         widget.user.then((DocumentSnapshot snapshot) {
           if (snapshot['profile_picture'] != null &&
-              snapshot['profile_picture'] != 'Null') {
+              snapshot['profile_picture'] != '') {
             setState(() {
               _imageURL = snapshot['profile_picture'];
             });
           } else {
             setState(() {
-              _imageURL = "Null";
+              _imageURL = "";
             });
           }
           setState(() {
-            if (snapshot['profile_picture'] != null) {
-                      _imageURL = snapshot['profile_picture'];
-                    }
+            if (snapshot['profile_picture'] != null &&
+                snapshot['profile_picture'] != '') {
+              _imageURL = snapshot['profile_picture'];
+            }
             userID = snapshot['uid'];
             _profileID = snapshot['id'];
             photos = snapshot['photos'];
@@ -444,7 +439,7 @@ class _ProfileState extends State<Profile> {
                 child: Column(
               children: [
                 CircleAvatar(
-                  backgroundImage: _imageURL == null
+                  backgroundImage: (_imageURL == null || _imageURL == '')
                       ? const AssetImage("assets/dummy_user.jpg")
                           as ImageProvider
                       : NetworkImage(_imageURL),

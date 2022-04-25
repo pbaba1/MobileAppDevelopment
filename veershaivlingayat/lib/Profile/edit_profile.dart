@@ -22,7 +22,7 @@ class _EditProfileState extends State<EditProfile> {
   final _form = GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String _imageURL = "Null";
+  String _imageURL = "";
   String _name = "";
   String _contactPhone = "";
   String _contactPhoneOther = "";
@@ -119,6 +119,7 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   void initState() {
+    print('INSIDE EDIT');
     super.initState();
     _fetchUserDetails();
   }
@@ -232,13 +233,19 @@ class _EditProfileState extends State<EditProfile> {
             .get()
             .then((DocumentSnapshot snapshot) {
           if (snapshot['profile_picture'] != null &&
-              snapshot['profile_picture'] != 'Null') {
+              snapshot['profile_picture'] != '') {
             setState(() {
               _imageURL = snapshot['profile_picture'];
             });
+          } else if (!snapshot['photos']
+              .contains(snapshot['profile_picture'])) {
+            firestore
+                .collection('users')
+                .doc(auth.currentUser?.uid)
+                .update({'profile_picture': ''});
           } else {
             setState(() {
-              _imageURL = "Null";
+              _imageURL = "";
             });
           }
           setState(() {
@@ -494,7 +501,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     InkWell(
                       child: CircleAvatar(
-                        backgroundImage: _imageURL == null
+                        backgroundImage: (_imageURL == null || _imageURL == '')
                             ? const AssetImage("assets/dummy_user.jpg")
                                 as ImageProvider
                             : NetworkImage(_imageURL),
@@ -514,7 +521,26 @@ class _EditProfileState extends State<EditProfile> {
                         style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontSize: 14,
-                            color: Color(c.appColor)))
+                            color: Color(c.appColor))),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      TextButton(
+                        child: const Text('Reset Profile Picture'),
+                        onPressed: () {
+                          setState(() {
+                            _imageURL = '';
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 5),
+                      TextButton(
+                        child: const Text('Click to refresh'),
+                        onPressed: () {
+                          setState(() {
+                            _fetchUserDetails();
+                          });
+                        },
+                      ),
+                    ])
                   ],
                 )),
             Padding(
@@ -1314,9 +1340,9 @@ class _EditProfileState extends State<EditProfile> {
                   child: Row(children: [
                     IconButton(
                         onPressed: () => _selectDate(context),
-                        icon: Icon(Icons.calendar_month_outlined),
+                        icon: const Icon(Icons.calendar_month_outlined),
                         color: Color(c.appColor)),
-                    SizedBox(width: 2),
+                    const SizedBox(width: 2),
                     Text(
                         selectedDate.toString().substring(0, 10) ==
                                 DateTime.now().toString().substring(0, 10)
@@ -1343,9 +1369,9 @@ class _EditProfileState extends State<EditProfile> {
                   child: Row(children: [
                     IconButton(
                         onPressed: () => _selectTime(context),
-                        icon: Icon(Icons.alarm),
+                        icon: const Icon(Icons.alarm),
                         color: Color(c.appColor)),
-                    SizedBox(width: 2),
+                    const SizedBox(width: 2),
                     Text(selectedTime.toString().substring(10, 15),
                         style: const TextStyle(fontSize: 14)),
                   ])),
@@ -2363,14 +2389,14 @@ class _EditProfileState extends State<EditProfile> {
               child: Column(
                 children: [
                   TextButton(
-                    child: Text('Upload Images'),
+                    child: const Text('Upload Images'),
                     onPressed: () {
                       _picker(context);
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextButton(
-                    child: Text('View Gallery'),
+                    child: const Text('View Gallery'),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ProfileImages(

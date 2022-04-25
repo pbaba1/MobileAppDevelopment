@@ -131,7 +131,8 @@ class _HomepageState extends State<Homepage> {
                     profileID = snapshot['id'];
                     interestSentCount = snapshot['interest_sent'].length;
                     blockedProfiles = snapshot['blocked_profiles'].length;
-                    if (snapshot['profile_picture'] != null) {
+                    if (snapshot['profile_picture'] != null &&
+                        snapshot['profile_picture'] != '') {
                       _imageURL = snapshot['profile_picture'];
                     }
                     calculateProfileCompleteness(snapshot);
@@ -250,7 +251,7 @@ class _HomepageState extends State<Homepage> {
                 },
                 padding: const EdgeInsets.only(left: 20.0),
                 child: CircleAvatar(
-                  backgroundImage: _imageURL == "Null"
+                  backgroundImage: (_imageURL == '' || _imageURL == null)
                       ? const AssetImage("assets/dummy_user.jpg")
                           as ImageProvider
                       : NetworkImage(_imageURL),
