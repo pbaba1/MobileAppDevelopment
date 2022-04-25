@@ -14,7 +14,7 @@ class _ShortlistedBlockedState extends State<ShortlistedBlocked> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Navdrawer(currentPage: 'Shortlisted/Blocked'),
+      drawer: Navdrawer(currentPage: 'Blocked'),
       appBar: AppBar(
         title: Text(widget.pageTitle),
         backgroundColor: Color(c.appColor),

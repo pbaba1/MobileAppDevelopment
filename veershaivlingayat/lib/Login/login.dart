@@ -53,40 +53,27 @@ class _LoginState extends State<Login> {
 
   void _login() async {
     try {
-      // await _auth.signInWithEmailAndPassword(
-      //   email: _username.text.toLowerCase(),
-      //   password: _password.text,
-      // );
-      fetchLoggedInUserDetails();
-      // print(_auth.currentUser);
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (_) => ()));
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (_) => Homepage(
                     pageTitle: 'Welcome, ' + _username.text,
                   )));
-    } catch (e) {
-      // if (e.code == 'user-not-found') {
-      //   setState(() {
-      //     emailSuccess = false;
-      //     passwordSuccess = true;
-      //   });
-      // } else if (e.code == 'wrong-password') {
-      //   setState(() {
-      //     emailSuccess = true;
-      //     passwordSuccess = false;
-      //     _password.clear();
-      //   });
-      // }
-      print('logging issue');
+    } on FirebaseException catch (e) {
+      if (e.code == 'user-not-found') {
+        setState(() {
+          emailSuccess = false;
+          passwordSuccess = true;
+        });
+      } else if (e.code == 'wrong-password') {
+        setState(() {
+          emailSuccess = true;
+          passwordSuccess = false;
+          _password.clear();
+        });
+      }
+      // print('logging issue');
     }
-  }
-
-  void fetchLoggedInUserDetails() async {
-    // await DatabaseHelper.db.insertIntoCasteTable();
-    // var data = await DatabaseHelper.db.insertIntoCasteTable();
   }
 
   @override
