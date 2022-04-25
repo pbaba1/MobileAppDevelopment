@@ -31,6 +31,7 @@ class _RegisterState extends State<Register> {
   var user = {
     'uid': null,
     'id': 0,
+    'age': 0,
     'name': null,
     'birth_city': null,
     'birth_country': null,
@@ -122,6 +123,7 @@ class _RegisterState extends State<Register> {
               user['subcaste'] = selectedSubCaste;
               user['caste'] = selectedCaste;
               user['registered_date'] = DateTime.now();
+              user['age'] = DateTime.now().year - selectedDate.year;
             }));
 
     await profileIds.doc(c.profileIdsDocID).set({'counter': IDcounter + 1});
