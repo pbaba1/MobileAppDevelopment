@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
   bool _visibility = true;
   bool emailSuccess = true;
   bool passwordSuccess = true;
+  User? user;
 
   @override
   void initState() {
@@ -53,40 +54,32 @@ class _LoginState extends State<Login> {
 
   void _login() async {
     try {
-      // await _auth.signInWithEmailAndPassword(
-      //   email: _username.text.toLowerCase(),
-      //   password: _password.text,
-      // );
-      fetchLoggedInUserDetails();
-      // print(_auth.currentUser);
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (_) => ()));
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => Homepage(
-                    pageTitle: 'Welcome, ' + _username.text,
-                  )));
-    } catch (e) {
-      // if (e.code == 'user-not-found') {
-      //   setState(() {
-      //     emailSuccess = false;
-      //     passwordSuccess = true;
-      //   });
-      // } else if (e.code == 'wrong-password') {
-      //   setState(() {
-      //     emailSuccess = true;
-      //     passwordSuccess = false;
-      //     _password.clear();
-      //   });
-      // }
-      print('logging issue');
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _username.text.trim(), password: _password.text);
+      user = userCredential.user;
+      if (user != null) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => Homepage(
+                  pageTitle: 'Welcome!',
+                )));
+      }
+    } on FirebaseException catch (e) {
+      print('errorrrr');
+      print(e);
+      if (e.code == 'user-not-found') {
+        setState(() {
+          emailSuccess = false;
+          passwordSuccess = true;
+        });
+      } else if (e.code == 'wrong-password') {
+        setState(() {
+          emailSuccess = true;
+          passwordSuccess = false;
+          _password.clear();
+        });
+      }
     }
-  }
-
-  void fetchLoggedInUserDetails() async {
-    // await DatabaseHelper.db.insertIntoCasteTable();
-    // var data = await DatabaseHelper.db.insertIntoCasteTable();
   }
 
   @override
@@ -180,13 +173,6 @@ class _LoginState extends State<Login> {
                       child: FlatButton(
                         onPressed: () {
                           _form.currentState!.validate() ? _login() : null;
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => Homepage(
-                          //               pageTitle: 'Welcome, ' + _username.text,
-                          //             )));
-                          // print("hello");
                         },
                         child: const Text(
                           'Login',
