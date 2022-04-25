@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -139,9 +141,88 @@ class _HomepageState extends State<Homepage> {
   }
 
   calculateProfileCompleteness(DocumentSnapshot snapshot) {
+    setState(() {
+      user['uid'] = snapshot['uid'];
+      user['photos'] = snapshot['photos'];
+      user['name'] = snapshot["name"];
+      user['urgency'] = snapshot["urgency"];
+      user['gender'] = snapshot["gender"];
+      user['marital_status'] = snapshot["marital_status"];
+      user['caste'] = snapshot["caste"];
+      user['subcaste'] = snapshot["subcaste"];
+      user['intercaste_parents'] = snapshot['intercaste_parents'];
+      user['occupation'] = snapshot['occupation'];
+      user['income'] = snapshot['income'];
+      user['education_level'] = snapshot['education_level'];
+      user['education_qualification'] = snapshot['education_qualification'];
+      user['settling_abroad'] = snapshot['settling_abroad'];
+      user['residency_status'] = snapshot['residency_status'];
+      user['contact_phone'] = snapshot['contact_phone'];
+      user['contact_phone_other'] = snapshot['contact_phone_other'];
+      user['permanent_address'] = snapshot['permanent_address'];
+      user['contact_email'] = snapshot['contact_email'];
+      user['contact_city'] = snapshot['contact_city'];
+      user['contact_state'] = snapshot['contact_state'];
+      user['contact_country'] = snapshot['contact_country'];
+      user['work_city'] = snapshot['work_city'];
+      user['reference_one'] = snapshot['reference_one'];
+      user['reference_one_phone'] = snapshot['reference_one_phone'];
+      user['reference_two'] = snapshot['reference_two'];
+      user['reference_two_phone'] = snapshot['reference_two_phone'];
+      user['birth_date_time'] = snapshot['birth_date_time'];
+      user['birth_city'] = snapshot['birth_city'];
+      user['birth_state'] = snapshot['birth_state'];
+      user['birth_country'] = snapshot['birth_country'];
+      user['rasi'] = snapshot['rasi'];
+      user['nakshatra'] = snapshot['nakshatra'];
+      user['charan'] = snapshot['charan'];
+      user['nadi'] = snapshot['nadi'];
+      user['gan'] = snapshot['gan'];
+      user['manglik'] = snapshot['manglik'];
+      user['blood_group'] = snapshot['blood_group'];
+      user['height'] = snapshot['height'];
+      user['weight'] = snapshot['weight'];
+      user['body_type'] = snapshot['body_type'];
+      user['spectacles'] = snapshot['spectacles'];
+      user['complexion'] = snapshot['complexion'];
+      user['diet'] = snapshot['diet'];
+      user['smoke'] = snapshot['smoke'];
+      user['drink'] = snapshot['drink'];
+      user['physically_challenged'] = snapshot['physically_challenged'];
+      user['mother_tongue'] = snapshot['mother_tongue'];
+      user['information'] = snapshot['information'];
+      user['family_background'] = snapshot['family_background'];
+      user['relative_information'] = snapshot['relative_information'];
+      user['employment_history'] = snapshot['employment_history'];
+      user['match_height_low'] = snapshot['match_height_low'];
+      user['match_height_high'] = snapshot['match_height_high'];
+      user['match_age_low'] = snapshot['match_age_low'];
+      user['match_age_high'] = snapshot['match_age_high'];
+      user['match_education'] = snapshot['match_education'];
+      user['match_education_qualification'] =
+          snapshot['match_education_qualification'];
 
-    var list = user.values.toList();
-    print(list);
+      user['match_special_characteristics'] =
+          snapshot['match_special_characteristics'];
+      user['match_manglik'] = snapshot['match_manglik'];
+      user['marry_outside_subcaste'] = snapshot['marry_outside_subcaste'];
+      user['marry_outside_caste'] = snapshot['marry_outside_caste'];
+      user['marry_divorced'] = snapshot['marry_divorced'];
+      user['marry_intercaste'] = snapshot['marry_intercaste'];
+    });
+    var toCount = user.values.toList().where((letter) => (letter == '' ||
+        letter == null ||
+        letter == 'Please Select' ||
+        letter == 'Select any one option'));
+    int finalCount = toCount.length;
+
+    if (user['photos'].length != 6) {
+      finalCount += 1;
+    }
+    setState(() {
+      profileCompletenessPercent =
+          100 - ((finalCount / user.values.toList().length) * 100).round();
+    });
   }
 
   @override
@@ -286,7 +367,8 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               Flexible(
                                 child: Text(
-                                    profileCompletenessPercent.toString(),
+                                    profileCompletenessPercent.toString() +
+                                        ' %',
                                     textAlign: TextAlign.start,
                                     style: const TextStyle(
                                         fontSize: 14.0, color: Colors.black)),
