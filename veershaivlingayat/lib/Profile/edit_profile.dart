@@ -132,6 +132,7 @@ class _EditProfileState extends State<EditProfile> {
         .then((DocumentSnapshot snapshot) {
       firestore.collection("users").doc(snapshot['uid']).set({
         'uid': snapshot['uid'],
+        'age': DateTime.now().year - selectedDate.year,
         'id': snapshot['id'],
         'name': _displayname.text,
         'birth_city': _birthCityCont.text,
