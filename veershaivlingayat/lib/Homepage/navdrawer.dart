@@ -102,9 +102,9 @@ class _NavdrawerState extends State<Navdrawer> {
             ? navigate(SearchProfiles(pageTitle: 'Search Profiles'))
             : Navigator.pop(context);
         break;
-      case 'Shortlisted/Blocked':
-        widget.currentPage != 'Shortlisted/Blocked'
-            ? navigate(ShortlistedBlocked(pageTitle: 'Shortlisted/Blocked'))
+      case 'Blocked':
+        widget.currentPage != 'Blocked'
+            ? navigate(ShortlistedBlocked(pageTitle: 'Blocked'))
             : Navigator.pop(context);
         break;
       case 'Melawa Information':
