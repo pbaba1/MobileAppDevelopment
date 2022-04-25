@@ -1,5 +1,5 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/homepage.dart';
 import 'package:veershaivlingayat/Profile/edit_profile.dart';
@@ -15,12 +15,12 @@ import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Profile extends StatefulWidget {
-  // final Future<DocumentSnapshot<Map<String, dynamic>>> user;
+  final Future<DocumentSnapshot<Map<String, dynamic>>> user;
   final String fromPage;
   final bool isSelf;
   const Profile(
       {Key? key,
-      // required this.user,
+      required this.user,
       required this.fromPage,
       required this.isSelf})
       : super(key: key);
@@ -112,7 +112,7 @@ class _ProfileState extends State<Profile> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (widget.fromPage == "home" || widget.fromPage == "edit") {
+              if (widget.fromPage == "Welcome" || widget.fromPage == "edit") {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
           context,
           MaterialPageRoute(
               builder: (_) => Homepage(
-                    pageTitle: 'Welcome, ' + _username.text,
+                    pageTitle: 'Welcome',
                   )));
     } catch (e) {
       // if (e.code == 'user-not-found') {

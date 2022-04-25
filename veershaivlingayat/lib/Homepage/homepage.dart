@@ -1,5 +1,5 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veershaivlingayat/Homepage/navdrawer.dart';
 import 'package:veershaivlingayat/Profile/profile.dart';
@@ -19,8 +19,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   String _imageURL = "Null";
 
   @override
@@ -36,12 +36,12 @@ class _HomepageState extends State<Homepage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Profile(
-                                // user: firestore
-                                //     .collection("users")
-                                //     .doc(auth.currentUser?.uid)
-                                //     .get(),
-                                fromPage: "home",
+                          builder: (context) => Profile(
+                                user: firestore
+                                    .collection("users")
+                                    .doc(auth.currentUser?.uid)
+                                    .get(),
+                                fromPage: widget.pageTitle,
                                 isSelf: true,
                               )));
                 },
