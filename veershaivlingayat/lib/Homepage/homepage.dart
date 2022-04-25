@@ -5,7 +5,6 @@ import 'package:veershaivlingayat/Homepage/navdrawer.dart';
 import 'package:veershaivlingayat/Profile/edit_profile.dart';
 import 'package:veershaivlingayat/Profile/profile.dart';
 import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
-import 'package:veershaivlingayat/QuickMenu/melawa-information.dart';
 import 'package:veershaivlingayat/QuickMenu/search-profiles.dart';
 import 'package:veershaivlingayat/QuickMenu/shortlisted-blocked.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
@@ -525,38 +524,6 @@ class _HomepageState extends State<Homepage> {
                         children: const [
                           Flexible(
                             child: Text('Search Profiles',
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                          Flexible(
-                              child: Icon(Icons.arrow_circle_right_outlined)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => MelawaInformation(
-                                  pageTitle: "Melawa Information",
-                                ))),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.black,
-                              width: 1.0,
-                              style: BorderStyle.solid)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Flexible(
-                            child: Text('Melawa Information',
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
                                     fontSize: 14.0,
