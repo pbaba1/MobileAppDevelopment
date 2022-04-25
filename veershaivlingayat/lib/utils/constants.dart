@@ -6,8 +6,8 @@ var menuSubOptions = [
   'Search Profiles',
   'Interest Sent',
   'Blocked',
-  'Melawa Information',
-  'Gunmilan'
+  // 'Melawa Information',
+  // 'Gunmilan'
 ];
 
 var profileIdsDocID = 'hrJcaDnxEFMp8kfwuTvj';

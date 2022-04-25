@@ -223,30 +223,30 @@ class _NavdrawerState extends State<Navdrawer> {
                   onTap: () => {performAction(c.menuSubOptions[2])},
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: ListTile(
-                  leading: Icon(Icons.people,
-                      color: checkMenuActivation(c.menuSubOptions[3]),
-                      size: 22),
-                  title: Text(c.menuSubOptions[3],
-                      style: TextStyle(
-                          color: checkMenuActivation(c.menuSubOptions[3]))),
-                  onTap: () => {performAction(c.menuSubOptions[3])},
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: ListTile(
-                  leading: Icon(FontAwesomeIcons.starOfDavid,
-                      color: checkMenuActivation(c.menuSubOptions[4]),
-                      size: 22),
-                  title: Text(c.menuSubOptions[4],
-                      style: TextStyle(
-                          color: checkMenuActivation(c.menuSubOptions[4]))),
-                  onTap: () => {performAction(c.menuSubOptions[4])},
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 15.0),
+              //   child: ListTile(
+              //     leading: Icon(Icons.people,
+              //         color: checkMenuActivation(c.menuSubOptions[3]),
+              //         size: 22),
+              //     title: Text(c.menuSubOptions[3],
+              //         style: TextStyle(
+              //             color: checkMenuActivation(c.menuSubOptions[3]))),
+              //     onTap: () => {performAction(c.menuSubOptions[3])},
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 15.0),
+              //   child: ListTile(
+              //     leading: Icon(FontAwesomeIcons.starOfDavid,
+              //         color: checkMenuActivation(c.menuSubOptions[4]),
+              //         size: 22),
+              //     title: Text(c.menuSubOptions[4],
+              //         style: TextStyle(
+              //             color: checkMenuActivation(c.menuSubOptions[4]))),
+              //     onTap: () => {performAction(c.menuSubOptions[4])},
+              //   ),
+              // ),
             ],
           ),
           ListTile(
