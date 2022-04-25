@@ -93,6 +93,19 @@ class _ProfileImagesState extends State<ProfileImages> {
     });
   }
 
+  _setProfilePicture(int index) {
+    auth.authStateChanges().listen((User? u) {
+      firestore
+          .collection('users')
+          .doc(u?.uid)
+          .update({'profile_picture': widget.images[index]});
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Updated your profile picture.")));
+      // Navigator.pop(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,18 +141,29 @@ class _ProfileImagesState extends State<ProfileImages> {
                               ),
                               SizedBox(height: 10),
                               widget.viewMode == c.EDITMODE
-                                  ? IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder:
-                                                (BuildContext buildContext) =>
+                                  ? Column(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext
+                                                        buildContext) =>
                                                     _confirmImageDeletion(
                                                         context, index));
-                                      },
-                                      iconSize: 25,
-                                      color: Color(c.appColor),
+                                          },
+                                          iconSize: 25,
+                                          color: Color(c.appColor),
+                                        ),
+                                        TextButton(
+                                          child: Text(
+                                              'Click to set this picture as profile picture'),
+                                          onPressed: () {
+                                            _setProfilePicture(index);
+                                          },
+                                        )
+                                      ],
                                     )
                                   : Container()
                             ]),
@@ -150,7 +174,7 @@ class _ProfileImagesState extends State<ProfileImages> {
                   );
                 },
               )
-            : Center(child: Text('No images have been uploaded')),
+            : Center(child: const Text('No images have been uploaded')),
       ),
     );
   }

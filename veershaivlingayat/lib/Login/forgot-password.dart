@@ -20,7 +20,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Future _resetPassword() async {
     try {
       await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: _emailController.text);
+          .sendPasswordResetEmail(email: _emailController.text.trim());
 
       setState(() {
         email_success = true;

@@ -13,7 +13,6 @@ import 'package:veershaivlingayat/StaticScreens/astrology.dart';
 import 'package:veershaivlingayat/StaticScreens/contact-us.dart';
 import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
-import 'package:provider/provider.dart';
 import 'dart:io';
 
 class Profile extends StatefulWidget {
@@ -34,7 +33,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String _imageURL = "Null";
+  String _imageURL = '';
   int _profileID = 0;
   String _name = "";
   String _contactPhone = "";
@@ -126,16 +125,20 @@ class _ProfileState extends State<Profile> {
       } else {
         widget.user.then((DocumentSnapshot snapshot) {
           if (snapshot['profile_picture'] != null &&
-              snapshot['profile_picture'] != 'Null') {
+              snapshot['profile_picture'] != '') {
             setState(() {
               _imageURL = snapshot['profile_picture'];
             });
           } else {
             setState(() {
-              _imageURL = "Null";
+              _imageURL = "";
             });
           }
           setState(() {
+            if (snapshot['profile_picture'] != null &&
+                snapshot['profile_picture'] != '') {
+              _imageURL = snapshot['profile_picture'];
+            }
             userID = snapshot['uid'];
             _profileID = snapshot['id'];
             photos = snapshot['photos'];
@@ -186,6 +189,7 @@ class _ProfileState extends State<Profile> {
                     : snapshot["contact_country"])
                 : "";
             _workCity = snapshot['work_city'] ?? "";
+            photos = snapshot['photos'];
             _refOne = snapshot['reference_one'] ?? "";
             _refOnePhone = snapshot['reference_one_phone'] ?? "";
             _refTwo = snapshot['reference_two'] ?? "";
@@ -423,10 +427,11 @@ class _ProfileState extends State<Profile> {
                 child: Column(
               children: [
                 CircleAvatar(
-                  backgroundImage: _imageURL == "Null"
+                  backgroundImage: (_imageURL == null || _imageURL == '')
                       ? const AssetImage("assets/dummy_user.jpg")
                           as ImageProvider
                       : NetworkImage(_imageURL),
+                  backgroundColor: Color(c.appColor),
                   radius: 100,
                 ),
                 const SizedBox(height: 15),
@@ -434,7 +439,7 @@ class _ProfileState extends State<Profile> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   padding: const EdgeInsets.all(10.0),
                   child: Flexible(
-                    child: Text("Profile ID " + _profileID.toString(),
+                    child: Text(_name.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold)),
@@ -448,7 +453,7 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Flexible(
-                        child: Text('Name',
+                        child: Text('Profile ID',
                             textAlign: TextAlign.start,
                             style:
                                 TextStyle(fontSize: 14.0, color: Colors.black)),
@@ -457,7 +462,7 @@ class _ProfileState extends State<Profile> {
                         child: Row(
                           children: [
                             Flexible(
-                              child: Text(_name,
+                              child: Text(_profileID.toString(),
                                   textAlign: TextAlign.start,
                                   style: const TextStyle(
                                       fontSize: 14.0, color: Colors.black)),
@@ -1600,11 +1605,7 @@ class _ProfileState extends State<Profile> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => ProfileImages(
                               pageTitle: 'Profile Images',
-                              images: const [
-                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2Fprofile%20image.jpg?alt=media&token=ea4c19a0-0f94-496b-bd32-c965e5ff5c75',
-                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG_20220113_095444.jpg?alt=media&token=1a5069aa-a4c0-438e-85f7-fdef689c7943',
-                                'https://firebasestorage.googleapis.com/v0/b/veershaiv-lingayat.appspot.com/o/AIRw3gdq7o4iFEnUuyRq%2FIMG-20211221-WA0012.jpg?alt=media&token=b43d9b4a-4e08-4dac-a555-7534469343cc'
-                              ],
+                              images: photos,
                               viewMode: c.READMODE,
                             )));
                   },
