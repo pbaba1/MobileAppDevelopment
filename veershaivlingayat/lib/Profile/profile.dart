@@ -17,12 +17,12 @@ import 'package:veershaivlingayat/StaticScreens/faq.dart';
 import 'package:veershaivlingayat/utils/constants.dart' as c;
 
 class Profile extends StatefulWidget {
-  // final Future<DocumentSnapshot<Map<String, dynamic>>> user;
+  final Future<DocumentSnapshot<Map<String, dynamic>>> user;
   final String fromPage;
   final bool isSelf;
   const Profile(
       {Key? key,
-      // required this.user,
+      required this.user,
       required this.fromPage,
       required this.isSelf})
       : super(key: key);
@@ -119,7 +119,7 @@ class _ProfileState extends State<Profile> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (widget.fromPage == "home" || widget.fromPage == "edit") {
+              if (widget.fromPage == "Welcome" || widget.fromPage == "edit") {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

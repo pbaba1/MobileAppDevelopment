@@ -139,7 +139,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   calculateProfileCompleteness(DocumentSnapshot snapshot) {
-    
+
     var list = user.values.toList();
     print(list);
   }
@@ -157,8 +157,12 @@ class _HomepageState extends State<Homepage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Profile(
-                                fromPage: "home",
+                          builder: (context) => Profile(
+                                user: firestore
+                                    .collection("users")
+                                    .doc(auth.currentUser?.uid)
+                                    .get(),
+                                fromPage: widget.pageTitle,
                                 isSelf: true,
                               )));
                 },
