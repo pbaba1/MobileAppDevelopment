@@ -44,7 +44,7 @@ class _InterestSentReceviedState extends State<InterestSentRecevied> {
               .then((DocumentSnapshot snapshot) {
             setState(() {
               usersOut = usersOut +
-                  '\n\n' +
+                  '\n -- ' +
                   snapshot['name'] +
                   ' - (Profile ID: ' +
                   snapshot['id'].toString() +
@@ -61,17 +61,30 @@ class _InterestSentReceviedState extends State<InterestSentRecevied> {
     return Scaffold(
       drawer: Navdrawer(currentPage: 'Interest'),
       appBar: AppBar(
-        title: Text('Interest'),
+        title: const Text('Interest'),
         backgroundColor: Color(c.appColor),
       ),
       body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Flexible(
-            child: Text(
-          usersOut,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        )),
+          child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 0),
+            child: Flexible(
+                child: Text(
+              'Users you are interested in',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            )),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 20),
+            child: Flexible(
+                child: Text(
+              usersOut,
+              style: const TextStyle(fontSize: 16),
+            )),
+          ),
+        ],
       )),
     );
   }
