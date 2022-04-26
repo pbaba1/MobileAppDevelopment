@@ -19,12 +19,6 @@ class _InterestSentReceviedState extends State<InterestSentRecevied> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String usersOut = '';
   List<dynamic> iDs = [];
-  // Map<String, dynamic> mapping = {'name': '', 'id': 0};
-
-  // Stream<QuerySnapshot> _userStream = FirebaseFirestore.instance
-  //     .collection('users')
-  //     .orderBy('displayName')
-  //     .snapshots();
 
   @override
   void initState() {
