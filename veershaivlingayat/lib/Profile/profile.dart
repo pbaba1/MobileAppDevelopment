@@ -7,6 +7,7 @@ import 'package:veershaivlingayat/Profile/edit_profile.dart';
 import 'package:veershaivlingayat/Profile/profile-images.dart';
 import 'package:veershaivlingayat/QuickMenu/interest-sent-recevied.dart';
 import 'package:veershaivlingayat/QuickMenu/search-profiles.dart';
+import 'package:veershaivlingayat/QuickMenu/search-results.dart';
 import 'package:veershaivlingayat/QuickMenu/shortlisted-blocked.dart';
 import 'package:veershaivlingayat/StaticScreens/about-us.dart';
 import 'package:veershaivlingayat/StaticScreens/astrology.dart';
@@ -17,12 +18,16 @@ import 'dart:io';
 
 class Profile extends StatefulWidget {
   final Future<DocumentSnapshot<Map<String, dynamic>>> user;
+  Map<String, dynamic> searchParameters;
+  String searchType;
   final String fromPage;
   final bool isSelf;
-  const Profile(
+  Profile(
       {Key? key,
       required this.user,
       required this.fromPage,
+      required this.searchParameters,
+      required this.searchType,
       required this.isSelf})
       : super(key: key);
 
@@ -353,32 +358,13 @@ class _ProfileState extends State<Profile> {
                         builder: (_) => Homepage(
                               pageTitle: 'Welcome',
                             )));
-              } else if (widget.fromPage == "Search Profiles") {
+              } else if (widget.fromPage == "searchResults") {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (_) =>
-                            SearchProfiles(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "About Us") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => AboutUs(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "Contact Us") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => ContactUs(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "FAQ") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => FAQ(pageTitle: widget.fromPage)));
-              } else if (widget.fromPage == "Astrology") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => Astrology(pageTitle: widget.fromPage)));
+                        builder: (_) => SearchResults(
+                            searchParameters: widget.searchParameters,
+                            searchType: widget.searchType)));
               } else if (widget.fromPage == "Interest Sent") {
                 Navigator.pushReplacement(
                     context,
@@ -411,13 +397,15 @@ class _ProfileState extends State<Profile> {
                     tooltip: "Edit Profile",
                   )
                 : const Text(""),
-            IconButton(
-              onPressed: () async {
-                await auth.signOut();
-              },
-              icon: const Icon(Icons.logout),
-              tooltip: "Logout",
-            ),
+            widget.isSelf
+                ? IconButton(
+                    onPressed: () async {
+                      await auth.signOut();
+                    },
+                    icon: const Icon(Icons.logout),
+                    tooltip: "Logout",
+                  )
+                : const Text(''),
           ],
         ),
         body: SingleChildScrollView(

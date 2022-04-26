@@ -209,6 +209,8 @@ class _EditProfileState extends State<EditProfile> {
         context,
         MaterialPageRoute(
             builder: (context) => Profile(
+                  searchParameters: {},
+                  searchType: '',
                   user: firestore
                       .collection("users")
                       .doc(auth.currentUser?.uid)
