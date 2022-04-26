@@ -36,7 +36,7 @@ class _SearchProfilesState extends State<SearchProfiles> {
 
   Map<String, dynamic> searchParameters = {
     'simple_search': {
-      'id': 0,
+      'id': 1000,
       'name': '',
       'height': 0,
       'age': 0,
@@ -705,7 +705,7 @@ class _SearchProfilesState extends State<SearchProfiles> {
                     child: FlatButton(
                       onPressed: () {
                         preparePayload();
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => SearchResults(
