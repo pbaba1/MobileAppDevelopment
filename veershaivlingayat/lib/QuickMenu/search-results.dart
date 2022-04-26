@@ -108,6 +108,10 @@ class _SearchResultsState extends State<SearchResults> {
         }
       case 'AdvancedSearch':
         {
+          _users = firestore
+              .collection('users')
+              .where('gender', isNotEqualTo: gender)
+              .snapshots();
           break;
         }
     }
