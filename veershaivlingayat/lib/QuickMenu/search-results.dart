@@ -197,7 +197,9 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Row(children: [
                             Text(data['name']),
                             CircleAvatar(
-                              backgroundImage: data['profile_picture'] != null
+                              backgroundImage: (data['profile_picture'] !=
+                                          null ||
+                                      data['profile_picture'] == '')
                                   ? NetworkImage(data['profile_picture'])
                                   : const AssetImage('assets/dummy_user.jpg')
                                       as ImageProvider,
