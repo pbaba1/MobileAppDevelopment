@@ -168,7 +168,6 @@ class _EditProfileState extends State<EditProfile> {
         'match_education': selectedMatchEducationValue,
         'match_education_qualification': _matchQualificationCont.text,
         'match_manglik': selectedMatchManglikValue,
-        'match_occupation': snapshot['match_occupation'],
         'match_special_characteristics': _specialCont.text,
         'mother_tongue': selectedTongueValue,
         'match_height_low': _heightLowValue,
