@@ -240,6 +240,8 @@ class _HomepageState extends State<Homepage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => Profile(
+                                searchParameters: {},
+                                searchType: '',
                                 user: firestore
                                     .collection("users")
                                     .doc(auth.currentUser?.uid)
